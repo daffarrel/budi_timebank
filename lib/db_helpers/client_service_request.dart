@@ -20,7 +20,8 @@ class ClientServiceRequest {
         .where((element) => element.status == ServiceRequestStatus.ongoing)
         .length;
     var completed = serviceRequest
-        .where((element) => element.status == ServiceRequestStatus.completed)
+        .where((element) =>
+            element.status == ServiceRequestStatus.completedVerified)
         .length;
 
     return (pending, accepted, ongoing, completed);
@@ -57,7 +58,7 @@ class ClientServiceRequest {
         .length;
     var completed = data
         .where((element) =>
-            element.status == ServiceRequestStatus.completed &&
+            element.status == ServiceRequestStatus.completedVerified &&
             element.providerId == userUid)
         .length;
 
