@@ -24,47 +24,24 @@ class _LoginPageState extends State<LoginPage> {
   late final StreamSubscription<User?> _authStateSubscription;
 
   Future<void> _logIn() async {
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text, password: _passwordController.text);
-      // await ClientAuth(Common().channel)
-      //     .signInUser(_emailController.text, _passwordController.text);
-
-      // if (mounted) {
-      //   context.showSnackBar(message: 'Check your email for Login link!');
-      //   _emailController.clear();
-      // }
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
     } on FirebaseAuthException catch (error) {
       context.showErrorSnackBar(message: error.message.toString());
-      //print(error);
     } catch (error) {
       context.showErrorSnackBar(message: 'Unable to log in!!');
     }
-    setState(() {
-      _isLoading = false;
-    });
+    setState(() => _isLoading = false);
   }
 
   @override
   void initState() {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-    //   if (_redirecting) return;
-    //   final session = data.session;
-    //   // final AuthChangeEvent event = data.event;
-    //   // if (event == AuthChangeEvent.passwordRecovery && session != null) {
-    //   //   // handle signIn
-    //   //   Navigator.of(context).pushReplacementNamed('/passwordReset');
-    //   // } else
-    //   if (session != null) {
-    //     _redirecting = true;
-    //     Navigator.of(context).pushReplacementNamed('/navigation');
-    //   }
-    // });
 
     _authStateSubscription =
         FirebaseAuth.instance.authStateChanges().listen((user) {
@@ -88,38 +65,18 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //resizeToAvoidBottomInset: false, //avoid keyboard overflow
-      // appBar: AppBar(
-      //   title: const Text('Log In'),
-      //   // backgroundColor: Color.fromARGB(255, 127, 17, 224),
-      // ),
       body: Center(
         child: ListView(
           shrinkWrap: true,
           padding: const EdgeInsets.all(15),
-          //mainAxisAlignment: MainAxisAlignment.center,
-          //padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Bu',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: themeData1().primaryColor,
-                      fontSize: 65,
-                      fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  'di',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: themeData1().primaryColor,
-                      fontSize: 65,
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
+            Text(
+              'Budi',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: themeData1().primaryColor,
+                  fontSize: 65,
+                  fontWeight: FontWeight.bold),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -149,21 +106,16 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 18),
             TextFormField(
-              //cursorColor: Color.fromARGB(255, 127, 17, 224),,
               controller: _emailController,
-              //style: TextStyle(),
-
               decoration: InputDecoration(
                 labelText: 'Email',
-                // labelStyle: TextStyle(
-                //   color: Color.fromARGB(255, 127, 17, 224),
-                // ),
                 border: const UnderlineInputBorder(),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: themeData1().primaryColor),
                 ),
-                // suffixIconColor: Color.fromARGB(255, 127, 17, 224),
               ),
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 18),
             TextFormField(

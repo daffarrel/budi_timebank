@@ -1,7 +1,8 @@
 import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-//import 'package:budi_timebank/auth%20pages/account_page.dart';
+
 import '../components/constants.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -20,38 +21,19 @@ class _SignUpPageState extends State<SignUpPage> {
   late final StreamSubscription<User?> _authStateSubscription;
 
   Future<void> _signUp() async {
-    //final session = supabase.auth.currentSession;
-    // final userId = supabase.auth.currentUser!.id; //map the user ID
-    // final data = await supabase.from('profiles').select().eq('id', userId);
-    // print('The data is' + data['username']);
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
     try {
-      // final response = await supabase.auth.signUp(
-      //   email: _emailController.text,
-      //   password: _passwordController.text,
-      //   emailRedirectTo:
-      //       kIsWeb ? null : 'io.supabase.fluttercallback://SignUp-callback/',
-      // );
-
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailController.text, password: _passwordController.text);
-
-      // ERROR: Prompt the user to try again!
-      // print(response.user!.identities!.length);
-      // if (session != null) {!
-      //   context.showSnackBar(message: 'User Already Registered!!');
-      // }
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
     } on FirebaseAuthException catch (error) {
       context.showErrorSnackBar(message: error.message.toString());
     } catch (error) {
       context.showErrorSnackBar(message: 'Unexpected error occured');
     }
 
-    setState(() {
-      _isLoading = false;
-    });
+    setState(() => _isLoading = false);
   }
 
   @override
@@ -82,7 +64,6 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sign Up'),
-        // backgroundColor: Color.fromARGB(255, 127, 17, 224),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
@@ -94,6 +75,8 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration: const InputDecoration(
               labelText: 'Email',
             ),
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: 18),
           TextFormField(
@@ -122,11 +105,6 @@ class _SignUpPageState extends State<SignUpPage> {
             onPressed: _isLoading ? null : _signUp,
             child: Text(_isLoading ? 'Loading' : 'Sign Up'),
           ),
-          // ElevatedButton(
-          //     onPressed: (() {
-          //       Navigator.of(context).pushReplacementNamed('/navigation');
-          //     }),
-          //     child: Text('Skip (for developers)'))
         ],
       ),
     );
