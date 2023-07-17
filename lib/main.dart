@@ -5,9 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'auth pages/setup_profile.dart';
-import 'auth%20pages/loginPage.dart';
+import 'auth pages/login_page.dart';
 import 'auth%20pages/password.dart';
-import 'auth%20pages/signUpPage.dart';
+import 'auth pages/sign_up_page.dart';
 import 'custom widgets/theme.dart';
 import 'dashboard%20pages/dashboard.dart';
 import 'firebase_options.dart';

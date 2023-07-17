@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../components/constants.dart';
 import '../custom%20widgets/theme.dart';
 import 'forgotPasword.dart';
-import 'signUpPage.dart';
+import 'sign_up_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
