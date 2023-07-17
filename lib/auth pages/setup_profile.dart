@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:textfield_tags/textfield_tags.dart';
 
 import '../components/constants.dart';
 import '../custom widgets/custom_headline.dart';
@@ -10,9 +12,13 @@ import '../my_extensions/extension_string.dart';
 import '../model/contact.dart';
 import '../model/identification.dart';
 import '../model/profile.dart';
+import '../splash_page.dart';
 
 class SetupProfile extends StatefulWidget {
-  const SetupProfile({super.key});
+  const SetupProfile({super.key, this.editProfile = false});
+
+  /// Flag to indicate this page is not first time user is setting up profile
+  final bool editProfile;
 
   @override
   State<SetupProfile> createState() => _SetupProfileState();
@@ -22,45 +28,51 @@ class _SetupProfileState extends State<SetupProfile> {
   final _usernameController = TextEditingController();
   final _contactController = TextEditingController();
   final _idController = TextEditingController();
-  final _skillController = TextEditingController();
   final _organizationNameController = TextEditingController();
+  final _emailAddressController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
-  List<String> skills = [];
-  List<Contact> contacts = [];
-  List<Gender> listGender = Gender.values;
-  List<ContactType> listContactType = ContactType.values;
+  List<bool> _selectedGender = <bool>[true, false];
+  final List<Contact> otherContacts = [];
+  final List<Gender> listGender = Gender.values;
   List<IdentificationType> idUser = IdentificationType.values;
   ContactType _selectedContactType = ContactType.phone;
   IdentificationType _selectedIdType = IdentificationType.mykad;
   OwnerType _selectedOwnerType = OwnerType.individual;
-  Gender _userGender = Gender.male;
+
+  final Map<ContactType, IconData> _contactTypes = {
+    ContactType.whatsapp: FontAwesomeIcons.whatsapp,
+    ContactType.twitter: FontAwesomeIcons.twitter,
+    ContactType.phone: Icons.phone,
+    ContactType.email: Icons.email,
+  };
 
   final userId = FirebaseAuth.instance.currentUser!.uid;
   bool _loading = true;
 
+  double _distanceToField = 1;
+  final TextfieldTagsController _skillsInputController =
+      TextfieldTagsController();
+  // only to be used when editing profile
+  List<String>? _initalSkills;
+
   @override
   void initState() {
     super.initState();
-    _initProfile();
+    widget.editProfile ? _readProfile() : _initProfile();
   }
 
-  _addskills(String skill) {
-    setState(() {
-      skills.insert(0, skill);
-    });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _distanceToField = MediaQuery.sizeOf(context).width;
   }
 
-  _deleteSkill(String skill) {
+  void _deleteContact(Contact contact) {
     setState(() {
-      skills.removeWhere((element) => element == skill);
-    });
-  }
-
-  _deleteContact(String contact) {
-    setState(() {
-      contacts.removeWhere((element) => element.value == contact);
+      otherContacts.removeWhere((element) => element == contact);
     });
   }
 
@@ -68,11 +80,48 @@ class _SetupProfileState extends State<SetupProfile> {
     var newContact = Contact(contactType: type, value: value);
 
     setState(() {
-      contacts.insert(0, newContact);
+      otherContacts.add(newContact);
     });
   }
 
+  Future<void> _readProfile() async {
+    print('go to read');
+
+    setState(() => _loading = true);
+    Profile userProfile = await ClientUser.getUserProfileById(
+        FirebaseAuth.instance.currentUser!.uid);
+    _usernameController.text = userProfile.name;
+    _initalSkills = userProfile.skills;
+    _selectedOwnerType = userProfile.ownerType;
+    if (_selectedOwnerType == OwnerType.organization) {
+      _organizationNameController.text = userProfile.organizationName!;
+    }
+
+    _selectedGender =
+        List.generate(2, (index) => userProfile.gender == listGender[index]);
+    _idController.text = userProfile.identification.value;
+
+    _emailAddressController.text = userProfile.contacts
+        .firstWhere((element) => element.contactType == ContactType.email)
+        .value;
+    _phoneNumberController.text = userProfile.contacts
+        .firstWhere((element) => element.contactType == ContactType.phone)
+        .value;
+
+    var contactOthers = userProfile.contacts;
+    contactOthers.removeWhere(
+        (element) => element.value == _emailAddressController.text);
+    contactOthers
+        .removeWhere((element) => element.value == _phoneNumberController.text);
+    otherContacts.addAll(contactOthers);
+
+    _selectedIdType = userProfile.identification.identificationType;
+
+    setState(() => _loading = false);
+  }
+
   Future<void> _initProfile() async {
+    print('go to init');
     setState(() => _loading = true);
 
     try {
@@ -87,6 +136,10 @@ class _SetupProfileState extends State<SetupProfile> {
       return;
     }
 
+    // Get user email from auth
+    var email = FirebaseAuth.instance.currentUser!.email;
+    _emailAddressController.text = email!;
+
     setState(() => _loading = false);
   }
 
@@ -99,13 +152,24 @@ class _SetupProfileState extends State<SetupProfile> {
         ? null
         : _organizationNameController.text;
 
+    var userGenderIndex =
+        _selectedGender.indexWhere((element) => element == true);
+
+    var contacts = [
+      Contact(
+          contactType: ContactType.email, value: _emailAddressController.text),
+      Contact(
+          contactType: ContactType.phone, value: _phoneNumberController.text),
+      ...otherContacts
+    ];
+
     var newProfile = Profile(
       name: _usernameController.text.trim(),
-      skills: skills,
+      skills: _skillsInputController.getTags ?? [],
       contacts: contacts,
       identification: userIdentification,
       ownerType: _selectedOwnerType,
-      gender: _userGender,
+      gender: Gender.values[userGenderIndex],
       organizationName: orgName,
     );
 
@@ -135,12 +199,30 @@ class _SetupProfileState extends State<SetupProfile> {
     });
   }
 
+  Future<void> _signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } on FirebaseAuthException {
+      context.showErrorSnackBar(message: 'error signing out');
+    } catch (error) {
+      context.showErrorSnackBar(message: 'Unable to signout');
+    }
+    if (mounted) {
+      //Navigator.of(context).pushReplacementNamed('/');
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => const SplashPage()));
+    }
+  }
+
   @override
   void dispose() {
     _usernameController.dispose();
     _contactController.dispose();
     _idController.dispose();
-    _skillController.dispose();
+    _skillsInputController.dispose();
     _organizationNameController.dispose();
     super.dispose();
   }
@@ -188,45 +270,32 @@ class _SetupProfileState extends State<SetupProfile> {
                         padding: EdgeInsets.all(8.0),
                         child: CustomHeadline(heading: 'Gender'),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width / 3,
-                        //padding: EdgeInsets.all(8),
-                        margin: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                              color: themeData2().primaryColor,
-                              width: 2,
-                            )),
-                        child: DropdownButton<Gender>(
-                          isExpanded: true,
-                          underline: Container(
-                            height: 0,
-                          ),
-                          iconEnabledColor: themeData2().primaryColor,
-                          value: _userGender,
-                          items: listGender.map<DropdownMenuItem<Gender>>((e) {
-                            return DropdownMenuItem<Gender>(
-                                value: e,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    e.name.titleCase(),
-                                    style: TextStyle(
-                                        color: themeData2().primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
-                                  ),
-                                ));
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _userGender = value!;
-                              //print(_genderController.text);
-                            });
-                          },
+                      ToggleButtons(
+                        direction: Axis.horizontal,
+                        onPressed: (int index) {
+                          setState(() {
+                            // The button that is tapped is set to true, and the others to false.
+                            for (int i = 0; i < _selectedGender.length; i++) {
+                              _selectedGender[i] = i == index;
+                            }
+                          });
+                        },
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
+                        selectedBorderColor: Colors.green[700],
+                        //     themeData2().,
+                        selectedColor: Colors.white,
+                        fillColor: Colors.green[300],
+                        // color: Colors.red[400],
+                        color: Colors.green[400],
+                        constraints: const BoxConstraints(
+                          minHeight: 40.0,
+                          minWidth: 80.0,
                         ),
+                        isSelected: _selectedGender,
+                        children: Gender.values
+                            .map((e) => Text(e.name.titleCase()))
+                            .toList(),
                       ),
                     ],
                   ),
@@ -372,79 +441,64 @@ class _SetupProfileState extends State<SetupProfile> {
                     padding: EdgeInsets.all(8.0),
                     child: CustomHeadline(heading: 'Skill'),
                   ),
-                  TextFormField(
-                    controller: _skillController,
-                    decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        hintText: 'Add Skills',
-                        //labelText: 'Skill',
-                        //suffixIconColor: themeData2().primaryColor,
-                        suffixIcon: TextButton(
-                          style: TextButton.styleFrom(
-                            foregroundColor: themeData2().primaryColor,
+                  TextFieldTags(
+                    textfieldTagsController: _skillsInputController,
+                    initialTags: _initalSkills,
+                    textSeparators: const [','],
+                    letterCase: LetterCase.normal,
+                    validator: (String tag) {
+                      if (_skillsInputController.getTags != null &&
+                          _skillsInputController.getTags!.contains(tag)) {
+                        return 'you already entered that';
+                      }
+                      return null;
+                    },
+                    inputfieldBuilder:
+                        (context, tec, fn, error, onChanged, onSubmitted) {
+                      return ((context, sc, tags, onTagDelete) {
+                        return TextField(
+                          controller: tec,
+                          focusNode: fn,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            focusedBorder: const OutlineInputBorder(),
+                            hintText: _skillsInputController.hasTags
+                                ? ''
+                                : "Enter skills seperated by comma...",
+                            errorText: error,
+                            prefixIconConstraints: BoxConstraints(
+                                maxWidth: _distanceToField * 0.74),
+                            prefixIcon: tags.isNotEmpty
+                                ? Padding(
+                                    padding: const EdgeInsets.only(left: 12),
+                                    child: SingleChildScrollView(
+                                      controller: sc,
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          for (var tag in tags)
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 4),
+                                              child: InputChip(
+                                                label: Text(tag),
+                                                onDeleted: () =>
+                                                    onTagDelete(tag),
+                                              ),
+                                            )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : null,
                           ),
-                          onPressed: () {
-                            if (_skillController.text.isEmpty) {
-                              context.showErrorSnackBar(
-                                  message: 'You have not entered any skill..');
-                            } else {
-                              try {
-                                _addskills(_skillController.text);
-                                _skillController.clear();
-                                context.showSnackBar(message: 'Skill added!');
-                              } catch (e) {
-                                context.showErrorSnackBar(
-                                    message: 'Unable to add skill');
-                              }
-                            }
-                          },
-                          child: const Icon(Icons.add),
-                        )),
+                          onChanged: onChanged,
+                          onSubmitted: onSubmitted,
+                        );
+                      });
+                    },
                   ),
                   const SizedBox(height: 8),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Your Skills: '),
-                  ),
-                  skills.isEmpty
-                      ? const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text('You have not entered any skill'),
-                        )
-                      : SizedBox(
-                          height: 60,
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount: skills.length,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(skills[index]
-                                          .toString()
-                                          .capitalize()),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      IconButton(
-                                          onPressed: () {
-                                            _deleteSkill(
-                                                skills[index].toString());
-                                          },
-                                          icon: const Icon(
-                                            Icons.remove_circle_outline,
-                                            color: Colors.red,
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          )),
                   Divider(
                       //horizontal line
                       color: themeData2().primaryColor,
@@ -456,16 +510,140 @@ class _SetupProfileState extends State<SetupProfile> {
                     padding: EdgeInsets.all(8.0),
                     child: CustomHeadline(heading: 'Contacts'),
                   ),
+                  TextFormField(
+                    controller: _emailAddressController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Email address',
+                      prefixIcon: Icon(Icons.email),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter email';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: _phoneNumberController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Phone Number. eg: 60192345678',
+                      prefixIcon: Icon(Icons.phone),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter email';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Other Contacts: '),
+                  ),
+                  otherContacts.isEmpty
+                      ? const Text('You have not entered any contacts...')
+                      : ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          //scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: otherContacts.length,
+                          itemBuilder: (context, index) {
+                            return _AddedContactWidget(
+                                onContactDelete: () =>
+                                    _deleteContact(otherContacts[index]),
+                                contactType: otherContacts[index].contactType,
+                                iconData: _contactTypes[
+                                    otherContacts[index].contactType]!,
+                                value: otherContacts[index].value);
+                          },
+                        ),
                   Row(
                     children: [
                       Expanded(
                         child: TextFormField(
                           controller: _contactController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Add Contacts',
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            hintText: 'Add other contacts',
+                            prefixIconConstraints: BoxConstraints(
+                                maxWidth: _distanceToField * 0.24),
+                            prefixIcon: DropdownButton<ContactType>(
+                              isExpanded: true,
+                              iconEnabledColor: themeData2().primaryColor,
+                              underline: Container(
+                                height: 0,
+                              ),
+                              value: _selectedContactType,
+                              selectedItemBuilder: (context) {
+                                return _contactTypes.entries.map((entry) {
+                                  final iconData = entry.value;
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          iconData,
+                                          color: themeData2().primaryColor,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList();
+                              },
+                              items: _contactTypes.entries.map((entry) {
+                                final contactType = entry.key;
+                                return DropdownMenuItem<ContactType>(
+                                  value: contactType,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Text(
+                                      contactType.name.titleCase(),
+                                      style: TextStyle(
+                                        color: themeData2().primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedContactType = value!;
+                                });
+                              },
+                            ),
                             //labelText: 'Contact',
+                            suffixIcon: TextButton(
+                              style: TextButton.styleFrom(
+                                foregroundColor: themeData2().primaryColor,
+                              ),
+                              onPressed: () {
+                                if (_contactController.text.isEmpty) {
+                                  context.showErrorSnackBar(
+                                      message:
+                                          'You have not entered any contact..');
+                                } else {
+                                  try {
+                                    _addcontact(_selectedContactType,
+                                        _contactController.text);
+                                    _contactController.clear();
+                                  } catch (e) {
+                                    context.showErrorSnackBar(
+                                        message: 'Unable to add contact');
+                                  }
+                                }
+                              },
+                              child: const Text('Add'),
+                            ),
                           ),
+                          maxLines: 1,
                           // validator: (value) {
                           //   if (value == null || value.isEmpty) {
                           //     return 'Please enter contacts';
@@ -474,124 +652,9 @@ class _SetupProfileState extends State<SetupProfile> {
                           // },
                         ),
                       ),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: themeData2().primaryColor,
-                        ),
-                        onPressed: () {
-                          if (_contactController.text.isEmpty) {
-                            context.showErrorSnackBar(
-                                message: 'You have not entered any contact..');
-                          } else {
-                            try {
-                              _addcontact(_selectedContactType,
-                                  _contactController.text);
-                              _contactController.clear();
-                              context.showSnackBar(message: 'Contact Added!');
-                            } catch (e) {
-                              context.showErrorSnackBar(
-                                  message: 'Unable to add contact');
-                            }
-                          }
-                        },
-                        child: const Icon(Icons.add),
-                      ),
-                      Container(
-                        //padding: EdgeInsets.all(8),
-                        width: MediaQuery.of(context).size.width / 3,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                              color: themeData2().primaryColor,
-                              width: 2,
-                            )),
-                        child: DropdownButton<ContactType>(
-                          isExpanded: true,
-                          //dropdownColor: themeData2().primaryColor,
-                          iconEnabledColor: themeData2().primaryColor,
-                          underline: Container(
-                            height: 0,
-                          ),
-                          // iconEnabledColor:
-                          //     themeData2().primaryColor,
-                          value: _selectedContactType,
-                          items: listContactType.map((e) {
-                            return DropdownMenuItem<ContactType>(
-                                value: e,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    e.name.titleCase(),
-                                    style: TextStyle(
-                                        color: themeData2().primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
-                                  ),
-                                ));
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedContactType = value!;
-                            });
-                          },
-                        ),
-                      ),
                     ],
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Your Contacts: '),
-                  ),
-                  contacts.isEmpty
-                      ? const Text('You have not entered any contacts...')
-                      : SizedBox(
-                          height: 180,
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            //scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount: contacts.length,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(contacts[index]
-                                              .contactType
-                                              .name
-                                              .capitalize()),
-                                          Text(
-                                              contacts[index].value.toString()),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          _deleteContact(contacts[index].value);
-                                        },
-                                        icon: const Icon(
-                                          Icons.remove_circle_outline,
-                                          color: Colors.red,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          )),
+
                   const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () async {
@@ -603,11 +666,76 @@ class _SetupProfileState extends State<SetupProfile> {
                             '/navigation', (route) => false);
                       }
                     },
-                    child: Text(_loading ? 'Loading...' : 'Save'),
+                    child: Text(_loading
+                        ? 'Loading...'
+                        : widget.editProfile
+                            ? 'Update'
+                            : 'Save'),
                   ),
+                  if (widget.editProfile)
+                    TextButton(
+                        style:
+                            TextButton.styleFrom(foregroundColor: Colors.red),
+                        onPressed: () => showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text('Confirm Sign Out?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'Cancel'),
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      _signOut();
+                                    },
+                                    child: const Text('Sign Out'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        // onPressed: _signOut,
+                        child: const Text('Sign Out')),
                 ],
               ),
             ),
+    );
+  }
+}
+
+class _AddedContactWidget extends StatelessWidget {
+  const _AddedContactWidget(
+      {Key? key,
+      required this.onContactDelete,
+      required this.contactType,
+      required this.iconData,
+      required this.value})
+      : super(key: key);
+
+  final VoidCallback onContactDelete;
+  final ContactType contactType;
+  final IconData iconData;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        leading: Icon(
+          iconData,
+          color: themeData2().primaryColor,
+        ),
+        subtitle: Text(contactType.name.capitalize()),
+        title: Text(value),
+        trailing: IconButton(
+          onPressed: onContactDelete,
+          icon: const Icon(
+            Icons.remove_circle_outline,
+            color: Colors.red,
+          ),
+        ),
+      ),
     );
   }
 }

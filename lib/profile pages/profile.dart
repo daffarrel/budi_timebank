@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../auth pages/setup_profile.dart';
 import '../custom widgets/custom_headline.dart';
 import '../custom%20widgets/theme.dart';
 import '../db_helpers/client_user.dart';
 import '../my_extensions/extension_string.dart';
 
-import '../auth pages/account_page.dart';
 import '../model/contact.dart';
 import '../model/profile.dart';
 import '../profile pages/contactIconWidget.dart';
@@ -49,7 +49,9 @@ class _ProfilePageState extends State<ProfilePage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const AccountPage(),
+                    builder: (context) => const SetupProfile(
+                      editProfile: true,
+                    ),
                   )).then((value) => setState(
                     () {
                       futureProfile = ClientUser.getUserProfileById(userUid);
@@ -71,26 +73,26 @@ class _ProfilePageState extends State<ProfilePage> {
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               }
-              // FIXME: The list readded when rebuild, fix this later
               skills = snapshot.data!.skills;
-              for (int i = 0; i < snapshot.data!.contacts.length; i++) {
-                if (snapshot.data!.contacts[i].contactType ==
-                    ContactType.email) {
-                  email.add(snapshot.data!.contacts[i].value);
-                }
-                if (snapshot.data!.contacts[i].contactType ==
-                    ContactType.phone) {
-                  phone.add(snapshot.data!.contacts[i].value);
-                }
-                if (snapshot.data!.contacts[i].contactType ==
-                    ContactType.twitter) {
-                  twitter.add(snapshot.data!.contacts[i].value);
-                }
-                if (snapshot.data!.contacts[i].contactType ==
-                    ContactType.email) {
-                  email.add(snapshot.data!.contacts[i].value);
-                }
-              }
+              email = snapshot.data!.contacts
+                  .where((element) => element.contactType == ContactType.email)
+                  .map((e) => e.value)
+                  .toList();
+              phone = snapshot.data!.contacts
+                  .where((element) => element.contactType == ContactType.phone)
+                  .map((e) => e.value)
+                  .toList();
+              whatsapp = snapshot.data!.contacts
+                  .where(
+                      (element) => element.contactType == ContactType.whatsapp)
+                  .map((e) => e.value)
+                  .toList();
+              twitter = snapshot.data!.contacts
+                  .where(
+                      (element) => element.contactType == ContactType.twitter)
+                  .map((e) => e.value)
+                  .toList();
+
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,26 +158,38 @@ class _ProfilePageState extends State<ProfilePage> {
                   const CustomHeadline(heading: ' Skill List'),
                   skills.isEmpty
                       ? const Text('No skills entered')
-                      : SizedBox(
-                          height: 50,
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount: skills.length,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                elevation: 5,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                      child: Text(skills[index]
-                                          .toString()
-                                          .capitalize())),
+                      : Wrap(
+                          children: [
+                            for (var skill in skills)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: Chip(
+                                  elevation: 4,
+                                  backgroundColor: Colors.white,
+                                  label: Text(skill.toString().capitalize()),
                                 ),
-                              );
-                            },
-                          )),
+                              ),
+                          ],
+                        ),
+
+                  // ListView.builder(
+                  //     physics: const BouncingScrollPhysics(),
+                  //     scrollDirection: Axis.horizontal,
+                  //     shrinkWrap: true,
+                  //     itemCount: skills.length,
+                  //     itemBuilder: (context, index) {
+                  //       return Card(
+                  //         elevation: 5,
+                  //         child: Padding(
+                  //           padding: const EdgeInsets.all(8.0),
+                  //           child: Center(
+                  //               child: Text(
+                  //                   skills[index].toString().capitalize())),
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
 
                   const CustomHeadline(heading: ' Contact List'),
                   Row(
