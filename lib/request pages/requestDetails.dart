@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../components/constants.dart';
 import '../custom widgets/heading2.dart';
@@ -46,11 +47,6 @@ class _RequestDetailsState extends State<RequestDetails> {
   int _starRatingValue = 0;
 
   double? paymentTransferred;
-
-  final mapController = MapController(
-    initMapWithUserPosition: const UserTrackingOption.withoutUserPosition(),
-    areaLimit: const BoundingBox.world(),
-  );
 
   isPending() => requestDetails.status == ServiceRequestStatus.pending;
   isAccepted() => requestDetails.status == ServiceRequestStatus.accepted;
@@ -134,13 +130,6 @@ class _RequestDetailsState extends State<RequestDetails> {
     setState(() {
       isLoad = false;
     });
-
-    await Future.delayed(const Duration(seconds: 1));
-
-    mapController.changeLocation(GeoPoint(
-        latitude: requestDetails.location.coordinate.latitude,
-        longitude: requestDetails.location.coordinate.longitude));
-    mapController.setZoom(zoomLevel: 15.4);
   }
 
   Future<void> _verifyTaskComplete(String jobId) async {
@@ -523,20 +512,37 @@ class _RequestDetailsState extends State<RequestDetails> {
                   SizedBox(
                     height: 120,
                     width: double.infinity,
-                    child: OSMFlutter(
-                      controller: mapController,
-                      initZoom: 16,
-                      minZoomLevel: 8,
-                      maxZoomLevel: 16,
-                      stepZoom: 1.0,
-                      markerOption: MarkerOption(
-                          defaultMarker: const MarkerIcon(
-                        icon: Icon(
-                          Icons.person_pin_circle,
-                          color: Colors.blue,
-                          size: 56,
+                    child: FlutterMap(
+                      options: MapOptions(
+                        center: LatLng(
+                            requestDetails.location.coordinate.latitude,
+                            requestDetails.location.coordinate.longitude),
+                        zoom: 13.0,
+                      ),
+                      children: [
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          userAgentPackageName: 'com.example.app',
                         ),
-                      )),
+                        MarkerLayer(
+                          markers: [
+                            Marker(
+                              width: 80.0,
+                              height: 80.0,
+                              point: LatLng(
+                                  requestDetails.location.coordinate.latitude,
+                                  requestDetails.location.coordinate.longitude),
+                              builder: (ctx) => IconButton(
+                                icon: Icon(Icons.location_on),
+                                color: Colors.red,
+                                iconSize: 45,
+                                onPressed: () {},
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                   ),
                   const Divider(),

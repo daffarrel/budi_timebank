@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide DatePickerTheme;
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../components/constants.dart';
@@ -12,6 +13,7 @@ import '../custom%20widgets/theme.dart';
 import '../db_helpers/client_service_request.dart';
 import '../model/service_request.dart' as model;
 import '../shared/malaysia_states.dart';
+import 'map_editor.dart';
 
 class RequestForm extends StatefulWidget {
   const RequestForm({Key? key}) : super(key: key);
@@ -67,11 +69,8 @@ class _RequestFormState extends State<RequestForm> {
   late bool isLocationFetched;
   late bool isLoad;
   bool isDetectingLocation = false;
-  Position? _currentPosition;
-  final mapController = MapController(
-    initMapWithUserPosition: const UserTrackingOption.withoutUserPosition(),
-    areaLimit: const BoundingBox.world(),
-  );
+  LatLng? _currentPosition;
+  MapController _mapController = MapController();
 
   @override
   void initState() {
@@ -155,8 +154,6 @@ class _RequestFormState extends State<RequestForm> {
     _descriptionController.dispose();
     _rateController.dispose();
     _mediaController.dispose();
-
-    mapController.dispose();
 
     super.dispose();
   }
@@ -379,10 +376,33 @@ class _RequestFormState extends State<RequestForm> {
                           )
                         ],
                       ),
+
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
                             'Enter address of the job or get current location'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          setState(() => isDetectingLocation = true);
+
+                          Position position = await _getGeoLocationPosition();
+                          getAddressFromLatLong(position);
+
+                          var latlngPos =
+                              LatLng(position.latitude, position.longitude);
+
+                          _mapController.move(latlngPos, 15.5);
+
+                          setState(() {
+                            _currentPosition = latlngPos;
+                            isLocationFetched = true;
+                            isDetectingLocation = false;
+                          });
+                        },
+                        child: isDetectingLocation
+                            ? const Text('Loading...')
+                            : const Text('Detect my location'),
                       ),
                       TextFormField(
                         controller: _locationController,
@@ -451,64 +471,79 @@ class _RequestFormState extends State<RequestForm> {
                         },
                       ),
                       const SizedBox(height: 4),
-                      ElevatedButton(
-                        onPressed: () async {
-                          setState(() => isDetectingLocation = true);
 
-                          Position position = await _getGeoLocationPosition();
-                          getAddressFromLatLong(position);
-
-                          // mapController.addMarker(GeoPoint(
-                          //     latitude: position.latitude,
-                          //     longitude: position.longitude));
-                          mapController.changeLocation(GeoPoint(
-                              latitude: position.latitude,
-                              longitude: position.longitude));
-                          mapController.setZoom(zoomLevel: 16);
-
-                          setState(() {
-                            _currentPosition = position;
-                            isLocationFetched = true;
-                            isDetectingLocation = false;
-                          });
-                        },
-                        child: isDetectingLocation
-                            ? const Text('Loading...')
-                            : const Text('Detect my location'),
-                      ),
                       // if (isLocationFetched)
                       SizedBox(
-                        height: 120,
+                        height: 140,
                         width: double.infinity,
-                        child: OSMFlutter(
-                          controller: mapController,
-                          initZoom: 13,
-                          minZoomLevel: 8,
-                          maxZoomLevel: 16,
-                          stepZoom: 1.0,
-                          userLocationMarker: UserLocationMaker(
-                            personMarker: const MarkerIcon(
-                              icon: Icon(
-                                Icons.location_history_rounded,
-                                color: Colors.red,
-                                size: 48,
+                        child: Stack(
+                          children: [
+                            FlutterMap(
+                              mapController: _mapController,
+                              options: MapOptions(
+                                center: LatLng(
+                                    _currentPosition?.latitude ?? 3.035,
+                                    _currentPosition?.longitude ?? 102.5),
+                                zoom: 13.6,
+                              ),
+                              children: [
+                                TileLayer(
+                                  urlTemplate:
+                                      'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                  userAgentPackageName: 'iium-buditimebank',
+                                ),
+                                MarkerLayer(
+                                  markers: [
+                                    if (_currentPosition != null)
+                                      Marker(
+                                        width: 80.0,
+                                        height: 80.0,
+                                        point: LatLng(
+                                            _currentPosition!.latitude,
+                                            _currentPosition!.longitude),
+                                        builder: (ctx) => IconButton(
+                                          icon: Icon(Icons.location_on),
+                                          color: Colors.red,
+                                          iconSize: 45,
+                                          onPressed: () {},
+                                        ),
+                                      ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            Positioned(
+                              right: 3,
+                              top: 3,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white.withAlpha(170),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: TextButton.icon(
+                                    onPressed: () async {
+                                      LatLng? res = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => MapEditor(
+                                              initialLocation:
+                                                  _currentPosition),
+                                        ),
+                                      );
+                                      if (res == null) return;
+
+                                      _mapController.move(
+                                          LatLng(res.latitude, res.longitude),
+                                          15.5);
+                                      setState(() {
+                                        _currentPosition = res;
+                                        isLocationFetched = true;
+                                      });
+                                    },
+                                    icon: const Icon(Icons.edit_location_alt),
+                                    label: const Text('Edit location')),
                               ),
                             ),
-                            directionArrowMarker: const MarkerIcon(
-                              icon: Icon(
-                                Icons.double_arrow,
-                                size: 48,
-                              ),
-                            ),
-                          ),
-                          markerOption: MarkerOption(
-                              defaultMarker: const MarkerIcon(
-                            icon: Icon(
-                              Icons.person_pin_circle,
-                              color: Colors.blue,
-                              size: 56,
-                            ),
-                          )),
+                          ],
                         ),
                       ),
                       // Padding(
@@ -655,40 +690,47 @@ class _RequestFormState extends State<RequestForm> {
                       const SizedBox(height: 8),
                       ElevatedButton(
                         onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            var rate = double.parse(
-                                _rateController.text); //convert to double
-                            var time = double.parse(_timeLimitController.text);
-
-                            var requestorId =
-                                FirebaseAuth.instance.currentUser!.uid;
-
-                            if (selectedDate == null) return;
-
-                            var request = model.ServiceRequest(
-                              title: _titleController.text,
-                              description: _descriptionController.text,
-                              location: model.Location(
-                                coordinate: firestore.GeoPoint(
-                                    _currentPosition!.latitude,
-                                    _currentPosition!.longitude),
-                                address: _locationController.text,
-                                city: cityValue!,
-                                state: stateValue!,
-                              ),
-                              status: model.ServiceRequestStatus.pending,
-                              rate: rate,
-                              media: mediaList,
-                              requestorId: requestorId,
-                              applicants: [],
-                              category: _categoryController.text,
-                              timeLimit: time,
-                              date: selectedDate!,
-                              createdAt: DateTime.now(),
-                            );
-
-                            _submitJobForm(request);
+                          if (_currentPosition == null) {
+                            context.showErrorSnackBar(
+                                message: 'Please set coordinate on map');
+                            return;
                           }
+                          if (!_formKey.currentState!.validate()) {
+                            context.showErrorSnackBar(
+                                message: 'Fill in all the particulars...');
+                            return;
+                          }
+
+                          var rate = double.parse(
+                              _rateController.text); //convert to double
+                          var time = double.parse(_timeLimitController.text);
+
+                          var requestorId =
+                              FirebaseAuth.instance.currentUser!.uid;
+
+                          var request = model.ServiceRequest(
+                            title: _titleController.text,
+                            description: _descriptionController.text,
+                            location: model.Location(
+                              coordinate: firestore.GeoPoint(
+                                  _currentPosition!.latitude,
+                                  _currentPosition!.longitude),
+                              address: _locationController.text,
+                              city: cityValue!,
+                              state: stateValue!,
+                            ),
+                            status: model.ServiceRequestStatus.pending,
+                            rate: rate,
+                            media: mediaList,
+                            requestorId: requestorId,
+                            applicants: [],
+                            category: _categoryController.text,
+                            timeLimit: time,
+                            date: selectedDate!,
+                            createdAt: DateTime.now(),
+                          );
+
+                          _submitJobForm(request);
                         },
                         child: const Text('Create Request'),
                       ),
