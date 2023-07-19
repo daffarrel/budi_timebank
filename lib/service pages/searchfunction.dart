@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../custom widgets/custom_card_service_request.dart';
-import '../request pages/requestDetails.dart';
+import '../request pages/request_details.dart';
 import 'job_details.dart';
 
 class CustomSearchDelegate extends SearchDelegate {

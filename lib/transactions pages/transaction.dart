@@ -8,7 +8,7 @@ import '../db_helpers/client_user.dart';
 import '../my_extensions/extension_string.dart';
 import '../model/earnings_history.dart';
 import '../model/profile.dart';
-import '../request pages/requestDetails.dart';
+import '../request pages/request_details.dart';
 
 class _MyEarningHistory {
   EarningsHistory earningsHistory;

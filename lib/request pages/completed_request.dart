@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../custom widgets/custom_card_service_request.dart';
 import '../db_helpers/client_service_request.dart';
 import '../model/service_request.dart';
-import 'requestDetails.dart';
+import 'request_details.dart';
 
 class CompletedRequest extends StatefulWidget {
   const CompletedRequest({Key? key}) : super(key: key);

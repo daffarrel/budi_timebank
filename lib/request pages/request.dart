@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'completedRequest.dart';
-import 'requestedJob.dart';
-import 'yourRequest.dart';
+import 'completed_request.dart';
+import 'requested_job.dart';
+import 'your_request.dart';
 
 class RequestPage extends StatefulWidget {
   const RequestPage({Key? key}) : super(key: key);

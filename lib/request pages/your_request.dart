@@ -5,8 +5,8 @@ import '../custom widgets/custom_card_service_request.dart';
 import '../custom%20widgets/theme.dart';
 import '../db_helpers/client_service_request.dart';
 import '../model/service_request.dart';
-import 'requestDetails.dart';
-import 'requestForm.dart';
+import 'request_details.dart';
+import 'request_form.dart';
 
 class YourRequest extends StatefulWidget {
   const YourRequest({Key? key}) : super(key: key);

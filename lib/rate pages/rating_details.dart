@@ -12,7 +12,7 @@ import '../my_extensions/extension_string.dart';
 import '../model/profile.dart';
 import '../model/rating.dart';
 import '../model/service_request.dart';
-import '../request pages/requestDetails.dart';
+import '../request pages/request_details.dart';
 
 class RatingDetails extends StatefulWidget {
   final bool isProvider;

@@ -21,12 +21,12 @@ class _CompletedServicesState extends State<CompletedServices> {
 
   @override
   void initState() {
-    isLoad = true;
-    getinstance();
     super.initState();
+    isLoad = true;
+    _getInstance();
   }
 
-  Future getinstance() async {
+  Future _getInstance() async {
     setState(() {
       isLoad = true;
     });
@@ -46,7 +46,7 @@ class _CompletedServicesState extends State<CompletedServices> {
           ? const Center(child: CircularProgressIndicator())
           : data.isEmpty
               ? RefreshIndicator(
-                  onRefresh: getinstance,
+                  onRefresh: _getInstance,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -66,7 +66,7 @@ class _CompletedServicesState extends State<CompletedServices> {
                   ),
                 )
               : RefreshIndicator(
-                  onRefresh: getinstance,
+                  onRefresh: _getInstance,
                   child: ListView.builder(
                     physics: const AlwaysScrollableScrollPhysics(),
                     itemCount: data.length,
@@ -80,7 +80,7 @@ class _CompletedServicesState extends State<CompletedServices> {
                                       user: currentUserUid)))
                               .then((value) => setState(
                                     () {
-                                      getinstance();
+                                      _getInstance();
                                     },
                                   ));
                         },

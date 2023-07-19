@@ -2,7 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart' hide Badge;
 
 import 'available_service.dart';
-import 'completedService.dart';
+import 'completed_service.dart';
 import 'yourServices.dart';
 
 class ServicePage extends StatefulWidget {
