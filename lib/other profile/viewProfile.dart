@@ -120,8 +120,7 @@ class _ViewProfileState extends State<ViewProfile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            CustomHeadline(
-                                heading: profile.name.toString().titleCase()),
+                            CustomHeadline(profile.name.toString().titleCase()),
                             const SizedBox(height: 8),
                             const Text('Gender',
                                 style: TextStyle(
@@ -133,12 +132,12 @@ class _ViewProfileState extends State<ViewProfile> {
                       ),
                     ),
                   ),
-                  const CustomHeadline(heading: ' Ratings'),
+                  const CustomHeadline(' Ratings'),
                   // TODO: enable this
                   // RatingCardDetails1(
                   //     isProvider: true,
                   //     userRating: profile.user.rating.asProvider),
-                  const CustomHeadline(heading: ' Skill List'),
+                  const CustomHeadline(' Skill List'),
                   isEmpty(skills)
                       ? const Text('No skills entered')
                       : SizedBox(
@@ -161,7 +160,7 @@ class _ViewProfileState extends State<ViewProfile> {
                               );
                             },
                           )),
-                  const CustomHeadline(heading: ' Contact List'),
+                  const CustomHeadline(' Contact List'),
                   Row(
                     children: [
                       ContactWidget(

@@ -249,7 +249,7 @@ class _SetupProfileState extends State<SetupProfile> {
                   // ),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: CustomHeadline(heading: 'Name'),
+                    child: CustomHeadline('Name'),
                   ),
                   TextFormField(
                     controller: _usernameController,
@@ -268,7 +268,7 @@ class _SetupProfileState extends State<SetupProfile> {
                     children: [
                       const Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: CustomHeadline(heading: 'Gender'),
+                        child: CustomHeadline('Gender'),
                       ),
                       ToggleButtons(
                         direction: Axis.horizontal,
@@ -301,7 +301,7 @@ class _SetupProfileState extends State<SetupProfile> {
                   ),
                   const Padding(
                     padding: EdgeInsets.fromLTRB(8.0, 0, 8, 8),
-                    child: CustomHeadline(heading: 'Identification'),
+                    child: CustomHeadline('Identification'),
                   ),
                   Row(
                     children: [
@@ -369,7 +369,7 @@ class _SetupProfileState extends State<SetupProfile> {
                     children: [
                       const Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: CustomHeadline(heading: 'Account type'),
+                        child: CustomHeadline('Account type'),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width / 2.6,
@@ -439,7 +439,7 @@ class _SetupProfileState extends State<SetupProfile> {
                       endIndent: 15),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: CustomHeadline(heading: 'Skill'),
+                    child: CustomHeadline('Skill'),
                   ),
                   TextFieldTags(
                     textfieldTagsController: _skillsInputController,
@@ -508,7 +508,7 @@ class _SetupProfileState extends State<SetupProfile> {
                       endIndent: 15),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: CustomHeadline(heading: 'Contacts'),
+                    child: CustomHeadline('Contacts'),
                   ),
                   TextFormField(
                     controller: _emailAddressController,

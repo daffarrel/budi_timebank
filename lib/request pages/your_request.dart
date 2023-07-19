@@ -97,13 +97,8 @@ class _YourRequestState extends State<YourRequest> {
                       child: CustomCardServiceRequest(
                         category: snapshot.data![index].category,
                         location: snapshot.data![index].location,
-                        // ['state'],
                         date: snapshot.data![index].date,
-                        // TODO: aku tak faham apa kaitan applicants dgn status
                         status: snapshot.data![index].status,
-                        // status: isRequested(
-                        //   snapshot.data![index].applicants,
-                        // ).toString(),
                         requestorId: snapshot.data![index].requestorId,
                         title: snapshot.data![index].title,
                         rate: snapshot.data![index].rate.toString(),

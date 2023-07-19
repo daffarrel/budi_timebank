@@ -40,7 +40,7 @@ class XDashboardCard extends StatelessWidget {
           );
         },
         child: Column(
-          children: [CustomHeadline(heading: title), content],
+          children: [CustomHeadline(title), content],
         ),
       ),
     );

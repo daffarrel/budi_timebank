@@ -135,7 +135,7 @@ class _UpdatePageState extends State<UpdatePage> {
                   children: [
                     const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: CustomHeadline(heading: 'Update Title'),
+                      child: CustomHeadline('Update Title'),
                     ),
                     TextFormField(
                       controller: _titleController,
@@ -175,7 +175,7 @@ class _UpdatePageState extends State<UpdatePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const CustomHeadline(heading: 'Pick category'),
+                      const CustomHeadline('Pick category'),
                       Container(
                         alignment: Alignment.center,
                         //padding: EdgeInsets.all(8),
@@ -232,7 +232,7 @@ class _UpdatePageState extends State<UpdatePage> {
                   children: [
                     const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: CustomHeadline(heading: 'Update Description'),
+                      child: CustomHeadline('Update Description'),
                     ),
                     TextFormField(
                       controller: _descriptionController,

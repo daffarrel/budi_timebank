@@ -338,7 +338,7 @@ class _JobDetailsState extends State<JobDetails> {
                       padding: EdgeInsets.all(15),
                       child: Column(
                         children: [
-                          CustomHeadline(heading: 'Job has been completed'),
+                          CustomHeadline('Job has been completed'),
                           Text('Pending verification from requestor')
                         ],
                       ),
@@ -358,8 +358,7 @@ class _JobDetailsState extends State<JobDetails> {
                       child: Column(
                         children: [
                           CustomHeadline(
-                              heading:
-                                  'You have been accepted as the provider'),
+                              'You have been accepted as the provider'),
                           Text(
                               'Contact your requestor to start the request when you are ready')
                         ],
@@ -380,7 +379,7 @@ class _JobDetailsState extends State<JobDetails> {
                       child: Column(
                         children: [
                           const CustomHeadline(
-                              heading: 'You are currently doing this request'),
+                              'You are currently doing this request'),
                           ElevatedButton(
                               onPressed: () async {
                                 var res = await showDialog(

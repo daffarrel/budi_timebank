@@ -157,18 +157,15 @@ class _RatingDetailsState extends State<RatingDetails> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomHeadline(
-                                  heading: 'Recipient',
-                                  color: themeData1().secondaryHeaderColor),
+                              const CustomHeadline(
+                                'Recipient',
+                              ),
                               Text(_userProvider.name.toString().titleCase()),
                             ],
                           ),
                           Column(
                             children: [
-                              CustomHeadline(
-                                heading: 'Author',
-                                color: themeData1().secondaryHeaderColor,
-                              ),
+                              const CustomHeadline('Author'),
                               Text(_userRequestor.name.toString().titleCase()),
                             ],
                           ),

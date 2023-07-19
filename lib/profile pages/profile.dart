@@ -121,8 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             CustomHeadline(
-                                heading:
-                                    snapshot.data!.name.toString().titleCase()),
+                                snapshot.data!.name.toString().titleCase()),
                             const SizedBox(height: 10),
                             Text(
                                 snapshot.data!.identification.identificationType
@@ -148,14 +147,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
 
-                  // const CustomHeadline(heading: ' Ratings'),
+                  // const CustomHeadline(' Ratings'),
                   // RatingCardDetails1(
                   //     isProvider: true,
                   //     userRating: profile.user.rating.asProvider),
                   // RatingCardDetails1(
                   //     isProvider: false,
                   //     userRating: profile.user.rating.asRequestor),
-                  const CustomHeadline(heading: ' Skill List'),
+                  const CustomHeadline(' Skill List'),
                   skills.isEmpty
                       ? const Text('No skills entered')
                       : Wrap(
@@ -191,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   //     },
                   //   ),
 
-                  const CustomHeadline(heading: ' Contact List'),
+                  const CustomHeadline(' Contact List'),
                   Row(
                     children: [
                       ContactWidget(

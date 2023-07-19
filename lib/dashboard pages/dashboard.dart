@@ -50,7 +50,7 @@ class Dashboard extends StatelessWidget {
             //CustomDivider(),
             const Padding(
               padding: EdgeInsets.only(left: 8.0),
-              child: CustomHeadline(heading: 'Services'),
+              child: CustomHeadline('Services'),
             ),
             Expanded(
               child: Row(

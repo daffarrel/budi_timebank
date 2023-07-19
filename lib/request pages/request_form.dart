@@ -195,17 +195,9 @@ class _RequestFormState extends State<RequestForm> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
-                            child: CustomHeadline(heading: 'Title'),
-                          ),
-                          CustomHeadline(
-                            heading: '*',
-                            color: Colors.red,
-                          )
-                        ],
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
+                        child: CustomHeadline('Title', isRequired: true),
                       ),
                       TextFormField(
                         controller: _titleController,
@@ -224,17 +216,9 @@ class _RequestFormState extends State<RequestForm> {
                         //   reqList[0]['Title'] = value;
                         // },
                       ),
-                      const Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
-                            child: CustomHeadline(heading: 'Desription'),
-                          ),
-                          CustomHeadline(
-                            heading: '*',
-                            color: Colors.red,
-                          )
-                        ],
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
+                        child: CustomHeadline('Description', isRequired: true),
                       ),
                       TextFormField(
                         controller: _descriptionController,
@@ -250,17 +234,9 @@ class _RequestFormState extends State<RequestForm> {
                           return null;
                         },
                       ),
-                      const Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
-                            child: CustomHeadline(heading: 'Date & Time'),
-                          ),
-                          CustomHeadline(
-                            heading: '*',
-                            color: Colors.red,
-                          )
-                        ],
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
+                        child: CustomHeadline('Date & Time', isRequired: true),
                       ),
                       ElevatedButton(
                           onPressed: () {
@@ -313,17 +289,9 @@ class _RequestFormState extends State<RequestForm> {
                           return null;
                         },
                       ),
-                      const Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
-                            child: CustomHeadline(heading: 'Category'),
-                          ),
-                          CustomHeadline(
-                            heading: '*',
-                            color: Colors.red,
-                          )
-                        ],
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
+                        child: CustomHeadline('Category', isRequired: true),
                       ),
                       Container(
                         alignment: Alignment.center,
@@ -364,19 +332,10 @@ class _RequestFormState extends State<RequestForm> {
                           },
                         ),
                       ),
-                      const Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
-                            child: CustomHeadline(heading: 'Location'),
-                          ),
-                          CustomHeadline(
-                            heading: '*',
-                            color: Colors.red,
-                          )
-                        ],
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
+                        child: CustomHeadline('Location', isRequired: true),
                       ),
-
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
@@ -622,17 +581,9 @@ class _RequestFormState extends State<RequestForm> {
                       //             );
                       //           },
                       //         )),
-                      const Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
-                            child: CustomHeadline(heading: 'Time Limit'),
-                          ),
-                          CustomHeadline(
-                            heading: '*',
-                            color: Colors.red,
-                          )
-                        ],
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
+                        child: CustomHeadline('Time Limit', isRequired: true),
                       ),
                       TextFormField(
                         controller: _timeLimitController,
@@ -651,17 +602,9 @@ class _RequestFormState extends State<RequestForm> {
                         //   reqList[0]['Title'] = value;
                         // },
                       ),
-                      const Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
-                            child: CustomHeadline(heading: 'Rate'),
-                          ),
-                          CustomHeadline(
-                            heading: '*',
-                            color: Colors.red,
-                          )
-                        ],
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
+                        child: CustomHeadline('Rate', isRequired: true),
                       ),
                       Row(
                         children: [
