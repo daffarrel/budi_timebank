@@ -146,463 +146,443 @@ class _RequestDetailsState extends State<RequestDetails> {
       ),
       body: isLoad
           ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+          : ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                if (kDebugMode)
+                  Text(
+                    requestDetails.id.toString(),
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                Center(child: Heading2('Title')),
+                Center(
+                    child: Text(requestDetails.title.toString().capitalize())),
+                const Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    if (kDebugMode)
-                      Text(
-                        requestDetails.id.toString(),
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    Center(child: Heading2('Title')),
-                    Center(
-                        child:
-                            Text(requestDetails.title.toString().capitalize())),
-                    const Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Card(
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Heading2('Status'),
-                                Text(
-                                  requestDetails.status.name.capitalize(),
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Card(
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Heading2('Rate'),
-                                Text(
-                                  '${requestDetails.rate} Time/hour',
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
                     Card(
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                       ),
-                      elevation: 5,
-                      child: Container(
+                      child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            //does not have any applicants
-                            if (_userProvidor == null &&
-                                requestDetails.applicants.isEmpty) ...[
-                              Heading2('Applicants'),
-                              const Text('No Applicants'),
-                              const SizedBox(height: 5)
-                            ],
-                            if (requestDetails.applicants.isNotEmpty &&
-                                _userProvidor == null)
-                              ApplicantsSelectionList(
-                                applicants: _listApplicants,
-                                onSelectProvider: (int index) async {
-                                  await ClientServiceRequest.applyProvider(
-                                      widget.requestId,
-                                      requestDetails.applicants[index]);
-                                  if (mounted) Navigator.pop(context);
-                                  setState(() {
-                                    _getAllinstance();
-                                  });
-                                },
-                                onClickProfile: (int index) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          ViewProfile(
-                                        id: requestDetails.applicants[index],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            Heading2('Provider'),
-                            _userProvidor == null
-                                ? const Text('No provider selected')
-                                : Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(3, 3, 3, 6),
-                                    child: TextButton(
-                                      style: themeData2().textButtonTheme.style,
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) => ViewProfile(
-                                            id: requestDetails.requestorId,
-                                          ),
-                                        ));
-                                      },
-                                      // TODO: Chnage to requestor name
-                                      child: Text(_userProvidor!.name
-                                          .toString()
-                                          .titleCase()),
-                                    ),
-                                  ),
-                            //CustomDivider(color: themeData2().primaryColor),
-                            //SizedBox(height: 8),
-                            if (isCompletedVerified())
-                              Column(
-                                children: [
-                                  Heading2('The request is completed'),
-                                  Text(
-                                      'Completed On: ${requestDetails.completedAt?.formatDate()}'),
-                                  Text(
-                                      'Time: ${requestDetails.completedAt?.formatTime()}'),
-                                ],
-                              ),
-                            if (isCompletedVerified() && isRated)
-                              Column(
-                                children: [
-                                  const Text('You have rated the provider.'),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text('Payment: '),
-                                      Text(
-                                        '${paymentTransferred?.toStringAsFixed(2)} Time/hour',
-                                        style: const TextStyle(
-                                            color: Colors.red,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  ),
-                                  TextButton(
-                                      style: themeData2().textButtonTheme.style,
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) =>
-                                              const RateGivenPage(),
-                                        ));
-                                      },
-                                      child: const Text('Go to rating page'))
-                                ],
-                              ),
-                            if (isCompletedVerified() && !isRated)
-                              Column(children: [
-                                const Text(
-                                  'Rate the provider',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 15),
-                                Center(
-                                  child: RatingBar.builder(
-                                    initialRating: 0,
-                                    itemBuilder: (context, index) => Icon(
-                                      Icons.star,
-                                      color: Theme.of(context)
-                                          .secondaryHeaderColor,
-                                    ),
-                                    onRatingUpdate: (value) {
-                                      _starRatingValue = value.toInt();
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(height: 15),
-                                TextFormField(
-                                  controller: _commentController,
-                                  decoration: const InputDecoration(
-                                      hintText: 'Enter comment'),
-                                ),
-                                const SizedBox(height: 15),
-                                ElevatedButton(
-                                    style:
-                                        themeData2().elevatedButtonTheme.style,
-                                    onPressed: () => showDialog<String>(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              AlertDialog(
-                                            title: const Text('Submit Review?'),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () =>
-                                                    Navigator.pop(context),
-                                                child: const Text('Cancel'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  ClientRating.rateProvider(
-                                                      rating: _starRatingValue,
-                                                      message:
-                                                          _commentController
-                                                              .text,
-                                                      jobId: widget.requestId,
-                                                      providerId: _userProvidor!
-                                                          .userUid!);
-
-                                                  Navigator.pop(context);
-                                                  setState(() {
-                                                    _getAllinstance();
-                                                  });
-                                                },
-                                                child: const Text('Submit'),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                    child: const Text('Rate Provider'))
-                              ]),
-                            if (isOngoing() && !isCompleted())
-                              Column(
-                                children: [
-                                  const Text(
-                                    'The request has started',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            if (isCompleted())
-                              Column(
-                                children: [
-                                  const Text(
-                                    'The provider has marked the request as completed.',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const Divider(),
-                                  ElevatedButton(
-                                      style: themeData2()
-                                          .elevatedButtonTheme
-                                          .style,
-                                      onPressed: () => showDialog<String>(
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                                AlertDialog(
-                                              title: const Text(
-                                                  'Complete Request?'),
-                                              content: const Text(
-                                                  'Once the request completion is verified, transaction of Time/hour will be made.'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(
-                                                          context, 'Cancel'),
-                                                  child: const Text('Cancel'),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    await _verifyTaskComplete(
-                                                        requestDetails.id!);
-                                                    Navigator.pop(context);
-                                                    _getAllinstance();
-                                                  },
-                                                  child: const Text('Complete'),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                      child: const Text('Verify Completion')),
-                                ],
-                              ),
-                            if (_userProvidor != null && isAccepted())
-                              Column(
-                                children: [
-                                  const Text(
-                                    'Start the request to record the request to the database',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  ElevatedButton(
-                                      style: themeData2()
-                                          .elevatedButtonTheme
-                                          .style,
-                                      onPressed: () => showDialog<String>(
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                                AlertDialog(
-                                              title:
-                                                  const Text('Start Request'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(
-                                                          context, 'Cancel'),
-                                                  child: const Text('Cancel'),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    await ClientServiceRequest
-                                                        .startService(
-                                                            requestDetails.id!);
-                                                    Navigator.pop(context);
-                                                    _getAllinstance();
-                                                  },
-                                                  child: const Text('Start'),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                      child: const Text('Start Request')),
-                                ],
-                              ),
-
-                            if (_userProvidor == null)
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                    foregroundColor: Colors.red),
-                                onPressed: () => showDialog<String>(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                    title: const Text('Delete Request?'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(context, 'Cancel'),
-                                        child: const Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () async {
-                                          await ClientServiceRequest
-                                              .deleteServiceRequest(
-                                                  widget.requestId);
-                                          if (!mounted) return;
-                                          context.showSnackBar(
-                                              message:
-                                                  'Service Request deleted');
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('Delete'),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                child: const Text('Delete request'),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    Container(
-                        alignment: Alignment.center,
-                        child: Heading2('Other Information')),
-                    const Divider(),
-                    Heading2('Date of the request'),
-                    Text('Date: ${dateJob.formatDate()}'),
-                    Text('Time: ${dateJob.formatTime()}'),
-                    const Divider(),
-                    Heading2('Category'),
-                    Text(requestDetails.category),
-                    const Divider(),
-                    Heading2('Description'),
-                    Text(requestDetails.description.toString().capitalize()),
-                    const Divider(),
-                    Heading2('Location'),
-                    Text('Address: ${requestDetails.location.address}'),
-                    Text('District: ${requestDetails.location.district}'),
-                    Text('State: ${requestDetails.location.state}'),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 120,
-                      width: double.infinity,
-                      child: FlutterMap(
-                        options: MapOptions(
-                          center: LatLng(
-                              requestDetails.location.coordinate.latitude,
-                              requestDetails.location.coordinate.longitude),
-                          zoom: 13.0,
-                        ),
-                        children: [
-                          TileLayer(
-                            urlTemplate:
-                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            userAgentPackageName: 'com.example.app',
-                          ),
-                          MarkerLayer(
-                            markers: [
-                              Marker(
-                                width: 80.0,
-                                height: 80.0,
-                                point: LatLng(
-                                    requestDetails.location.coordinate.latitude,
-                                    requestDetails
-                                        .location.coordinate.longitude),
-                                builder: (ctx) => IconButton(
-                                  icon: Icon(Icons.location_on),
-                                  color: Colors.red,
-                                  iconSize: 45,
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    const Divider(),
-                    Heading2('Media'),
-                    requestDetails.media.isEmpty
-                        ? const Text('No Attachment')
-                        : SizedBox(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: requestDetails.media.length,
-                              itemBuilder: (context, index) {
-                                return Row(
-                                  children: [
-                                    Text(
-                                        '${index + 1}) ${requestDetails.media[index].toString()}'),
-                                  ],
-                                );
-                              },
+                            Heading2('Status'),
+                            Text(
+                              requestDetails.status.name.capitalize(),
+                              style: const TextStyle(fontSize: 12),
                             ),
-                          ),
-                    const Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Heading2('Created On'),
-                            Text('Date: ${dateCreatedOn.formatDate()}'),
-                            Text('Time: ${dateCreatedOn.formatTime()}'),
                           ],
                         ),
-                        if (dateUpdatedOn != null)
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Heading2('Updated On'),
-                              Text('Date: ${dateUpdatedOn?.formatDate()}'),
-                              Text('Time: ${dateUpdatedOn?.formatTime()}'),
-                            ],
-                          ),
-                      ],
+                      ),
+                    ),
+                    Card(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Heading2('Rate'),
+                            Text(
+                              '${requestDetails.rate} Time/hour',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 15),
+                Card(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
+                  elevation: 5,
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        //does not have any applicants
+                        if (_userProvidor == null &&
+                            requestDetails.applicants.isEmpty) ...[
+                          Heading2('Applicants'),
+                          const Text('No Applicants'),
+                          const SizedBox(height: 5)
+                        ],
+                        if (requestDetails.applicants.isNotEmpty &&
+                            _userProvidor == null)
+                          ApplicantsSelectionList(
+                            applicants: _listApplicants,
+                            onSelectProvider: (int index) async {
+                              await ClientServiceRequest.applyProvider(
+                                  widget.requestId,
+                                  requestDetails.applicants[index]);
+                              if (mounted) Navigator.pop(context);
+                              setState(() {
+                                _getAllinstance();
+                              });
+                            },
+                            onClickProfile: (int index) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ViewProfile(
+                                    id: requestDetails.applicants[index],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        Heading2('Provider'),
+                        _userProvidor == null
+                            ? const Text('No provider selected')
+                            : Padding(
+                                padding: const EdgeInsets.fromLTRB(3, 3, 3, 6),
+                                child: TextButton(
+                                  style: themeData2().textButtonTheme.style,
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) => ViewProfile(
+                                        id: requestDetails.requestorId,
+                                      ),
+                                    ));
+                                  },
+                                  // TODO: Chnage to requestor name
+                                  child: Text(_userProvidor!.name
+                                      .toString()
+                                      .titleCase()),
+                                ),
+                              ),
+                        //CustomDivider(color: themeData2().primaryColor),
+                        //SizedBox(height: 8),
+                        if (isCompletedVerified())
+                          Column(
+                            children: [
+                              Heading2('The request is completed'),
+                              Text(
+                                  'Completed On: ${requestDetails.completedAt?.formatDate()}'),
+                              Text(
+                                  'Time: ${requestDetails.completedAt?.formatTime()}'),
+                            ],
+                          ),
+                        if (isCompletedVerified() && isRated)
+                          Column(
+                            children: [
+                              const Text('You have rated the provider.'),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text('Payment: '),
+                                  Text(
+                                    '${paymentTransferred?.toStringAsFixed(2)} Time/hour',
+                                    style: const TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                              TextButton(
+                                  style: themeData2().textButtonTheme.style,
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RateGivenPage(),
+                                    ));
+                                  },
+                                  child: const Text('Go to rating page'))
+                            ],
+                          ),
+                        if (isCompletedVerified() && !isRated)
+                          Column(children: [
+                            const Text(
+                              'Rate the provider',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 15),
+                            Center(
+                              child: RatingBar.builder(
+                                initialRating: 0,
+                                itemBuilder: (context, index) => Icon(
+                                  Icons.star,
+                                  color: Theme.of(context).secondaryHeaderColor,
+                                ),
+                                onRatingUpdate: (value) {
+                                  _starRatingValue = value.toInt();
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 15),
+                            TextFormField(
+                              controller: _commentController,
+                              decoration: const InputDecoration(
+                                  hintText: 'Enter comment'),
+                            ),
+                            const SizedBox(height: 15),
+                            ElevatedButton(
+                                style: themeData2().elevatedButtonTheme.style,
+                                onPressed: () => showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        title: const Text('Submit Review?'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: const Text('Cancel'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              ClientRating.rateProvider(
+                                                  rating: _starRatingValue,
+                                                  message:
+                                                      _commentController.text,
+                                                  jobId: widget.requestId,
+                                                  providerId:
+                                                      _userProvidor!.userUid!);
+
+                                              Navigator.pop(context);
+                                              setState(() {
+                                                _getAllinstance();
+                                              });
+                                            },
+                                            child: const Text('Submit'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                child: const Text('Rate Provider'))
+                          ]),
+                        if (isOngoing() && !isCompleted())
+                          Column(
+                            children: [
+                              const Text(
+                                'The request has started',
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        if (isCompleted())
+                          Column(
+                            children: [
+                              const Text(
+                                'The provider has marked the request as completed.',
+                                textAlign: TextAlign.center,
+                              ),
+                              const Divider(),
+                              ElevatedButton(
+                                  style: themeData2().elevatedButtonTheme.style,
+                                  onPressed: () => showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                          title:
+                                              const Text('Complete Request?'),
+                                          content: const Text(
+                                              'Once the request completion is verified, transaction of Time/hour will be made.'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(
+                                                  context, 'Cancel'),
+                                              child: const Text('Cancel'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () async {
+                                                await _verifyTaskComplete(
+                                                    requestDetails.id!);
+                                                Navigator.pop(context);
+                                                _getAllinstance();
+                                              },
+                                              child: const Text('Complete'),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                  child: const Text('Verify Completion')),
+                            ],
+                          ),
+                        if (_userProvidor != null && isAccepted())
+                          Column(
+                            children: [
+                              const Text(
+                                'Start the request to record the request to the database',
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 8),
+                              ElevatedButton(
+                                  style: themeData2().elevatedButtonTheme.style,
+                                  onPressed: () => showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                          title: const Text('Start Request'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(
+                                                  context, 'Cancel'),
+                                              child: const Text('Cancel'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () async {
+                                                await ClientServiceRequest
+                                                    .startService(
+                                                        requestDetails.id!);
+                                                Navigator.pop(context);
+                                                _getAllinstance();
+                                              },
+                                              child: const Text('Start'),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                  child: const Text('Start Request')),
+                            ],
+                          ),
+
+                        if (_userProvidor == null)
+                          TextButton(
+                            style: TextButton.styleFrom(
+                                foregroundColor: Colors.red),
+                            onPressed: () => showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text('Delete Request?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'Cancel'),
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      await ClientServiceRequest
+                                          .deleteServiceRequest(
+                                              widget.requestId);
+                                      if (!mounted) return;
+                                      context.showSnackBar(
+                                          message: 'Service Request deleted');
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Delete'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            child: const Text('Delete request'),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Container(
+                    alignment: Alignment.center,
+                    child: Heading2('Other Information')),
+                const Divider(),
+                Heading2('Date of the request'),
+                Text('Date: ${dateJob.formatDate()}'),
+                Text('Time: ${dateJob.formatTime()}'),
+                const Divider(),
+                Heading2('Category'),
+                Text(requestDetails.category),
+                const Divider(),
+                Heading2('Description'),
+                Text(requestDetails.description.toString().capitalize()),
+                const Divider(),
+                Heading2('Location'),
+                Text('Address: ${requestDetails.location.address}'),
+                Text('District: ${requestDetails.location.district}'),
+                Text('State: ${requestDetails.location.state}'),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 120,
+                  width: double.infinity,
+                  child: FlutterMap(
+                    options: MapOptions(
+                      center: LatLng(
+                          requestDetails.location.coordinate.latitude,
+                          requestDetails.location.coordinate.longitude),
+                      zoom: 13.0,
+                    ),
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName: 'com.example.app',
+                      ),
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            width: 80.0,
+                            height: 80.0,
+                            point: LatLng(
+                                requestDetails.location.coordinate.latitude,
+                                requestDetails.location.coordinate.longitude),
+                            builder: (ctx) => IconButton(
+                              icon: Icon(Icons.location_on),
+                              color: Colors.red,
+                              iconSize: 45,
+                              onPressed: () {},
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                const Divider(),
+                Heading2('Media'),
+                requestDetails.media.isEmpty
+                    ? const Text('No Attachment')
+                    : SizedBox(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: requestDetails.media.length,
+                          itemBuilder: (context, index) {
+                            return Row(
+                              children: [
+                                Text(
+                                    '${index + 1}) ${requestDetails.media[index].toString()}'),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                const Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Heading2('Created On'),
+                        Text('Date: ${dateCreatedOn.formatDate()}'),
+                        Text('Time: ${dateCreatedOn.formatTime()}'),
+                      ],
+                    ),
+                    if (dateUpdatedOn != null)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Heading2('Updated On'),
+                          Text('Date: ${dateUpdatedOn?.formatDate()}'),
+                          Text('Time: ${dateUpdatedOn?.formatTime()}'),
+                        ],
+                      ),
+                  ],
+                ),
+              ],
             ),
       // FIXME: reanable edit request
       // floatingActionButton: !isLoad && isPending()
