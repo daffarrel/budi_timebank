@@ -89,7 +89,8 @@ class _YourRequestState extends State<YourRequest> {
                                     user: userUid)))
                             .then((value) => setState(
                                   () {
-                                    listRequestFuture;
+                                    listRequestFuture = ClientServiceRequest
+                                        .getPendingRequests();
                                   },
                                 ));
                       },

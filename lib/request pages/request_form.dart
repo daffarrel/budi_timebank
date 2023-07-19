@@ -473,9 +473,7 @@ class _RequestFormState extends State<RequestForm> {
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
-                        height: isLocationFetched
-                            ? 140
-                            : 1, // sort of hiding the map when location is not fetched
+                        height: 140,
                         width: double.infinity,
                         child: Stack(
                           children: [
@@ -513,38 +511,39 @@ class _RequestFormState extends State<RequestForm> {
                                 )
                               ],
                             ),
-                            if (isLocationFetched)
-                              Positioned(
-                                right: 3,
-                                top: 3,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.white.withAlpha(170),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: TextButton.icon(
-                                      onPressed: () async {
-                                        LatLng? res = await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => MapEditor(
-                                                initialLocation:
-                                                    _currentPosition),
-                                          ),
-                                        );
-                                        if (res == null) return;
+                            Positioned(
+                              right: 3,
+                              top: 3,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white.withAlpha(170),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: TextButton.icon(
+                                  onPressed: () async {
+                                    LatLng? res = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => MapEditor(
+                                            initialLocation: _currentPosition),
+                                      ),
+                                    );
+                                    if (res == null) return;
 
-                                        _mapController.move(
-                                            LatLng(res.latitude, res.longitude),
-                                            15.5);
-                                        setState(() {
-                                          _currentPosition = res;
-                                          isLocationFetched = true;
-                                        });
-                                      },
-                                      icon: const Icon(Icons.edit_location_alt),
-                                      label: const Text('Edit location')),
+                                    _mapController.move(
+                                        LatLng(res.latitude, res.longitude),
+                                        15.5);
+                                    setState(() {
+                                      _currentPosition = res;
+                                      isLocationFetched = true;
+                                    });
+                                  },
+                                  icon: const Icon(Icons.edit_location_alt),
+                                  label: Text(isLocationFetched
+                                      ? 'Edit location'
+                                      : 'Set location'),
                                 ),
                               ),
+                            ),
                           ],
                         ),
                       ),
