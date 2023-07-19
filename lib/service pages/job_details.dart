@@ -498,7 +498,7 @@ class _JobDetailsState extends State<JobDetails> {
                   Heading2('Location'),
                   Text('Address: ${jobDetail.location.address}'),
                   Text('State: ${jobDetail.location.state}'),
-                  Text('City: ${jobDetail.location.city}'),
+                  Text('District: ${jobDetail.location.district}'),
                   const SizedBox(height: 10),
                   SizedBox(
                     height: 120,

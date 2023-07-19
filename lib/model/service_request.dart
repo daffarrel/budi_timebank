@@ -146,20 +146,20 @@ class ServiceRequest {
 class Location {
   final GeoPoint coordinate;
   final String address;
-  final String city;
+  final String district;
   final String state;
 
   Location({
     required this.coordinate,
     required this.address,
-    required this.city,
+    required this.district,
     required this.state,
   });
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
       address: json['address'],
-      city: json['city'],
+      district: json['city'],
       state: json['state'],
       coordinate: json['coordinate'] as GeoPoint,
     );
@@ -168,7 +168,7 @@ class Location {
   Map<String, dynamic> toMap() {
     return {
       'address': address,
-      'city': city,
+      'city': district,
       'state': state,
       'coordinate': coordinate,
     };
@@ -176,7 +176,7 @@ class Location {
 
   @override
   String toString() {
-    return "{Location: $address, $city, $state, $coordinate}";
+    return "{Location: $address, $district, $state, $coordinate}";
   }
 }
 

@@ -12,7 +12,7 @@ import '../custom widgets/custom_headline.dart';
 import '../custom%20widgets/theme.dart';
 import '../db_helpers/client_service_request.dart';
 import '../model/service_request.dart' as model;
-import '../shared/malaysia_states.dart';
+import '../shared/malaysia_state.dart';
 import 'map_editor.dart';
 
 class RequestForm extends StatefulWidget {
@@ -58,12 +58,12 @@ class _RequestFormState extends State<RequestForm> {
   late DateTime? newDate;
   late TimeOfDay? newTime;
 
-  List<String> states = MalaysiaStates.allStates().map((e) => e.name!).toList();
-  List<String>? citiesInSelectedState;
+  List<String> states = MalaysiaState.allStatesName();
+  List<String>? districtsInSelectedState;
 
   // late String countryValue = '';
   String? stateValue;
-  String? cityValue;
+  String? districtValue;
 
   // late MapController _mapController;
   late bool isLocationFetched;
@@ -140,7 +140,7 @@ class _RequestFormState extends State<RequestForm> {
       setState(() {
         // countryValue = place.country.toString();
         stateValue = place.administrativeArea.toString();
-        citiesInSelectedState = MalaysiaStates.getCitiesByState(stateValue!);
+        districtsInSelectedState = MalaysiaState.districtsForState(stateValue!);
       });
       if (mounted) context.showSnackBar(message: 'Location details added');
     } catch (e) {
@@ -189,9 +189,9 @@ class _RequestFormState extends State<RequestForm> {
           ? const Center(child: CircularProgressIndicator())
           : Form(
               key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: SingleChildScrollView(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -441,40 +441,41 @@ class _RequestFormState extends State<RequestForm> {
                           setState(() {
                             stateValue = value.toString();
 
-                            cityValue = null;
-                            citiesInSelectedState =
-                                MalaysiaStates.getCitiesByState(stateValue!);
+                            districtValue = null;
+                            districtsInSelectedState =
+                                MalaysiaState.districtsForState(stateValue!);
                           });
                         },
                       ),
                       const SizedBox(height: 10),
                       DropdownButtonFormField(
-                        value: cityValue,
-                        validator: (value) =>
-                            value == null ? 'Please select a city...' : null,
+                        value: districtValue,
+                        validator: (value) => value == null
+                            ? 'Please select a district...'
+                            : null,
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),
-                            hintText: 'Select City'),
-                        items: citiesInSelectedState == null
+                            hintText: 'Select District'),
+                        items: districtsInSelectedState == null
                             ? null
                             : [
-                                for (var city in citiesInSelectedState!)
+                                for (var district in districtsInSelectedState!)
                                   DropdownMenuItem(
-                                    value: city,
-                                    child: Text(city),
+                                    value: district,
+                                    child: Text(district),
                                   )
                               ],
                         onChanged: (value) {
                           setState(() {
-                            cityValue = value.toString();
+                            districtValue = value.toString();
                           });
                         },
                       ),
-                      const SizedBox(height: 4),
-
-                      // if (isLocationFetched)
+                      const SizedBox(height: 10),
                       SizedBox(
-                        height: 140,
+                        height: isLocationFetched
+                            ? 140
+                            : 1, // sort of hiding the map when location is not fetched
                         width: double.infinity,
                         child: Stack(
                           children: [
@@ -502,7 +503,7 @@ class _RequestFormState extends State<RequestForm> {
                                             _currentPosition!.latitude,
                                             _currentPosition!.longitude),
                                         builder: (ctx) => IconButton(
-                                          icon: Icon(Icons.location_on),
+                                          icon: const Icon(Icons.location_on),
                                           color: Colors.red,
                                           iconSize: 45,
                                           onPressed: () {},
@@ -512,37 +513,38 @@ class _RequestFormState extends State<RequestForm> {
                                 )
                               ],
                             ),
-                            Positioned(
-                              right: 3,
-                              top: 3,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white.withAlpha(170),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: TextButton.icon(
-                                    onPressed: () async {
-                                      LatLng? res = await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => MapEditor(
-                                              initialLocation:
-                                                  _currentPosition),
-                                        ),
-                                      );
-                                      if (res == null) return;
+                            if (isLocationFetched)
+                              Positioned(
+                                right: 3,
+                                top: 3,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white.withAlpha(170),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: TextButton.icon(
+                                      onPressed: () async {
+                                        LatLng? res = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => MapEditor(
+                                                initialLocation:
+                                                    _currentPosition),
+                                          ),
+                                        );
+                                        if (res == null) return;
 
-                                      _mapController.move(
-                                          LatLng(res.latitude, res.longitude),
-                                          15.5);
-                                      setState(() {
-                                        _currentPosition = res;
-                                        isLocationFetched = true;
-                                      });
-                                    },
-                                    icon: const Icon(Icons.edit_location_alt),
-                                    label: const Text('Edit location')),
+                                        _mapController.move(
+                                            LatLng(res.latitude, res.longitude),
+                                            15.5);
+                                        setState(() {
+                                          _currentPosition = res;
+                                          isLocationFetched = true;
+                                        });
+                                      },
+                                      icon: const Icon(Icons.edit_location_alt),
+                                      label: const Text('Edit location')),
+                                ),
                               ),
-                            ),
                           ],
                         ),
                       ),
@@ -716,7 +718,7 @@ class _RequestFormState extends State<RequestForm> {
                                   _currentPosition!.latitude,
                                   _currentPosition!.longitude),
                               address: _locationController.text,
-                              city: cityValue!,
+                              district: districtValue!,
                               state: stateValue!,
                             ),
                             status: model.ServiceRequestStatus.pending,
@@ -734,6 +736,7 @@ class _RequestFormState extends State<RequestForm> {
                         },
                         child: const Text('Create Request'),
                       ),
+                      const SizedBox(height: 25),
                     ],
                   ),
                 ),

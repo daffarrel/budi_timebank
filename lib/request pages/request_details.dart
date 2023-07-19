@@ -506,7 +506,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                   const Divider(),
                   Heading2('Location'),
                   Text('Address: ${requestDetails.location.address}'),
-                  Text('City: ${requestDetails.location.city}'),
+                  Text('District: ${requestDetails.location.district}'),
                   Text('State: ${requestDetails.location.state}'),
                   const SizedBox(height: 10),
                   SizedBox(
