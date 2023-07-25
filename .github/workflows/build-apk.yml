@@ -37,11 +37,12 @@ jobs:
         with:
           channel: ${{ inputs.flutterChannel }}
 
-      # - name: Decoding android/key.properties
-      #   run: echo "${{ secrets.KEY_PROP }}" | base64 --decode > android/key.properties
+      # File encoder: https://base64.guru/converter/encode/file
+      - name: Decoding android/key.properties
+        run: echo "${{ secrets.KEY_PROP }}" | base64 --decode > android/key.properties
 
-      # - name: Decoding android/key.jks
-      #   run: echo "${{ secrets.KEY_JKS }}" | base64 --decode > android/key.jks\
+      - name: Decoding android/key.jks
+        run: echo "${{ secrets.KEY_JKS }}" | base64 --decode > android/key.jks
 
       - name: Build splitted apk(s)
         run: |
