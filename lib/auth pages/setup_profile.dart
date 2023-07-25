@@ -519,7 +519,7 @@ class _SetupProfileState extends State<SetupProfile> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter email';
+                        return 'Please enter your email';
                       }
                       return null;
                     },
@@ -534,7 +534,7 @@ class _SetupProfileState extends State<SetupProfile> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter email';
+                        return 'Please enter your mobile number';
                       }
                       return null;
                     },
