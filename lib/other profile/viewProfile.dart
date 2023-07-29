@@ -171,7 +171,7 @@ class _ViewProfileState extends State<ViewProfile> {
                           ),
                           iconColor: Colors.white),
                       isEmpty(email)
-                          ? const emptyCardContact()
+                          ? const EmptyCardContact()
                           : CustomListviewContact(contactList: email)
                     ],
                   ),
@@ -185,7 +185,7 @@ class _ViewProfileState extends State<ViewProfile> {
                           ),
                           iconColor: Colors.white),
                       isEmpty(phone)
-                          ? const emptyCardContact()
+                          ? const EmptyCardContact()
                           : CustomListviewContact(contactList: phone)
                     ],
                   ),
@@ -199,7 +199,7 @@ class _ViewProfileState extends State<ViewProfile> {
                           ),
                           iconColor: Colors.white),
                       isEmpty(twitter)
-                          ? const emptyCardContact()
+                          ? const EmptyCardContact()
                           : CustomListviewContact(contactList: twitter)
                     ],
                   ),
@@ -213,7 +213,7 @@ class _ViewProfileState extends State<ViewProfile> {
                           ),
                           iconColor: Colors.white),
                       isEmpty(whatsapp)
-                          ? const emptyCardContact()
+                          ? const EmptyCardContact()
                           : CustomListviewContact(contactList: whatsapp)
                     ],
                   ),

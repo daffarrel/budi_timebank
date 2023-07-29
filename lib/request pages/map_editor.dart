@@ -44,8 +44,8 @@ class _MapEditorState extends State<MapEditor> {
                 }
               },
             ),
-            nonRotatedChildren: [
-              const RichAttributionWidget(
+            nonRotatedChildren: const [
+              RichAttributionWidget(
                 attributions: [
                   TextSourceAttribution(
                     'OpenStreetMap contributors',

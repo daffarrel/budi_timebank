@@ -24,7 +24,7 @@ class ApplicantsSelectionList extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Heading2('Applicants'),
+          const Heading2('Applicants'),
           const Text('Select your applicants: '),
           ListView.builder(
             shrinkWrap: true,

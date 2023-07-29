@@ -154,7 +154,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                     requestDetails.id.toString(),
                     style: const TextStyle(color: Colors.red),
                   ),
-                Center(child: Heading2('Title')),
+                const Center(child: Heading2('Title')),
                 Center(
                     child: Text(requestDetails.title.toString().capitalize())),
                 const Divider(),
@@ -169,7 +169,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            Heading2('Status'),
+                            const Heading2('Status'),
                             Text(
                               requestDetails.status.name.capitalize(),
                               style: const TextStyle(fontSize: 12),
@@ -186,7 +186,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            Heading2('Rate'),
+                            const Heading2('Rate'),
                             Text(
                               '${requestDetails.rate} Time/hour',
                               style: const TextStyle(fontSize: 12),
@@ -210,7 +210,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                         //does not have any applicants
                         if (_userProvidor == null &&
                             requestDetails.applicants.isEmpty) ...[
-                          Heading2('Applicants'),
+                          const Heading2('Applicants'),
                           const Text('No Applicants'),
                           const SizedBox(height: 5)
                         ],
@@ -239,7 +239,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                               );
                             },
                           ),
-                        Heading2('Provider'),
+                        const Heading2('Provider'),
                         _userProvidor == null
                             ? const Text('No provider selected')
                             : Padding(
@@ -265,7 +265,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                         if (isCompletedVerified())
                           Column(
                             children: [
-                              Heading2('The request is completed'),
+                              const Heading2('The request is completed'),
                               Text(
                                   'Completed On: ${requestDetails.completedAt?.formatDate()}'),
                               Text(
@@ -363,9 +363,9 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 child: const Text('Rate Provider'))
                           ]),
                         if (isOngoing() && !isCompleted())
-                          Column(
+                          const Column(
                             children: [
-                              const Text(
+                              Text(
                                 'The request has started',
                                 textAlign: TextAlign.center,
                               ),
@@ -487,19 +487,19 @@ class _RequestDetailsState extends State<RequestDetails> {
                 const SizedBox(height: 15),
                 Container(
                     alignment: Alignment.center,
-                    child: Heading2('Other Information')),
+                    child: const Heading2('Other Information')),
                 const Divider(),
-                Heading2('Date of the request'),
+                const Heading2('Date of the request'),
                 Text('Date: ${dateJob.formatDate()}'),
                 Text('Time: ${dateJob.formatTime()}'),
                 const Divider(),
-                Heading2('Category'),
+                const Heading2('Category'),
                 Text(requestDetails.category),
                 const Divider(),
-                Heading2('Description'),
+                const Heading2('Description'),
                 Text(requestDetails.description.toString().capitalize()),
                 const Divider(),
-                Heading2('Location'),
+                const Heading2('Location'),
                 Text('Address: ${requestDetails.location.address}'),
                 Text('District: ${requestDetails.location.district}'),
                 Text('State: ${requestDetails.location.state}'),
@@ -529,7 +529,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 requestDetails.location.coordinate.latitude,
                                 requestDetails.location.coordinate.longitude),
                             builder: (ctx) => IconButton(
-                              icon: Icon(Icons.location_on),
+                              icon: const Icon(Icons.location_on),
                               color: Colors.red,
                               iconSize: 45,
                               onPressed: () {},
@@ -541,7 +541,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                   ),
                 ),
                 const Divider(),
-                Heading2('Media'),
+                const Heading2('Media'),
                 requestDetails.media.isEmpty
                     ? const Text('No Attachment')
                     : SizedBox(
@@ -566,7 +566,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Heading2('Created On'),
+                        const Heading2('Created On'),
                         Text('Date: ${dateCreatedOn.formatDate()}'),
                         Text('Time: ${dateCreatedOn.formatTime()}'),
                       ],
@@ -575,7 +575,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Heading2('Updated On'),
+                          const Heading2('Updated On'),
                           Text('Date: ${dateUpdatedOn?.formatDate()}'),
                           Text('Time: ${dateUpdatedOn?.formatTime()}'),
                         ],

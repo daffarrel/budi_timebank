@@ -85,8 +85,6 @@ class _SetupProfileState extends State<SetupProfile> {
   }
 
   Future<void> _readProfile() async {
-    print('go to read');
-
     setState(() => _loading = true);
     Profile userProfile = await ClientUser.getUserProfileById(
         FirebaseAuth.instance.currentUser!.uid);
@@ -121,7 +119,6 @@ class _SetupProfileState extends State<SetupProfile> {
   }
 
   Future<void> _initProfile() async {
-    print('go to init');
     setState(() => _loading = true);
 
     try {
@@ -186,7 +183,6 @@ class _SetupProfileState extends State<SetupProfile> {
       context.showErrorSnackBar(message: error.message.toString());
     } catch (error) {
       context.showErrorSnackBar(message: 'Unable to Update Profile');
-      print(error);
     }
 
     // add points

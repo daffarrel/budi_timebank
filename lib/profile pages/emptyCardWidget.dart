@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../custom widgets/theme.dart';
 
-class emptyCardContact extends StatelessWidget {
-  const emptyCardContact({
+class EmptyCardContact extends StatelessWidget {
+  const EmptyCardContact({
     Key? key,
   }) : super(key: key);
 

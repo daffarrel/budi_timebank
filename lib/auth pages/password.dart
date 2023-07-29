@@ -79,7 +79,7 @@ class PasswordPageState extends State<PasswordPage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
         children: [
-          Heading2('Enter new password'),
+          const Heading2('Enter new password'),
           const SizedBox(height: 18),
           TextFormField(
             controller: _passwordController,

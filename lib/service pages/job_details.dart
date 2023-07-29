@@ -195,7 +195,7 @@ class _JobDetailsState extends State<JobDetails> {
                   ),
                 // Heading2('Job Id'),
                 // Text(widget.id),
-                Center(child: Heading2('Title')),
+                const Center(child: Heading2('Title')),
                 Center(child: Text(jobDetail.title.toString().capitalize())),
                 const Divider(),
                 Row(
@@ -216,7 +216,7 @@ class _JobDetailsState extends State<JobDetails> {
                           child: Column(
                             //crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Heading2('Requestor'),
+                              const Heading2('Requestor'),
                               Text(
                                 _userRequestor.name.toString().titleCase(),
                                 style: const TextStyle(fontSize: 12),
@@ -238,7 +238,7 @@ class _JobDetailsState extends State<JobDetails> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            Heading2('Status'),
+                            const Heading2('Status'),
                             Text(
                               jobDetail.status.name.capitalize(),
                               style: const TextStyle(fontSize: 12),
@@ -260,7 +260,7 @@ class _JobDetailsState extends State<JobDetails> {
                         child: Column(
                           //crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Heading2('Rate'),
+                            const Heading2('Rate'),
                             Text(
                               '${jobDetail.rate} Time/hour',
                               style: const TextStyle(fontSize: 12),
@@ -279,7 +279,7 @@ class _JobDetailsState extends State<JobDetails> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          Heading2('Completed On'),
+                          const Heading2('Completed On'),
                           Text('Date: ${jobDetail.updatedAt?.formatDate()}'),
                           Text('Time: ${jobDetail.updatedAt?.formatTime()}\n'),
                           Row(
@@ -434,7 +434,7 @@ class _JobDetailsState extends State<JobDetails> {
                       child: !isRequested()
                           ? Column(
                               children: [
-                                Heading2('Want to help?'),
+                                const Heading2('Want to help?'),
                                 ElevatedButton(
                                   style: themeData2().elevatedButtonTheme.style,
                                   onPressed: () => showDialog<String>(
@@ -477,20 +477,20 @@ class _JobDetailsState extends State<JobDetails> {
                 const SizedBox(height: 15),
                 Container(
                     alignment: Alignment.center,
-                    child: Heading2('Other Information')),
+                    child: const Heading2('Other Information')),
                 const Divider(),
-                Heading2('Date of the request'),
+                const Heading2('Date of the request'),
                 Text('Date: ${dateJob.formatDate()}'),
                 Text('Time: ${dateJob.formatTime()}'),
                 //const SizedBox(height: 15),
                 const Divider(),
-                Heading2('Category'),
+                const Heading2('Category'),
                 Text(jobDetail.category),
                 const Divider(),
-                Heading2('Description'),
+                const Heading2('Description'),
                 Text(jobDetail.description.toString().capitalize()),
                 const Divider(),
-                Heading2('Location'),
+                const Heading2('Location'),
                 Text('Address: ${jobDetail.location.address}'),
                 Text('State: ${jobDetail.location.state}'),
                 Text('District: ${jobDetail.location.district}'),
@@ -544,7 +544,7 @@ class _JobDetailsState extends State<JobDetails> {
                     icon: const FaIcon(FontAwesomeIcons.map, size: 19.4),
                     label: const Text('Get Direction')),
                 const Divider(),
-                Heading2('Media'),
+                const Heading2('Media'),
                 jobDetail.media.isEmpty
                     ? const Text('No Attachment')
                     : SizedBox(
@@ -569,7 +569,7 @@ class _JobDetailsState extends State<JobDetails> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Heading2('Created On'),
+                        const Heading2('Created On'),
                         Text('Date: ${dateCreatedOn.formatDate()}'),
                         Text('Time: ${dateCreatedOn.formatTime()}'),
                       ],
@@ -578,7 +578,7 @@ class _JobDetailsState extends State<JobDetails> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Heading2('Updated On'),
+                          const Heading2('Updated On'),
                           Text('Date: ${dateUpdatedOn?.formatDate()}'),
                           Text('Time: ${dateUpdatedOn?.formatTime()}'),
                         ],

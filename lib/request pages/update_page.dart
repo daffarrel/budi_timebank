@@ -86,7 +86,7 @@ class _UpdatePageState extends State<UpdatePage> {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Heading2('Pick element to update'),
+          const Heading2('Pick element to update'),
           Container(
             alignment: Alignment.center,
             //padding: EdgeInsets.all(8),

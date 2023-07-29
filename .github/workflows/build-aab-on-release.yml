@@ -1,0 +1,42 @@
+name: Build all on release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build_android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3.9.0
+        with:
+          distribution: "zulu"
+          java-version: "11"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2.8.0
+        with:
+          channel: "stable"
+
+      # File can be encoded to base64 on https://base64.guru/converter/encode/file
+      - name: Decoding android/key.properties
+        run: echo "${{ secrets.KEY_PROP }}" | base64 --decode > android/key.properties
+
+      - name: Decoding android/key.jks
+        run: echo "${{ secrets.KEY_JKS }}" | base64 --decode > android/key.jks
+
+      - name: Build appbundle
+        run: flutter build appbundle --release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: build/app/outputs/bundle/release/app-release.aab
+
+      - name: Adding markdown
+        run: |
+          echo ":blue_heart: Using **`flutter --version`**" >> $GITHUB_STEP_SUMMARY

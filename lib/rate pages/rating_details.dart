@@ -103,7 +103,7 @@ class _RatingDetailsState extends State<RatingDetails> {
                                   Icon(Icons.comment,
                                       color: themeData1().primaryColor),
                                   const SizedBox(width: 5),
-                                  Heading2('Comment'),
+                                  const Heading2('Comment'),
                                 ],
                               ),
                               widget.ratingDetails.message == null ||
@@ -118,7 +118,7 @@ class _RatingDetailsState extends State<RatingDetails> {
                           ),
                           Column(
                             children: [
-                              Heading2('Rate'),
+                              const Heading2('Rate'),
                               Center(
                                 child: RatingBar.builder(
                                   ignoreGestures: true,
@@ -174,11 +174,11 @@ class _RatingDetailsState extends State<RatingDetails> {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  Heading2(' Created On'),
+                  const Heading2(' Created On'),
                   Text(' Date: ${widget.ratingDetails.createdAt.formatDate()}'),
                   Text(' Time: ${widget.ratingDetails.createdAt.formatTime()}'),
                   const SizedBox(height: 15),
-                  Heading2(' Request Title'),
+                  const Heading2(' Request Title'),
                   ElevatedButton(
                     onPressed: (() {
                       Navigator.of(context).push(MaterialPageRoute(

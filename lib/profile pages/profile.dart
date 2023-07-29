@@ -201,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           iconColor: Colors.white),
                       email.isEmpty
-                          ? const emptyCardContact()
+                          ? const EmptyCardContact()
                           : CustomListviewContact(contactList: email)
                     ],
                   ),
@@ -215,7 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           iconColor: Colors.white),
                       phone.isEmpty
-                          ? const emptyCardContact()
+                          ? const EmptyCardContact()
                           : CustomListviewContact(contactList: phone)
                     ],
                   ),
@@ -229,7 +229,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           iconColor: Colors.white),
                       twitter.isEmpty
-                          ? const emptyCardContact()
+                          ? const EmptyCardContact()
                           : CustomListviewContact(contactList: twitter)
                     ],
                   ),
@@ -243,7 +243,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           iconColor: Colors.white),
                       whatsapp.isEmpty
-                          ? const emptyCardContact()
+                          ? const EmptyCardContact()
                           : CustomListviewContact(contactList: whatsapp)
                     ],
                   ),

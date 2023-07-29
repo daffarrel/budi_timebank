@@ -1,7 +1,4 @@
-// import 'dart:async';
 import 'package:flutter/material.dart';
-// import 'package:supabase_flutter/supabase_flutter.dart';
-import 'components/constants.dart';
 import 'custom%20widgets/theme.dart';
 import 'dashboard%20pages/dashboard.dart';
 import 'profile%20pages/profile.dart';
