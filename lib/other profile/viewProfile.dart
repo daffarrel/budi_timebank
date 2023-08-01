@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../custom widgets/custom_headline.dart';
-import '../custom%20widgets/ratingCardDetails1.dart';
 import '../custom%20widgets/theme.dart';
 import '../db_helpers/client_user.dart';
 import '../my_extensions/extension_string.dart';
 
 import '../model/contact.dart';
 import '../model/profile.dart';
-import '../profile pages/contactIconWidget.dart';
-import '../profile pages/emptyCardWidget.dart';
-import '../profile pages/listViewContact.dart';
+import '../profile pages/contact_widget.dart';
+import '../profile pages/empty_card_contact.dart';
+import '../profile pages/custom_list_view_contact.dart';
 
 class ViewProfile extends StatefulWidget {
   final String id;
@@ -28,8 +27,6 @@ class _ViewProfileState extends State<ViewProfile> {
   late List<String> twitter;
   late List<String> whatsapp;
 
-  //late final dynamic contacts = [];
-
   bool isLoad = true;
   @override
   void initState() {
@@ -38,24 +35,17 @@ class _ViewProfileState extends State<ViewProfile> {
   }
 
   getInstance() async {
-    // profile = await ClientUser(Common().channel).getProfile1(widget.id);
-    // TODO: implement get profile
-    // print(profile);
-    // print('the type is : ' + profile.user.profile.contacts[0].type.toString());
     var myProfile = await ClientUser.getUserProfileById(widget.id);
     skills = [];
     email = [];
     phone = [];
     twitter = [];
     whatsapp = [];
-    //print(profile.user.profile.skills);
     for (int i = 0; i < myProfile.skills.length; i++) {
       skills.add(myProfile.skills[i]);
     }
     for (int i = 0; i < myProfile.contacts.length; i++) {
-      //print(data['contacts'][i]['type'].toString() == 'Email');
       if (myProfile.contacts[i].contactType.toString() == 'Email') {
-        //print("ui");
         email.add(myProfile.contacts[i].value);
       }
       if (myProfile.contacts[i].contactType == ContactType.phone) {
@@ -69,20 +59,10 @@ class _ViewProfileState extends State<ViewProfile> {
       }
     }
 
-    //print(contacts);
     setState(() {
       profile = myProfile;
       isLoad = false;
     });
-    //print(skills);
-  }
-
-  bool isEmpty(stuff) {
-    if (stuff.length == 0) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   @override
@@ -132,13 +112,9 @@ class _ViewProfileState extends State<ViewProfile> {
                       ),
                     ),
                   ),
-                  const CustomHeadline(' Ratings'),
-                  // TODO: enable this
-                  // RatingCardDetails1(
-                  //     isProvider: true,
-                  //     userRating: profile.user.rating.asProvider),
+                  // const CustomHeadline(' Ratings'),
                   const CustomHeadline(' Skill List'),
-                  isEmpty(skills)
+                  skills.isEmpty
                       ? const Text('No skills entered')
                       : SizedBox(
                           height: 50,
@@ -170,7 +146,7 @@ class _ViewProfileState extends State<ViewProfile> {
                             color: Colors.white,
                           ),
                           iconColor: Colors.white),
-                      isEmpty(email)
+                      email.isEmpty
                           ? const EmptyCardContact()
                           : CustomListviewContact(contactList: email)
                     ],
@@ -184,7 +160,7 @@ class _ViewProfileState extends State<ViewProfile> {
                             color: Colors.white,
                           ),
                           iconColor: Colors.white),
-                      isEmpty(phone)
+                      phone.isEmpty
                           ? const EmptyCardContact()
                           : CustomListviewContact(contactList: phone)
                     ],
@@ -198,7 +174,7 @@ class _ViewProfileState extends State<ViewProfile> {
                             color: Colors.white,
                           ),
                           iconColor: Colors.white),
-                      isEmpty(twitter)
+                      twitter.isEmpty
                           ? const EmptyCardContact()
                           : CustomListviewContact(contactList: twitter)
                     ],
@@ -212,7 +188,7 @@ class _ViewProfileState extends State<ViewProfile> {
                             color: Colors.white,
                           ),
                           iconColor: Colors.white),
-                      isEmpty(whatsapp)
+                      whatsapp.isEmpty
                           ? const EmptyCardContact()
                           : CustomListviewContact(contactList: whatsapp)
                     ],

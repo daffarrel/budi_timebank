@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../custom widgets/custom_card_service_request.dart';
-import '../custom%20widgets/theme.dart';
 import '../db_helpers/client_service_request.dart';
 import '../model/service_request.dart';
 import 'job_details.dart';
@@ -16,9 +15,7 @@ class AvailableServices extends StatefulWidget {
 
 class _AvailableServicesState extends State<AvailableServices> {
   late bool isLoad;
-  // late dynamic listRequest;
   late List<ServiceRequest> listFiltered;
-  late dynamic _userCurrent;
   late String user;
 
   final _categoryController = TextEditingController();

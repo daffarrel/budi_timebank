@@ -10,9 +10,9 @@ import '../my_extensions/extension_string.dart';
 
 import '../model/contact.dart';
 import '../model/profile.dart';
-import '../profile pages/contactIconWidget.dart';
-import '../profile pages/emptyCardWidget.dart';
-import '../profile pages/listViewContact.dart';
+import 'contact_widget.dart';
+import 'empty_card_contact.dart';
+import 'custom_list_view_contact.dart';
 
 class ProfilePage extends StatefulWidget {
   final bool isMyProfile;
@@ -146,14 +146,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-
-                  // const CustomHeadline(' Ratings'),
-                  // RatingCardDetails1(
-                  //     isProvider: true,
-                  //     userRating: profile.user.rating.asProvider),
-                  // RatingCardDetails1(
-                  //     isProvider: false,
-                  //     userRating: profile.user.rating.asRequestor),
                   const CustomHeadline(' Skill List'),
                   skills.isEmpty
                       ? const Text('No skills entered')
