@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../custom widgets/custom_headline.dart';
 import '../custom%20widgets/theme.dart';
 import '../db_helpers/client_user.dart';
-import '../my_extensions/extension_string.dart';
-
 import '../model/contact.dart';
 import '../model/profile.dart';
+import '../my_extensions/extension_string.dart';
 import '../profile pages/contact_widget.dart';
-import '../profile pages/empty_card_contact.dart';
 import '../profile pages/custom_list_view_contact.dart';
+import '../profile pages/empty_card_contact.dart';
 
 class ViewProfile extends StatefulWidget {
   final String id;
