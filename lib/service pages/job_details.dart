@@ -17,6 +17,7 @@ import '../my_extensions/extension_datetime.dart';
 import '../my_extensions/extension_string.dart';
 import '../model/profile.dart';
 import '../model/service_request.dart';
+import '../other profile/viewProfile.dart';
 import '../rate pages/rate_received_page.dart';
 
 /// Basically request details but in Job offers tab
@@ -202,15 +203,21 @@ class _JobDetailsState extends State<JobDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Flexible(
-                      child: Card(
-                        shape: const RoundedRectangleBorder(
-                          // side: BorderSide(
-                          //   color: themeData1().secondaryHeaderColor,
-                          //   width: 3,
-                          // ),
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                        ),
+                    Card(
+                      clipBehavior: Clip.hardEdge,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          // view requestor profile
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ViewProfile(id: jobDetail.requestorId),
+                            ),
+                          );
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(

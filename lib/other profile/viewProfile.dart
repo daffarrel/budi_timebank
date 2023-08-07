@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -45,7 +46,7 @@ class _ViewProfileState extends State<ViewProfile> {
       skills.add(myProfile.skills[i]);
     }
     for (int i = 0; i < myProfile.contacts.length; i++) {
-      if (myProfile.contacts[i].contactType.toString() == 'Email') {
+      if (myProfile.contacts[i].contactType == ContactType.email) {
         email.add(myProfile.contacts[i].value);
       }
       if (myProfile.contacts[i].contactType == ContactType.phone) {
@@ -78,10 +79,13 @@ class _ViewProfileState extends State<ViewProfile> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+            : ListView(
                 children: [
+                  if (kDebugMode)
+                    Text(
+                      widget.id,
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Card(
@@ -113,29 +117,30 @@ class _ViewProfileState extends State<ViewProfile> {
                     ),
                   ),
                   // const CustomHeadline(' Ratings'),
+                  const SizedBox(height: 10),
                   const CustomHeadline(' Skill List'),
                   skills.isEmpty
                       ? const Text('No skills entered')
-                      : SizedBox(
-                          height: 50,
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount: skills.length,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                elevation: 5,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                      child: Text(skills[index]
-                                          .toString()
-                                          .capitalize())),
+                      : Wrap(
+                          children: [
+                            for (var skill in skills)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 6),
+                                child: Chip(
+                                  label: Text(skill.capitalize()),
+                                  padding: const EdgeInsets.all(8),
+                                  elevation: 5,
+                                  backgroundColor: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12)),
+                                  ),
+                                  // shape: ,
                                 ),
-                              );
-                            },
-                          )),
+                              ),
+                          ],
+                        ),
+                  const SizedBox(height: 10),
                   const CustomHeadline(' Contact List'),
                   Row(
                     children: [
@@ -148,9 +153,10 @@ class _ViewProfileState extends State<ViewProfile> {
                           iconColor: Colors.white),
                       email.isEmpty
                           ? const EmptyCardContact()
-                          : CustomListviewContact(contactList: email)
+                          : CustomListViewContact(contactList: email)
                     ],
                   ),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       ContactWidget(
@@ -162,9 +168,10 @@ class _ViewProfileState extends State<ViewProfile> {
                           iconColor: Colors.white),
                       phone.isEmpty
                           ? const EmptyCardContact()
-                          : CustomListviewContact(contactList: phone)
+                          : CustomListViewContact(contactList: phone)
                     ],
                   ),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       ContactWidget(
@@ -176,9 +183,11 @@ class _ViewProfileState extends State<ViewProfile> {
                           iconColor: Colors.white),
                       twitter.isEmpty
                           ? const EmptyCardContact()
-                          : CustomListviewContact(contactList: twitter)
+                          : CustomListViewContact(contactList: twitter)
                     ],
                   ),
+                  const SizedBox(height: 8),
+
                   Row(
                     children: [
                       ContactWidget(
@@ -190,7 +199,7 @@ class _ViewProfileState extends State<ViewProfile> {
                           iconColor: Colors.white),
                       whatsapp.isEmpty
                           ? const EmptyCardContact()
-                          : CustomListviewContact(contactList: whatsapp)
+                          : CustomListViewContact(contactList: whatsapp)
                     ],
                   ),
                 ],

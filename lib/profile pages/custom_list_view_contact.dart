@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../custom widgets/theme.dart';
 
-class CustomListviewContact extends StatefulWidget {
+class CustomListViewContact extends StatefulWidget {
   final List<String> contactList;
-  const CustomListviewContact({super.key, required this.contactList});
+  const CustomListViewContact({super.key, required this.contactList});
 
   @override
-  State<CustomListviewContact> createState() => _CustomListviewContactState();
+  State<CustomListViewContact> createState() => _CustomListViewContactState();
 }
 
-class _CustomListviewContactState extends State<CustomListviewContact> {
+class _CustomListViewContactState extends State<CustomListViewContact> {
   @override
   Widget build(BuildContext context) {
     return Expanded(

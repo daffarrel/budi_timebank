@@ -194,7 +194,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           iconColor: Colors.white),
                       email.isEmpty
                           ? const EmptyCardContact()
-                          : CustomListviewContact(contactList: email)
+                          : CustomListViewContact(contactList: email)
                     ],
                   ),
                   Row(
@@ -208,7 +208,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           iconColor: Colors.white),
                       phone.isEmpty
                           ? const EmptyCardContact()
-                          : CustomListviewContact(contactList: phone)
+                          : CustomListViewContact(contactList: phone)
                     ],
                   ),
                   Row(
@@ -222,7 +222,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           iconColor: Colors.white),
                       twitter.isEmpty
                           ? const EmptyCardContact()
-                          : CustomListviewContact(contactList: twitter)
+                          : CustomListViewContact(contactList: twitter)
                     ],
                   ),
                   Row(
@@ -236,7 +236,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           iconColor: Colors.white),
                       whatsapp.isEmpty
                           ? const EmptyCardContact()
-                          : CustomListviewContact(contactList: whatsapp)
+                          : CustomListViewContact(contactList: whatsapp)
                     ],
                   ),
                   // RatingCardWidget(
