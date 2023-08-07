@@ -8,9 +8,9 @@ import '../db_helpers/client_user.dart';
 import '../model/contact.dart';
 import '../model/profile.dart';
 import '../my_extensions/extension_string.dart';
-import '../profile pages/contact_widget.dart';
-import '../profile pages/custom_list_view_contact.dart';
-import '../profile pages/empty_card_contact.dart';
+import 'contact_widget.dart';
+import 'custom_list_view_contact.dart';
+import 'empty_card_contact.dart';
 
 class ViewProfile extends StatefulWidget {
   final String id;

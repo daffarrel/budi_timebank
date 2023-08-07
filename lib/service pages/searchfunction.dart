@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../custom widgets/custom_card_service_request.dart';
-import '../request pages/request_details.dart';
 import 'job_details.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
@@ -9,13 +8,7 @@ class CustomSearchDelegate extends SearchDelegate {
   String user;
   CustomSearchDelegate(this.listRequest, this.user);
 
-  isRequested(list) {
-    if (list.length == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  isRequested(list) => list.length == 0;
 
   changeState(state) {
     switch (state) {

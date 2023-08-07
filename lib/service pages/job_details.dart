@@ -17,7 +17,7 @@ import '../my_extensions/extension_datetime.dart';
 import '../my_extensions/extension_string.dart';
 import '../model/profile.dart';
 import '../model/service_request.dart';
-import '../other profile/viewProfile.dart';
+import '../profile pages/others_profile.dart';
 import '../rate pages/rate_received_page.dart';
 
 /// Basically request details but in Job offers tab
@@ -60,49 +60,16 @@ class _JobDetailsState extends State<JobDetails> {
 
   bool isRequested() => jobDetail.applicants.contains(widget.user);
 
-  // isProviderRated() {
-  //   if (ratedUser.ratings.length == 1 &&
-  //       ratedUser.ratings[0].recipient == JobDetails.provider) {
-  //     return true;
-  //   } else if (ratedUser.ratings.length == 2 &&
-  //       (ratedUser.ratings[0].recipient == JobDetails.provider ||
-  //           ratedUser.ratings[1].recipient == JobDetails.provider)) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
-  // isRequestorRated() {
-  //   if (ratedUser.ratings.length == 1 &&
-  //       ratedUser.ratings[0].recipient == JobDetails.requestor) {
-  //     return true;
-  //   } else if (ratedUser.ratings.length == 2 &&
-  //       (ratedUser.ratings[0].recipient == JobDetails.requestor ||
-  //           ratedUser.ratings[1].recipient == JobDetails.requestor)) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
   @override
   void initState() {
+    super.initState();
     isLoad = true;
-    // hasRequestorRated = false;
-    // hasRateRequestor = false;
 
     _getAllinstance();
-    // _getRatingResponse();
-    // _getApplicants();
-    //_getRatingId();
-    super.initState();
   }
 
   void _getAllinstance() async {
-    setState(() {
-      isLoad = true;
-    });
+    setState(() => isLoad = true);
 
     jobDetail =
         await ClientServiceRequest.getMyServiceRequestById(widget.requestId);
@@ -131,7 +98,6 @@ class _JobDetailsState extends State<JobDetails> {
         ? _userProvidor = 'No Providor'
         : _userProvidor =
             await ClientUser.getUserProfileById(jobDetail.requestorId);
-    // print(_userProvidor);
     dateCreatedOn = jobDetail.createdAt;
     dateUpdatedOn = jobDetail.updatedAt;
     dateJob = jobDetail.date;
@@ -194,8 +160,6 @@ class _JobDetailsState extends State<JobDetails> {
                     jobDetail.id.toString(),
                     style: const TextStyle(color: Colors.red),
                   ),
-                // Heading2('Job Id'),
-                // Text(widget.id),
                 const Center(child: Heading2('Title')),
                 Center(child: Text(jobDetail.title.toString().capitalize())),
                 const Divider(),
@@ -256,10 +220,6 @@ class _JobDetailsState extends State<JobDetails> {
                     ),
                     Card(
                       shape: const RoundedRectangleBorder(
-                        // side: BorderSide(
-                        //   color: themeData1().secondaryHeaderColor,
-                        //   width: 3,
-                        // ),
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                       ),
                       child: Padding(
@@ -354,10 +314,6 @@ class _JobDetailsState extends State<JobDetails> {
                 if (isAccepted())
                   const Card(
                     shape: RoundedRectangleBorder(
-                      // side: BorderSide(
-                      //   color: themeData1().secondaryHeaderColor,
-                      //   width: 3,
-                      // ),
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
                     child: Padding(
@@ -465,12 +421,6 @@ class _JobDetailsState extends State<JobDetails> {
                                       ],
                                     ),
                                   ),
-                                  // onPressed: () {
-
-                                  //   // print(widget.id);
-                                  //   // print(widget.user);
-
-                                  // },
                                   child: const Text('Apply Request'),
                                 ),
                               ],

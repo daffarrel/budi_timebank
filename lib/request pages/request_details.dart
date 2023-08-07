@@ -14,7 +14,7 @@ import '../my_extensions/extension_datetime.dart';
 import '../my_extensions/extension_string.dart';
 import '../model/profile.dart';
 import '../model/service_request.dart';
-import '../other%20profile/viewProfile.dart';
+import '../profile pages/others_profile.dart';
 import '../rate pages/rate_given_page.dart';
 import 'applicants_selection.dart';
 import 'update_page.dart';
@@ -55,15 +55,6 @@ class _RequestDetailsState extends State<RequestDetails> {
       requestDetails.status == ServiceRequestStatus.completedVerified;
   // pending completion verification
   isCompleted() => requestDetails.status == ServiceRequestStatus.completed;
-
-  isRequested() {
-    for (int i = 0; i < requestDetails.applicants.length; i++) {
-      if (requestDetails.applicants[i] == widget.user) {
-        return true;
-      }
-    }
-    return false;
-  }
 
   isRequestor() => requestDetails.requestorId == widget.user;
 

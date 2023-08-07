@@ -27,14 +27,6 @@ class _CompletedRequestState extends State<CompletedRequest> {
     super.initState();
   }
 
-  isRated(jobId) {
-    if (listRating.toString().contains(jobId)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   Future getinstance() async {
     setState(() => isLoad = true);
 
