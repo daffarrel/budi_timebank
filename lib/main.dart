@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 
 import 'auth pages/setup_profile.dart';
 import 'auth pages/login_page.dart';
-import 'auth%20pages/password.dart';
 import 'auth pages/sign_up_page.dart';
 import 'custom widgets/theme.dart';
 import 'dashboard%20pages/dashboard.dart';
@@ -48,7 +47,6 @@ class MyApp extends StatelessWidget {
         '/setupProfile': (_) => const SetupProfile(),
         '/navigation': (_) => const BottomBarNavigation(valueListenable: 0),
         '/profile': (_) => const ProfilePage(isMyProfile: true),
-        '/passwordReset': (_) => const PasswordPage(),
         '/request': (_) => const RequestPage(),
         '/service': (_) => const ServicePage(),
         '/dashboard': (_) => const Dashboard(),

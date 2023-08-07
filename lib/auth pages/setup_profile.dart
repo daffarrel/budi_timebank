@@ -18,6 +18,8 @@ class SetupProfile extends StatefulWidget {
   const SetupProfile({super.key, this.editProfile = false});
 
   /// Flag to indicate this page is not first time user is setting up profile
+  /// [editProfile] is false when it shows after user sign up
+  /// [editProfile] is true when user is editing profile from profile tab
   final bool editProfile;
 
   @override
@@ -171,28 +173,25 @@ class _SetupProfileState extends State<SetupProfile> {
     );
 
     try {
-      FirebaseFirestore.instance.collection('users').doc(userId).update({
-        'earningsHistory': [],
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
         'profile': newProfile.toMap(),
         'updatedAt': DateTime.now().toIso8601String(),
       });
       if (mounted) {
-        context.showSnackBar(message: 'Successfully updated profile!');
+        context.showSnackBar(
+            message: widget.editProfile
+                ? 'Successfully updated profile!'
+                : 'Welcome to Budi!');
       }
     } on FirebaseException catch (error) {
       context.showErrorSnackBar(message: error.message.toString());
+      return;
     } catch (error) {
       context.showErrorSnackBar(message: 'Unable to Update Profile');
+      return;
+    } finally {
+      setState(() => _loading = false);
     }
-
-    // add points
-
-    await ClientUser.addPoints(
-        points: _selectedOwnerType == OwnerType.individual ? 10 : 200);
-
-    setState(() {
-      _loading = false;
-    });
   }
 
   Future<void> _signOut() async {
@@ -657,16 +656,31 @@ class _SetupProfileState extends State<SetupProfile> {
                       if (!_formKey.currentState!.validate()) return;
 
                       await _saveProfile();
-                      if (mounted) {
+
+                      // add points during registration
+                      if (!widget.editProfile) {
+                        await ClientUser.addPoints(
+                          points: _selectedOwnerType == OwnerType.individual
+                              ? 10
+                              : 200,
+                        );
+                      }
+                      if (widget.editProfile) {
+                        // go to previous page
+                        Navigator.of(context).pop();
+                      } else {
+                        // go to dahsboard page
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/navigation', (route) => false);
+                            '/navigation', (Route<dynamic> route) => false);
                       }
                     },
-                    child: Text(_loading
-                        ? 'Loading...'
-                        : widget.editProfile
-                            ? 'Update'
-                            : 'Save'),
+                    child: Text(
+                      _loading
+                          ? 'Loading...'
+                          : widget.editProfile
+                              ? 'Update'
+                              : 'Save',
+                    ),
                   ),
                   if (widget.editProfile)
                     TextButton(
