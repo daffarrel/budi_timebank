@@ -5,8 +5,6 @@ import '../model/earnings_history.dart';
 import '../model/profile.dart';
 
 class ClientUser {
-  static final _userUid = FirebaseAuth.instance.currentUser!.uid;
-
   /// Return profile data with userUid
   static Future<Profile> getUserProfileById(String id) async {
     var res =
@@ -22,15 +20,16 @@ class ClientUser {
       {required double points,
       String reason = "rewards",
       String? senderId}) async {
+    var userUid = FirebaseAuth.instance.currentUser!.uid;
     var data = EarningsHistory(
         date: DateTime.now(),
         amount: points.toDouble(),
         reason: reason,
         from: senderId == null ? "system" : "id:$senderId",
-        to: 'id:$_userUid');
+        to: 'id:$userUid');
     return await FirebaseFirestore.instance
         .collection('users')
-        .doc(_userUid)
+        .doc(userUid)
         .update({
       'earningsHistory': FieldValue.arrayUnion([data.toFirestoreMap()])
     });
@@ -38,12 +37,11 @@ class ClientUser {
 
   /// Get earnings history
   static Future<List<EarningsHistory>> getUserEarningsHistory() async {
-    var snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(_userUid)
-        .get();
+    var userUid = FirebaseAuth.instance.currentUser!.uid;
+    var snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userUid).get();
 
-    if (!snapshot.exists) throw Exception("User $_userUid not exist");
+    if (!snapshot.exists) throw Exception("User $userUid not exist");
     var data = snapshot.data()!;
     var earningsData = data['earningsHistory'] as List<dynamic>;
     var earnings =
@@ -66,12 +64,13 @@ class ClientUser {
   /// Transfer time points to another user
   static Future<void> transferPoints(
       String receiverId, double amount, String jobId) async {
+    var userUid = FirebaseAuth.instance.currentUser!.uid;
     // add points to receiver
     var data = EarningsHistory(
         date: DateTime.now(),
         amount: amount,
         reason: 'job:$jobId',
-        from: 'id:$_userUid',
+        from: 'id:$userUid',
         to: 'id:$receiverId');
     await FirebaseFirestore.instance
         .collection('users')
@@ -86,9 +85,9 @@ class ClientUser {
         date: DateTime.now(),
         amount: -amount,
         reason: 'job:$jobId',
-        from: "id:$_userUid",
+        from: "id:$userUid",
         to: 'id:$receiverId');
-    await FirebaseFirestore.instance.collection('users').doc(_userUid).update({
+    await FirebaseFirestore.instance.collection('users').doc(userUid).update({
       'earningsHistory': FieldValue.arrayUnion([data1.toFirestoreMap()])
     });
   }
