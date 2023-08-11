@@ -32,10 +32,13 @@ jobs:
       - name: Build appbundle
         run: flutter build appbundle --release
 
+        # The previous job will likely to fail because of https://github.com/flutter/flutter/issues/126971
+        # But that is false poisitive so we ignore it
       - name: Upload artifact
+        if: failure()
         uses: actions/upload-artifact@v3
         with:
-          path: build/app/outputs/bundle/release/app-release.aab
+          path: build/app/outputs/bundle/release/*-release.aab
 
       - name: Adding markdown
         run: |
