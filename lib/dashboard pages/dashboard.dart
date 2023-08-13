@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../custom widgets/custom_headline.dart';
 import '../components/app_theme.dart';
@@ -7,6 +8,7 @@ import '../rate pages/rate_received_page.dart';
 import '../transactions pages/transaction.dart';
 import 'request_dashboard_content.dart';
 import 'service_dashboard_content.dart';
+import 'shortcut_action_card.dart';
 import 'time_balance_card.dart';
 import 'x_dashboard_card.dart';
 
@@ -18,7 +20,6 @@ class Dashboard extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard'),
-        backgroundColor: AppTheme.themeData2.primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -47,188 +48,44 @@ class Dashboard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            //CustomDivider(),
             const Padding(
               padding: EdgeInsets.only(left: 8.0),
-              child: CustomHeadline('Services'),
+              child: CustomHeadline('Shortcuts'),
             ),
             Expanded(
               child: Row(
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                //mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Flexible(
-                    flex: 1,
-                    child: Column(
-                        //crossAxisAlignment: CrossAxisAlignment.center,
-                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Card(
-                              //elevation: 5,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12)),
-                              ),
-                              color: AppTheme.themeData.primaryColor,
-                              child: InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const TransactionPage()));
-                                  },
-                                  child: const Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.receipt_long,
-                                          color: Colors.white),
-                                      Padding(
-                                        padding: EdgeInsets.all(5.0),
-                                        child: Text('View Transaction History',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold)
-                                            // style: Theme.of(context)
-                                            //     .textTheme
-                                            //     .headline1,
-                                            ),
-                                      ),
-                                      //SizedBox(height: 10),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: Text(
-                                          'Keep your balance in check',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                      //SizedBox(height: 10),
-                                      // Ink.image(
-                                      //   image: AssetImage('asset/folder.png'),
-                                      //   height: 40,
-                                      //   width: 40,
-                                      // ),
-                                    ],
-                                  )),
-                            ),
-                          ),
-                        ]),
+                  ShortcutActionCard(
+                    title: 'View Transaction History',
+                    description: 'Keep your balance in check',
+                    icon: Icons.receipt_long,
+                    backgroundColor: AppTheme.themeData.primaryColor,
+                    foregroundColor: Colors.white,
+                    destination: MaterialPageRoute(
+                        builder: (context) => const TransactionPage()),
                   ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Flexible(
-                          flex: 1,
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                color: AppTheme.themeData.primaryColor,
-                                width: 3,
-                              ),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(12)),
-                            ),
-                            //elevation: 5,
-                            //color: Color.fromARGB(255, 234, 234, 234),
-                            child: InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RateGivenPage()));
-                                },
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.rate_review,
-                                        color: AppTheme.themeData.primaryColor),
-                                    Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Text(
-                                        'Rate Given',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: AppTheme
-                                                .themeData.primaryColor),
-                                        textAlign: TextAlign.center,
-                                        //Theme.of(context).textTheme.headline1,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 6.0),
-                                      child: Text(
-                                        'Give feedback to other people',
-                                        style: TextStyle(
-                                            fontSize: 13,
-                                            color: AppTheme
-                                                .themeData.primaryColor),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    // Image.asset('asset/Rate given.png')
-                                  ],
-                                )),
-                          ),
+                        ShortcutActionCard(
+                          title: 'Rate Given',
+                          description: 'Give feedback to other people',
+                          icon: Icons.rate_review,
+                          foregroundColor: AppTheme.themeData.primaryColor,
+                          borderColor: AppTheme.themeData.primaryColor,
+                          destination: MaterialPageRoute(
+                              builder: (context) => const RateGivenPage()),
                         ),
-                        //SizedBox(height: 15),
-                        Flexible(
-                          flex: 1,
-                          child: Card(
-                            //elevatio n: 5,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12)),
-                            ),
-                            color: AppTheme.themeData.secondaryHeaderColor,
-                            child: InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const RateReceivedPage()),
-                                  );
-                                },
-                                child: const Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.thumbs_up_down,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(height: 5),
-                                    Padding(
-                                      padding: EdgeInsets.all(5.0),
-                                      child: Text(
-                                        'Received Rating',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
-                                        textAlign: TextAlign.center,
-                                        // style:
-                                        //Theme.of(context).textTheme.headline1,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 7.0),
-                                      child: Text(
-                                        'See what other people thinks about you',
-                                        style: TextStyle(
-                                            fontSize: 12, color: Colors.white),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  ],
-                                )),
-                          ),
+                        ShortcutActionCard(
+                          title: 'Received Rating',
+                          description: 'See what other people thinks about you',
+                          icon: Icons.thumbs_up_down,
+                          foregroundColor: Colors.white,
+                          backgroundColor:
+                              AppTheme.themeData.secondaryHeaderColor,
+                          destination: MaterialPageRoute(
+                              builder: (context) => const RateReceivedPage()),
                         ),
                       ],
                     ),

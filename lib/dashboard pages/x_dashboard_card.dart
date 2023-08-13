@@ -21,6 +21,7 @@ class XDashboardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      clipBehavior: Clip.hardEdge,
       shape: RoundedRectangleBorder(
         side: BorderSide(
           color: borderColor,
@@ -39,8 +40,15 @@ class XDashboardCard extends StatelessWidget {
             ),
           );
         },
-        child: Column(
-          children: [CustomHeadline(title), content],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              CustomHeadline(title),
+              const SizedBox(height: 10),
+              content,
+            ],
+          ),
         ),
       ),
     );
