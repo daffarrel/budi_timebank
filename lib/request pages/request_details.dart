@@ -6,7 +6,7 @@ import 'package:latlong2/latlong.dart';
 
 import '../components/constants.dart';
 import '../custom widgets/heading2.dart';
-import '../custom%20widgets/theme.dart';
+import '../components/app_theme.dart';
 import '../db_helpers/client_rating.dart';
 import '../db_helpers/client_service_request.dart';
 import '../db_helpers/client_user.dart';
@@ -236,7 +236,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                             : Padding(
                                 padding: const EdgeInsets.fromLTRB(3, 3, 3, 6),
                                 child: TextButton(
-                                  style: themeData2().textButtonTheme.style,
+                                  style:
+                                      AppTheme.themeData2.textButtonTheme.style,
                                   onPressed: () {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
@@ -251,7 +252,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                       .titleCase()),
                                 ),
                               ),
-                        //CustomDivider(color: themeData2().primaryColor),
+                        //CustomDivider(color: AppTheme.themeData2.primaryColor),
                         //SizedBox(height: 8),
                         if (isCompletedVerified())
                           Column(
@@ -281,7 +282,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                                 ],
                               ),
                               TextButton(
-                                  style: themeData2().textButtonTheme.style,
+                                  style:
+                                      AppTheme.themeData2.textButtonTheme.style,
                                   onPressed: () {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
@@ -319,7 +321,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                             ),
                             const SizedBox(height: 15),
                             ElevatedButton(
-                                style: themeData2().elevatedButtonTheme.style,
+                                style: AppTheme
+                                    .themeData2.elevatedButtonTheme.style,
                                 onPressed: () => showDialog<String>(
                                       context: context,
                                       builder: (BuildContext context) =>
@@ -371,7 +374,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                               ),
                               const Divider(),
                               ElevatedButton(
-                                  style: themeData2().elevatedButtonTheme.style,
+                                  style: AppTheme
+                                      .themeData2.elevatedButtonTheme.style,
                                   onPressed: () => showDialog<String>(
                                         context: context,
                                         builder: (BuildContext context) =>
@@ -410,7 +414,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                               ),
                               const SizedBox(height: 8),
                               ElevatedButton(
-                                  style: themeData2().elevatedButtonTheme.style,
+                                  style: AppTheme
+                                      .themeData2.elevatedButtonTheme.style,
                                   onPressed: () => showDialog<String>(
                                         context: context,
                                         builder: (BuildContext context) =>

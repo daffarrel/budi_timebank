@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'auth pages/setup_profile.dart';
 import 'auth pages/login_page.dart';
 import 'auth pages/sign_up_page.dart';
-import 'custom widgets/theme.dart';
+import 'components/app_theme.dart';
 import 'dashboard%20pages/dashboard.dart';
 import 'firebase_options.dart';
 import 'navigation.dart';
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BUDI Timebank',
-      theme: themeData1(),
+      theme: AppTheme.themeData,
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (_) => const SplashPage(),

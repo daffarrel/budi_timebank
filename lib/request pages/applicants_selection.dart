@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../custom widgets/heading2.dart';
-import '../custom widgets/theme.dart';
+import '../components/app_theme.dart';
 import '../my_extensions/extension_string.dart';
 import '../model/profile.dart';
 
@@ -35,7 +35,7 @@ class ApplicantsSelectionList extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                        style: themeData2().elevatedButtonTheme.style,
+                        style: AppTheme.themeData2.elevatedButtonTheme.style,
                         onPressed: () => showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
@@ -72,7 +72,7 @@ class ApplicantsSelectionList extends StatelessWidget {
                     onPressed: (() => onClickProfile(index)),
                     icon: FaIcon(
                       FontAwesomeIcons.solidCircleQuestion,
-                      color: themeData2().secondaryHeaderColor,
+                      color: AppTheme.themeData2.secondaryHeaderColor,
                     ),
                   )
                 ],

@@ -5,7 +5,7 @@ import '../my_extensions/extension_datetime.dart';
 import '../my_extensions/extension_string.dart';
 import '../model/profile.dart';
 import '../model/service_request.dart';
-import 'theme.dart';
+import '../components/app_theme.dart';
 
 class CustomCardServiceRequest extends StatefulWidget {
   final String requestorId;
@@ -56,7 +56,7 @@ class _CustomCardServiceRequestState extends State<CustomCardServiceRequest> {
       case ServiceRequestStatus.completedVerified:
         return const Color.fromARGB(255, 89, 175, 89);
       case ServiceRequestStatus.completed:
-        return themeData2().secondaryHeaderColor;
+        return AppTheme.themeData2.secondaryHeaderColor;
       default:
         return const Color.fromARGB(255, 127, 124, 139);
     }

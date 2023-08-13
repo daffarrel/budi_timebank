@@ -181,7 +181,7 @@ class _AvailableServicesState extends State<AvailableServices> {
                       //     children: [
                       //       Icon(
                       //         Icons.tune,
-                      //         color: themeData1().secondaryHeaderColor,
+                      //         color: AppTheme.themeData.secondaryHeaderColor,
                       //       ),
                       //       const SizedBox(width: 3),
                       //       Container(
@@ -382,7 +382,7 @@ class _AvailableServicesState extends State<AvailableServices> {
                     //     children: [
                     //       Icon(
                     //         Icons.tune,
-                    //         color: themeData1().secondaryHeaderColor,
+                    //         color: AppTheme.themeData.secondaryHeaderColor,
                     //       ),
                     //       const SizedBox(width: 3),
                     //       Container(

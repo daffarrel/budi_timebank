@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../custom%20widgets/theme.dart';
+import '../components/app_theme.dart';
 import '../db_helpers/client_rating.dart';
 import '../model/rating.dart';
 import 'custom_card_rating.dart';
@@ -37,7 +37,7 @@ class _RateReceivedPageState extends State<RateReceivedPage> {
     return Scaffold(
       appBar: AppBar(
           title: const Text('Received Rating'),
-          backgroundColor: themeData1().secondaryHeaderColor),
+          backgroundColor: AppTheme.themeData.secondaryHeaderColor),
       body: isLoad
           ? const Center(child: CircularProgressIndicator())
           : data.isEmpty

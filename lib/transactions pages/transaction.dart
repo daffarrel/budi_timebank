@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../custom widgets/custom_divider.dart';
-import '../custom%20widgets/theme.dart';
+import '../components/app_theme.dart';
 import '../db_helpers/client_service_request.dart';
 import '../db_helpers/client_user.dart';
 import '../my_extensions/extension_string.dart';
@@ -127,7 +127,7 @@ class _TransactionPageState extends State<TransactionPage> {
     return Scaffold(
       appBar: AppBar(
           title: const Text('Transaction Page'),
-          backgroundColor: themeData1().primaryColor),
+          backgroundColor: AppTheme.themeData.primaryColor),
       body: isLoad
           ? const Center(child: CircularProgressIndicator())
           : myEarningsHistory.isEmpty
@@ -303,7 +303,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                     style: const TextStyle(fontSize: 12),
                                   ),
                                   CustomDivider(
-                                      color: themeData1().primaryColor)
+                                      color: AppTheme.themeData.primaryColor)
                                 ],
                               ),
                             ));

@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../components/constants.dart';
-import '../custom%20widgets/theme.dart';
+import '../components/app_theme.dart';
 import 'password_recovery_page.dart';
 import 'sign_up_page.dart';
 
@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
               'Budi',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: themeData1().primaryColor,
+                  color: AppTheme.themeData.primaryColor,
                   fontSize: 65,
                   fontWeight: FontWeight.bold),
             ),
@@ -85,14 +85,14 @@ class _LoginPageState extends State<LoginPage> {
                   'Blockchain-Based ',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: themeData1().secondaryHeaderColor,
+                      color: AppTheme.themeData.secondaryHeaderColor,
                       fontWeight: FontWeight.w600),
                 ),
                 Text(
                   'Time Bank',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: themeData1().secondaryHeaderColor,
+                      color: AppTheme.themeData.secondaryHeaderColor,
                       fontWeight: FontWeight.w600),
                 ),
               ],
@@ -111,7 +111,8 @@ class _LoginPageState extends State<LoginPage> {
                 labelText: 'Email',
                 border: const UnderlineInputBorder(),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: themeData1().primaryColor),
+                  borderSide:
+                      BorderSide(color: AppTheme.themeData.primaryColor),
                 ),
               ),
               keyboardType: TextInputType.emailAddress,
@@ -124,7 +125,8 @@ class _LoginPageState extends State<LoginPage> {
               decoration: InputDecoration(
                 border: const UnderlineInputBorder(),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: themeData1().primaryColor),
+                  borderSide:
+                      BorderSide(color: AppTheme.themeData.primaryColor),
                 ),
                 labelText: 'Password',
                 suffixIcon: IconButton(
@@ -145,11 +147,11 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 18),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: themeData1().secondaryHeaderColor,
+                backgroundColor: AppTheme.themeData.secondaryHeaderColor,
                 foregroundColor: Colors.white,
                 // side: BorderSide(
                 //   width: 3.0,
-                //   color: themeData1().secondaryHeaderColor,
+                //   color: AppTheme.themeData.secondaryHeaderColor,
                 // )
               ),
               onPressed: _isLoading ? null : _logIn,
@@ -171,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             TextButton(
               style: TextButton.styleFrom(
-                  foregroundColor: themeData1().secondaryHeaderColor),
+                  foregroundColor: AppTheme.themeData.secondaryHeaderColor),
               onPressed: (() {
                 Navigator.push(
                     context,

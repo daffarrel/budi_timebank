@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../components/constants.dart';
-import '../custom%20widgets/theme.dart';
+import '../components/app_theme.dart';
 
 class PasswordRecoveryPage extends StatefulWidget {
   const PasswordRecoveryPage({super.key});
@@ -45,7 +45,7 @@ class PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Password Change'),
-        backgroundColor: themeData2().primaryColor,
+        backgroundColor: AppTheme.themeData2.primaryColor,
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),

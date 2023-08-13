@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../custom widgets/theme.dart';
+import '../components/app_theme.dart';
 
 class RatingCardWidget extends StatefulWidget {
   final dynamic userRating;
@@ -31,8 +31,8 @@ class _RatingCardWidgetState extends State<RatingCardWidget> {
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         color: widget.isProvider
-            ? themeData1().secondaryHeaderColor
-            : themeData1().primaryColor,
+            ? AppTheme.themeData.secondaryHeaderColor
+            : AppTheme.themeData.primaryColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -48,8 +48,8 @@ class _RatingCardWidgetState extends State<RatingCardWidget> {
                     child: Icon(
                       widget.iconRating,
                       color: widget.isProvider
-                          ? themeData1().secondaryHeaderColor
-                          : themeData1().primaryColor,
+                          ? AppTheme.themeData.secondaryHeaderColor
+                          : AppTheme.themeData.primaryColor,
                     ),
                   ),
                   const SizedBox(width: 5),

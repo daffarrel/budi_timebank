@@ -4,7 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../custom widgets/heading2.dart';
 import '../custom widgets/custom_headline.dart';
-import '../custom%20widgets/theme.dart';
+import '../components/app_theme.dart';
 import '../db_helpers/client_service_request.dart';
 import '../db_helpers/client_user.dart';
 import '../my_extensions/extension_datetime.dart';
@@ -70,8 +70,8 @@ class _RatingDetailsState extends State<RatingDetails> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: widget.isProvider
-            ? themeData1().primaryColor
-            : themeData1().secondaryHeaderColor,
+            ? AppTheme.themeData.primaryColor
+            : AppTheme.themeData.secondaryHeaderColor,
         title: const Text('Rating Details'),
       ),
       body: Padding(
@@ -85,7 +85,7 @@ class _RatingDetailsState extends State<RatingDetails> {
                   Card(
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
-                        color: themeData1().primaryColor,
+                        color: AppTheme.themeData.primaryColor,
                         width: 3,
                       ),
                       borderRadius: const BorderRadius.all(Radius.circular(12)),
@@ -101,7 +101,7 @@ class _RatingDetailsState extends State<RatingDetails> {
                               Row(
                                 children: [
                                   Icon(Icons.comment,
-                                      color: themeData1().primaryColor),
+                                      color: AppTheme.themeData.primaryColor),
                                   const SizedBox(width: 5),
                                   const Heading2('Comment'),
                                 ],
@@ -127,7 +127,8 @@ class _RatingDetailsState extends State<RatingDetails> {
                                       widget.ratingDetails.rating.toDouble(),
                                   itemBuilder: (context, index) => Icon(
                                     Icons.star,
-                                    color: themeData1().secondaryHeaderColor,
+                                    color:
+                                        AppTheme.themeData.secondaryHeaderColor,
                                   ),
                                   onRatingUpdate: (value) {
                                     //_value1Controller = value;
@@ -144,7 +145,7 @@ class _RatingDetailsState extends State<RatingDetails> {
                   Card(
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
-                        color: themeData1().secondaryHeaderColor,
+                        color: AppTheme.themeData.secondaryHeaderColor,
                         width: 3,
                       ),
                       borderRadius: const BorderRadius.all(Radius.circular(12)),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-ThemeData themeData1() {
-  return ThemeData(
+class AppTheme {
+  static ThemeData themeData = ThemeData(
     textSelectionTheme: const TextSelectionThemeData(
         cursorColor: Color.fromARGB(255, 0, 146, 143)),
     inputDecorationTheme: const InputDecorationTheme(
@@ -36,10 +36,8 @@ ThemeData themeData1() {
       ),
     ),
   );
-}
 
-ThemeData themeData2() {
-  return ThemeData(
+  static ThemeData themeData2 = ThemeData(
     inputDecorationTheme: const InputDecorationTheme(
       border: OutlineInputBorder(),
 
@@ -71,8 +69,7 @@ ThemeData themeData2() {
       ),
     ),
   );
-}
 
-ThemeData themeData3() {
-  return ThemeData(primaryColor: const Color.fromARGB(255, 71, 85, 92));
+  static ThemeData themeData3 =
+      ThemeData(primaryColor: const Color.fromARGB(255, 71, 85, 92));
 }

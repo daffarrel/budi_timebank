@@ -9,7 +9,7 @@ import 'package:geolocator/geolocator.dart';
 
 import '../components/constants.dart';
 import '../custom widgets/custom_headline.dart';
-import '../custom%20widgets/theme.dart';
+import '../components/app_theme.dart';
 import '../db_helpers/client_service_request.dart';
 import '../model/service_request.dart' as model;
 import '../shared/malaysia_state.dart';
@@ -243,7 +243,8 @@ class _RequestFormState extends State<RequestForm> {
                             DatePicker.showDateTimePicker(context,
                                 theme: DatePickerTheme(
                                     doneStyle: TextStyle(
-                                        color: themeData1().primaryColor)),
+                                        color:
+                                            AppTheme.themeData.primaryColor)),
                                 showTitleActions: true,
                                 minTime: DateTime(
                                     _dateTime.year,

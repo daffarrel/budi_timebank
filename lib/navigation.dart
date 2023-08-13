@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'custom%20widgets/theme.dart';
+import 'components/app_theme.dart';
 import 'dashboard%20pages/dashboard.dart';
 import 'profile%20pages/profile.dart';
 
@@ -62,19 +62,19 @@ class _BottomBarNavigationState extends State<BottomBarNavigation> {
             BottomNavigationBarItem(
                 icon: const Icon(Icons.home),
                 label: 'Home',
-                backgroundColor: themeData2().primaryColor),
+                backgroundColor: AppTheme.themeData2.primaryColor),
             BottomNavigationBarItem(
                 icon: const Icon(Icons.handshake),
                 label: 'Need Help',
-                backgroundColor: themeData1().primaryColor),
+                backgroundColor: AppTheme.themeData.primaryColor),
             BottomNavigationBarItem(
                 icon: const Icon(Icons.emoji_people),
                 label: 'Offer Help',
-                backgroundColor: themeData1().secondaryHeaderColor),
+                backgroundColor: AppTheme.themeData.secondaryHeaderColor),
             BottomNavigationBarItem(
                 icon: const Icon(Icons.account_box),
                 label: 'Account',
-                backgroundColor: themeData2().primaryColor)
+                backgroundColor: AppTheme.themeData2.primaryColor)
           ],
           currentIndex: _selectedIndex,
           onTap: onItemTapped,

@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../components/profile_avatar.dart';
 import '../custom widgets/custom_headline.dart';
-import '../custom%20widgets/theme.dart';
+import '../components/app_theme.dart';
 import '../db_helpers/client_user.dart';
 import '../model/contact.dart';
 import '../model/profile.dart';
@@ -72,7 +72,7 @@ class _ViewProfileState extends State<ViewProfile> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile Summary'),
-        //backgroundColor: themeData2().primaryColor,
+        //backgroundColor: AppTheme.themeData2.primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -82,27 +82,18 @@ class _ViewProfileState extends State<ViewProfile> {
               )
             : ListView(
                 children: [
-                  // if (kDebugMode)
-                  //   Text(
-                  //     widget.id,
-                  //     style: const TextStyle(color: Colors.red),
-                  //   ),
+                  if (kDebugMode)
+                    Text(
+                      widget.id,
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Card(
-                      // shape: RoundedRectangleBorder(
-                      //   side: BorderSide(
-                      //     color: themeData2().primaryColor,
-                      //     width: 3,
-                      //   ),
-                      //   borderRadius:
-                      //       const BorderRadius.all(Radius.circular(12)),
-                      // ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10.0),
                         child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ProfileAvatar(
                               imageUrl: profile.avatar,
@@ -154,7 +145,7 @@ class _ViewProfileState extends State<ViewProfile> {
                   Row(
                     children: [
                       ContactWidget(
-                          containerColor: themeData3().primaryColor,
+                          containerColor: AppTheme.themeData3.primaryColor,
                           theIcon: const Icon(
                             Icons.email,
                             color: Colors.white,
@@ -169,7 +160,7 @@ class _ViewProfileState extends State<ViewProfile> {
                   Row(
                     children: [
                       ContactWidget(
-                          containerColor: themeData3().primaryColor,
+                          containerColor: AppTheme.themeData3.primaryColor,
                           theIcon: const Icon(
                             Icons.phone,
                             color: Colors.white,
@@ -184,7 +175,7 @@ class _ViewProfileState extends State<ViewProfile> {
                   Row(
                     children: [
                       ContactWidget(
-                          containerColor: themeData3().primaryColor,
+                          containerColor: AppTheme.themeData3.primaryColor,
                           theIcon: const FaIcon(
                             FontAwesomeIcons.twitter,
                             color: Colors.white,
@@ -200,7 +191,7 @@ class _ViewProfileState extends State<ViewProfile> {
                   Row(
                     children: [
                       ContactWidget(
-                          containerColor: themeData3().primaryColor,
+                          containerColor: AppTheme.themeData3.primaryColor,
                           theIcon: const FaIcon(
                             FontAwesomeIcons.whatsapp,
                             color: Colors.white,

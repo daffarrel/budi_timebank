@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../custom widgets/theme.dart';
+import '../components/app_theme.dart';
 import '../db_helpers/client_user.dart';
 
 class TimeBalanceCard extends StatefulWidget {
@@ -30,7 +30,7 @@ class _TimeBalanceCardState extends State<TimeBalanceCard> {
             borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
           //elevation: 5,
-          color: themeData1().primaryColor,
+          color: AppTheme.themeData.primaryColor,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -45,7 +45,7 @@ class _TimeBalanceCardState extends State<TimeBalanceCard> {
                           color: Colors.white),
                       child: Icon(
                         Icons.wallet,
-                        color: themeData1().primaryColor,
+                        color: AppTheme.themeData.primaryColor,
                       ),
                     ),
                     const SizedBox(width: 8),

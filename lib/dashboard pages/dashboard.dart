@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../custom widgets/custom_headline.dart';
-import '../custom widgets/theme.dart';
+import '../components/app_theme.dart';
 import '../rate pages/rate_given_page.dart';
 import '../rate pages/rate_received_page.dart';
 import '../transactions pages/transaction.dart';
@@ -18,7 +18,7 @@ class Dashboard extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard'),
-        backgroundColor: themeData2().primaryColor,
+        backgroundColor: AppTheme.themeData2.primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -31,7 +31,7 @@ class Dashboard extends StatelessWidget {
                 Expanded(
                   child: XDashboardCard(
                     title: "Your Request",
-                    borderColor: themeData1().primaryColor,
+                    borderColor: AppTheme.themeData.primaryColor,
                     navBarIndex: 1,
                     content: const RequestDashboardContent(),
                   ),
@@ -39,7 +39,7 @@ class Dashboard extends StatelessWidget {
                 Expanded(
                   child: XDashboardCard(
                     title: "Your Service",
-                    borderColor: themeData1().secondaryHeaderColor,
+                    borderColor: AppTheme.themeData.secondaryHeaderColor,
                     navBarIndex: 2,
                     content: const ServiceDashboardContent(),
                   ),
@@ -70,7 +70,7 @@ class Dashboard extends StatelessWidget {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(12)),
                               ),
-                              color: themeData1().primaryColor,
+                              color: AppTheme.themeData.primaryColor,
                               child: InkWell(
                                   onTap: () {
                                     Navigator.of(context).push(
@@ -128,7 +128,7 @@ class Dashboard extends StatelessWidget {
                           child: Card(
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: themeData1().primaryColor,
+                                color: AppTheme.themeData.primaryColor,
                                 width: 3,
                               ),
                               borderRadius:
@@ -147,14 +147,15 @@ class Dashboard extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Icon(Icons.rate_review,
-                                        color: themeData1().primaryColor),
+                                        color: AppTheme.themeData.primaryColor),
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Text(
                                         'Rate Given',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            color: themeData1().primaryColor),
+                                            color: AppTheme
+                                                .themeData.primaryColor),
                                         textAlign: TextAlign.center,
                                         //Theme.of(context).textTheme.headline1,
                                       ),
@@ -166,7 +167,8 @@ class Dashboard extends StatelessWidget {
                                         'Give feedback to other people',
                                         style: TextStyle(
                                             fontSize: 13,
-                                            color: themeData1().primaryColor),
+                                            color: AppTheme
+                                                .themeData.primaryColor),
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
@@ -184,7 +186,7 @@ class Dashboard extends StatelessWidget {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(12)),
                             ),
-                            color: themeData1().secondaryHeaderColor,
+                            color: AppTheme.themeData.secondaryHeaderColor,
                             child: InkWell(
                                 onTap: () {
                                   Navigator.of(context).push(

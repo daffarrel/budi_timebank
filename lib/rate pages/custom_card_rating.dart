@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-import '../custom widgets/theme.dart';
+import '../components/app_theme.dart';
 import '../db_helpers/client_user.dart';
 import '../my_extensions/extension_string.dart';
 import '../model/profile.dart';
@@ -93,8 +93,9 @@ class _CustomCardRatingState extends State<CustomCardRating> {
                             decoration: BoxDecoration(
                                 border: Border.all(
                                     color: widget.isProvider
-                                        ? themeData1().secondaryHeaderColor
-                                        : themeData1().primaryColor,
+                                        ? AppTheme
+                                            .themeData.secondaryHeaderColor
+                                        : AppTheme.themeData.primaryColor,
                                     width: 2),
                                 //color: Color.fromARGB(255, 219, 216, 233),
                                 borderRadius: BorderRadius.circular(10)),
@@ -122,7 +123,7 @@ class _CustomCardRatingState extends State<CustomCardRating> {
                         initialRating: widget.ratingDetails.rating.toDouble(),
                         itemBuilder: (context, index) => Icon(
                           Icons.star,
-                          color: themeData1().secondaryHeaderColor,
+                          color: AppTheme.themeData.secondaryHeaderColor,
                         ),
                         onRatingUpdate: (value) {
                           //_value1Controller = value;

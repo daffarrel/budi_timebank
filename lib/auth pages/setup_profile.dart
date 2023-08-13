@@ -10,7 +10,7 @@ import 'package:textfield_tags/textfield_tags.dart';
 import '../components/constants.dart';
 import '../components/profile_avatar.dart';
 import '../custom widgets/custom_headline.dart';
-import '../custom%20widgets/theme.dart';
+import '../components/app_theme.dart';
 import '../db_helpers/client_user.dart';
 import '../my_extensions/extension_string.dart';
 import '../model/contact.dart';
@@ -276,7 +276,7 @@ class _SetupProfileState extends State<SetupProfile> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile Settings'),
-        backgroundColor: themeData2().primaryColor,
+        backgroundColor: AppTheme.themeData2.primaryColor,
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
@@ -351,7 +351,7 @@ class _SetupProfileState extends State<SetupProfile> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(8)),
                         selectedBorderColor: Colors.green[700],
-                        //     themeData2().,
+                        //     AppTheme.themeData2.,
                         selectedColor: Colors.white,
                         fillColor: Colors.green[300],
                         // color: Colors.red[400],
@@ -395,7 +395,7 @@ class _SetupProfileState extends State<SetupProfile> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
-                              color: themeData2().primaryColor,
+                              color: AppTheme.themeData2.primaryColor,
                               width: 2,
                             )),
                         child: DropdownButton<IdentificationType>(
@@ -403,7 +403,7 @@ class _SetupProfileState extends State<SetupProfile> {
                           underline: Container(
                             height: 0,
                           ),
-                          iconEnabledColor: themeData2().primaryColor,
+                          iconEnabledColor: AppTheme.themeData2.primaryColor,
                           value: _selectedIdType,
                           items: idUser
                               .map<DropdownMenuItem<IdentificationType>>((e) {
@@ -415,7 +415,7 @@ class _SetupProfileState extends State<SetupProfile> {
                                   child: Text(
                                     e.name.titleCase(),
                                     style: TextStyle(
-                                        color: themeData2().primaryColor,
+                                        color: AppTheme.themeData2.primaryColor,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15),
                                   ),
@@ -446,7 +446,7 @@ class _SetupProfileState extends State<SetupProfile> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
-                              color: themeData2().primaryColor,
+                              color: AppTheme.themeData2.primaryColor,
                               width: 2,
                             )),
                         child: DropdownButton<OwnerType>(
@@ -454,7 +454,7 @@ class _SetupProfileState extends State<SetupProfile> {
                           underline: Container(
                             height: 0,
                           ),
-                          iconEnabledColor: themeData2().primaryColor,
+                          iconEnabledColor: AppTheme.themeData2.primaryColor,
                           value: _selectedOwnerType,
                           items: OwnerType.values
                               .map<DropdownMenuItem<OwnerType>>((e) {
@@ -466,7 +466,7 @@ class _SetupProfileState extends State<SetupProfile> {
                                   child: Text(
                                     e.name.titleCase(),
                                     style: TextStyle(
-                                        color: themeData2().primaryColor,
+                                        color: AppTheme.themeData2.primaryColor,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15),
                                   ),
@@ -514,7 +514,8 @@ class _SetupProfileState extends State<SetupProfile> {
                     textSeparators: const [','],
                     letterCase: LetterCase.normal,
                     validator: (String tag) {
-                      // This part sometimes toggle 2 times when running on time emulator
+                      // This part may be wrongly triggered when pressing comma
+                      // from PC keyboard (Nothing to worry about when in production)
                       if (_skillsInputController.getTags != null &&
                           _skillsInputController.getTags!.contains(tag)) {
                         return 'Recent tag already added';
@@ -569,7 +570,7 @@ class _SetupProfileState extends State<SetupProfile> {
                   const SizedBox(height: 8),
                   Divider(
                       //horizontal line
-                      color: themeData2().primaryColor,
+                      color: AppTheme.themeData2.primaryColor,
                       height: 30,
                       thickness: 2,
                       indent: 15,
@@ -641,7 +642,8 @@ class _SetupProfileState extends State<SetupProfile> {
                                 maxWidth: _distanceToField * 0.24),
                             prefixIcon: DropdownButton<ContactType>(
                               isExpanded: true,
-                              iconEnabledColor: themeData2().primaryColor,
+                              iconEnabledColor:
+                                  AppTheme.themeData2.primaryColor,
                               underline: Container(
                                 height: 0,
                               ),
@@ -656,7 +658,8 @@ class _SetupProfileState extends State<SetupProfile> {
                                       children: [
                                         Icon(
                                           iconData,
-                                          color: themeData2().primaryColor,
+                                          color:
+                                              AppTheme.themeData2.primaryColor,
                                         ),
                                       ],
                                     ),
@@ -673,7 +676,7 @@ class _SetupProfileState extends State<SetupProfile> {
                                     child: Text(
                                       contactType.name.titleCase(),
                                       style: TextStyle(
-                                        color: themeData2().primaryColor,
+                                        color: AppTheme.themeData2.primaryColor,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15,
                                       ),
@@ -690,7 +693,8 @@ class _SetupProfileState extends State<SetupProfile> {
                             //labelText: 'Contact',
                             suffixIcon: TextButton(
                               style: TextButton.styleFrom(
-                                foregroundColor: themeData2().primaryColor,
+                                foregroundColor:
+                                    AppTheme.themeData2.primaryColor,
                               ),
                               onPressed: () {
                                 if (_contactController.text.isEmpty) {
@@ -806,7 +810,7 @@ class _AddedContactWidget extends StatelessWidget {
       child: ListTile(
         leading: Icon(
           iconData,
-          color: themeData2().primaryColor,
+          color: AppTheme.themeData2.primaryColor,
         ),
         subtitle: Text(contactType.name.capitalize()),
         title: Text(value),

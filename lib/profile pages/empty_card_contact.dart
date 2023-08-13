@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../custom widgets/theme.dart';
+import '../components/app_theme.dart';
 
 class EmptyCardContact extends StatelessWidget {
   const EmptyCardContact({
@@ -12,7 +12,7 @@ class EmptyCardContact extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         side: BorderSide(
-          color: themeData3().primaryColor,
+          color: AppTheme.themeData3.primaryColor,
           width: 2,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(12)),

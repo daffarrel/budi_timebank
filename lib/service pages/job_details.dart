@@ -9,7 +9,7 @@ import 'package:maps_launcher/maps_launcher.dart';
 import '../components/constants.dart';
 import '../custom widgets/heading2.dart';
 import '../custom widgets/custom_headline.dart';
-import '../custom%20widgets/theme.dart';
+import '../components/app_theme.dart';
 import '../db_helpers/client_rating.dart';
 import '../db_helpers/client_service_request.dart';
 import '../db_helpers/client_user.dart';
@@ -200,7 +200,7 @@ class _JobDetailsState extends State<JobDetails> {
                     Card(
                       shape: const RoundedRectangleBorder(
                         // side: BorderSide(
-                        //   color: themeData1().secondaryHeaderColor,
+                        //   color: AppTheme.themeData.secondaryHeaderColor,
                         //   width: 3,
                         // ),
                         borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -281,7 +281,8 @@ class _JobDetailsState extends State<JobDetails> {
                                   const TextStyle(fontStyle: FontStyle.italic),
                             ),
                             TextButton(
-                                style: themeData2().textButtonTheme.style,
+                                style:
+                                    AppTheme.themeData2.textButtonTheme.style,
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
@@ -332,7 +333,7 @@ class _JobDetailsState extends State<JobDetails> {
                   Card(
                     shape: const RoundedRectangleBorder(
                       // side: BorderSide(
-                      //   color: themeData1().secondaryHeaderColor,
+                      //   color: AppTheme.themeData.secondaryHeaderColor,
                       //   width: 3,
                       // ),
                       borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -385,7 +386,7 @@ class _JobDetailsState extends State<JobDetails> {
                   Card(
                     shape: const RoundedRectangleBorder(
                       // side: BorderSide(
-                      //   //color: themeData1().secondary1HeaderColor,
+                      //   //color: AppTheme.themeData.secondary1HeaderColor,
                       //   width: 3,
                       // ),
                       borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -399,7 +400,8 @@ class _JobDetailsState extends State<JobDetails> {
                               children: [
                                 const Heading2('Want to help?'),
                                 ElevatedButton(
-                                  style: themeData2().elevatedButtonTheme.style,
+                                  style: AppTheme
+                                      .themeData2.elevatedButtonTheme.style,
                                   onPressed: () => showDialog<String>(
                                     context: context,
                                     builder: (BuildContext context) =>

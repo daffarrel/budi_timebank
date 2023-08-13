@@ -4,7 +4,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import '../components/constants.dart';
 import '../custom widgets/custom_headline.dart';
 import '../custom%20widgets/heading2.dart';
-import '../custom%20widgets/theme.dart';
+import '../components/app_theme.dart';
 import '../my_extensions/extension_string.dart';
 
 class UpdatePage extends StatefulWidget {
@@ -82,7 +82,7 @@ class _UpdatePageState extends State<UpdatePage> {
     return Scaffold(
       appBar: AppBar(
           title: const Text('Update Request'),
-          backgroundColor: themeData1().primaryColor),
+          backgroundColor: AppTheme.themeData.primaryColor),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -93,14 +93,14 @@ class _UpdatePageState extends State<UpdatePage> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(
-                  color: themeData1().primaryColor,
+                  color: AppTheme.themeData.primaryColor,
                   width: 2,
                 )),
             child: DropdownButton<String>(
               underline: Container(
                 height: 0,
               ),
-              iconEnabledColor: themeData1().primaryColor,
+              iconEnabledColor: AppTheme.themeData.primaryColor,
               value: _elementController.text,
               items: listElement.map<DropdownMenuItem<String>>((e) {
                 return DropdownMenuItem<String>(
@@ -110,7 +110,7 @@ class _UpdatePageState extends State<UpdatePage> {
                       child: Text(
                         e.toString().capitalize(),
                         style: TextStyle(
-                            color: themeData1().primaryColor,
+                            color: AppTheme.themeData.primaryColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 15),
                       ),
@@ -156,7 +156,7 @@ class _UpdatePageState extends State<UpdatePage> {
                     ),
                     const SizedBox(height: 8),
                     ElevatedButton(
-                        style: themeData2().elevatedButtonTheme.style,
+                        style: AppTheme.themeData2.elevatedButtonTheme.style,
                         onPressed: (() {
                           if (_titleController.text == '') {
                             context.showErrorSnackBar(
@@ -182,14 +182,14 @@ class _UpdatePageState extends State<UpdatePage> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
-                              color: themeData1().primaryColor,
+                              color: AppTheme.themeData.primaryColor,
                               width: 2,
                             )),
                         child: DropdownButton<String>(
                           underline: Container(
                             height: 0,
                           ),
-                          iconEnabledColor: themeData1().primaryColor,
+                          iconEnabledColor: AppTheme.themeData.primaryColor,
                           value: _categoryController.text,
                           items:
                               listCategories.map<DropdownMenuItem<String>>((e) {
@@ -201,7 +201,7 @@ class _UpdatePageState extends State<UpdatePage> {
                                   child: Text(
                                     e,
                                     style: TextStyle(
-                                        color: themeData1().primaryColor,
+                                        color: AppTheme.themeData.primaryColor,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15),
                                   ),
@@ -216,7 +216,7 @@ class _UpdatePageState extends State<UpdatePage> {
                         ),
                       ),
                       ElevatedButton(
-                          style: themeData1().elevatedButtonTheme.style,
+                          style: AppTheme.themeData.elevatedButtonTheme.style,
                           onPressed: (() {
                             updateJob(
                                 '{"category": "${_categoryController.text.toString()}"}');
@@ -246,7 +246,7 @@ class _UpdatePageState extends State<UpdatePage> {
                     ),
                     const SizedBox(height: 8),
                     ElevatedButton(
-                        style: themeData1().elevatedButtonTheme.style,
+                        style: AppTheme.themeData.elevatedButtonTheme.style,
                         onPressed: (() {
                           if (_descriptionController.text == '') {
                             context.showErrorSnackBar(
@@ -291,7 +291,7 @@ class _UpdatePageState extends State<UpdatePage> {
                     //   dropdownDecoration: BoxDecoration(
                     //       borderRadius: BorderRadius.circular(10),
                     //       border: Border.all(
-                    //         color: themeData1().primaryColor,
+                    //         color: AppTheme.themeData.primaryColor,
                     //         width: 2,
                     //       )),
                     //   cityDropdownLabel: 'Pick a City',
@@ -321,7 +321,7 @@ class _UpdatePageState extends State<UpdatePage> {
                     //   },
                     // ),
                     ElevatedButton(
-                        style: themeData1().elevatedButtonTheme.style,
+                        style: AppTheme.themeData.elevatedButtonTheme.style,
                         onPressed: (() {
                           if (_locationController.text == 'null' ||
                               _stateController.text == 'null') {
@@ -340,12 +340,12 @@ class _UpdatePageState extends State<UpdatePage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     ElevatedButton(
-                        style: themeData1().elevatedButtonTheme.style,
+                        style: AppTheme.themeData.elevatedButtonTheme.style,
                         onPressed: () {
                           DatePicker.showDateTimePicker(context,
                               theme: DatePickerTheme(
                                   doneStyle: TextStyle(
-                                      color: themeData1().primaryColor)),
+                                      color: AppTheme.themeData.primaryColor)),
                               showTitleActions: true,
                               minTime: DateTime(
                                   _dateTime.year,
@@ -380,7 +380,7 @@ class _UpdatePageState extends State<UpdatePage> {
                           hintText: 'Date & Time'),
                     ),
                     ElevatedButton(
-                        style: themeData1().elevatedButtonTheme.style,
+                        style: AppTheme.themeData.elevatedButtonTheme.style,
                         onPressed: (() {
                           if (_dateControllerDisplay.text == '') {
                             context.showErrorSnackBar(
