@@ -12,6 +12,7 @@ class Profile {
   final Gender gender;
   final OwnerType ownerType;
   final String? organizationName;
+  final String? avatar;
 
   Profile({
     this.userUid,
@@ -22,6 +23,7 @@ class Profile {
     required this.gender,
     required this.ownerType,
     this.organizationName,
+    this.avatar,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class Profile {
       gender: _parseGender(json['gender']),
       ownerType: _parseOwnerType(json['ownerType']),
       organizationName: json['organizationName'] as String?,
+      avatar: json['avatar'] as String?,
     );
   }
 
@@ -52,6 +55,7 @@ class Profile {
       'gender': gender.name,
       'ownerType': ownerType.name,
       'organizationName': organizationName,
+      'avatar': avatar,
     };
   }
 
@@ -73,7 +77,7 @@ class Profile {
 
   @override
   String toString() {
-    return 'Profile{name: $name, gender: $gender';
+    return 'Profile{name: $name, gender: $gender, avatar: $avatar}';
   }
 }
 

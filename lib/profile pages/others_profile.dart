@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../components/profile_avatar.dart';
 import '../custom widgets/custom_headline.dart';
 import '../custom%20widgets/theme.dart';
 import '../db_helpers/client_user.dart';
@@ -81,36 +82,44 @@ class _ViewProfileState extends State<ViewProfile> {
               )
             : ListView(
                 children: [
-                  if (kDebugMode)
-                    Text(
-                      widget.id,
-                      style: const TextStyle(color: Colors.red),
-                    ),
+                  // if (kDebugMode)
+                  //   Text(
+                  //     widget.id,
+                  //     style: const TextStyle(color: Colors.red),
+                  //   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Card(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          color: themeData2().primaryColor,
-                          width: 3,
-                        ),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12)),
-                      ),
+                      // shape: RoundedRectangleBorder(
+                      //   side: BorderSide(
+                      //     color: themeData2().primaryColor,
+                      //     width: 3,
+                      //   ),
+                      //   borderRadius:
+                      //       const BorderRadius.all(Radius.circular(12)),
+                      // ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CustomHeadline(profile.name.toString().titleCase()),
-                            const SizedBox(height: 8),
-                            const Text('Gender',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold)),
-                            Text(profile.gender.name.capitalize(),
-                                style: const TextStyle(fontSize: 12)),
+                            ProfileAvatar(
+                              imageUrl: profile.avatar,
+                              radius: 30,
+                            ),
+                            const SizedBox(width: 20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                CustomHeadline(
+                                    profile.name.toString().titleCase()),
+                                const SizedBox(height: 8),
+                                Text('(${profile.gender.name.capitalize()})',
+                                    style: const TextStyle(fontSize: 12)),
+                              ],
+                            ),
                           ],
                         ),
                       ),

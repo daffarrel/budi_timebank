@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
 import '../components/constants.dart';
+import '../components/profile_avatar.dart';
 import '../custom widgets/custom_headline.dart';
 import '../custom%20widgets/theme.dart';
 import '../db_helpers/client_user.dart';
@@ -52,7 +56,9 @@ class _SetupProfileState extends State<SetupProfile> {
   };
 
   final userId = FirebaseAuth.instance.currentUser!.uid;
+  String? imageUrl;
   bool _loading = true;
+  bool _isUplaodingImage = false;
 
   double _distanceToField = 1;
   final TextfieldTagsController _skillsInputController =
@@ -86,6 +92,7 @@ class _SetupProfileState extends State<SetupProfile> {
     });
   }
 
+  /// Called when not first time setup profile
   Future<void> _readProfile() async {
     setState(() => _loading = true);
     Profile userProfile = await ClientUser.getUserProfileById(
@@ -116,6 +123,7 @@ class _SetupProfileState extends State<SetupProfile> {
     otherContacts.addAll(contactOthers);
 
     _selectedIdType = userProfile.identification.identificationType;
+    imageUrl = userProfile.avatar;
 
     setState(() => _loading = false);
   }
@@ -166,6 +174,7 @@ class _SetupProfileState extends State<SetupProfile> {
       name: _usernameController.text.trim(),
       skills: _skillsInputController.getTags ?? [],
       contacts: contacts,
+      avatar: imageUrl,
       identification: userIdentification,
       ownerType: _selectedOwnerType,
       gender: Gender.values[userGenderIndex],
@@ -212,6 +221,46 @@ class _SetupProfileState extends State<SetupProfile> {
     }
   }
 
+  Future<File?> _selectImage() async {
+    // show dialog to select destination where to pick image
+    ImageSource? imgSource = await showDialog(
+        context: context,
+        builder: (_) {
+          return SimpleDialog(
+            children: [
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, ImageSource.camera);
+                },
+                child: const Text('Camera'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, ImageSource.gallery);
+                },
+                child: const Text('Gallery'),
+              ),
+            ],
+          );
+        });
+
+    // if user cancel picking image
+    if (imgSource == null) return null;
+
+    // pick image from selected source
+    final picker = ImagePicker();
+    final imageFile = await picker.pickImage(
+      source: imgSource,
+      maxWidth: 300,
+      maxHeight: 300,
+    );
+
+    // if user cancel picking image
+    if (imageFile == null) return null;
+
+    return File(imageFile.path);
+  }
+
   @override
   void dispose() {
     _usernameController.dispose();
@@ -234,14 +283,38 @@ class _SetupProfileState extends State<SetupProfile> {
           : Form(
               key: _formKey,
               child: ListView(
-                shrinkWrap: true,
                 padding:
                     const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
                 children: [
-                  // Avatar(
-                  //   imageUrl: _avatarUrl,
-                  //   onUpload: _onUpload,
-                  // ),
+                  Row(
+                    children: [
+                      ProfileAvatar(
+                        imageUrl: imageUrl,
+                        showLoadingSpinner: _isUplaodingImage,
+                      ),
+                      const SizedBox(width: 8),
+                      TextButton.icon(
+                        onPressed: () async {
+                          final selectedFile = await _selectImage();
+                          if (selectedFile == null) return;
+                          setState(() => _isUplaodingImage = true);
+                          final newImageUrl =
+                              await ClientUser.uploadProfilePicture(
+                                  selectedFile);
+                          // if user first time setup, do not edit directly yet.
+                          if (!widget.editProfile) {
+                            await ClientUser.setProfilePicture(newImageUrl);
+                          }
+                          setState(() {
+                            _isUplaodingImage = false;
+                            imageUrl = newImageUrl;
+                          });
+                        },
+                        label: const Text('Change profile photo'),
+                        icon: const Icon(Icons.camera_alt_outlined),
+                      ),
+                    ],
+                  ),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: CustomHeadline('Name'),
@@ -425,7 +498,6 @@ class _SetupProfileState extends State<SetupProfile> {
                       },
                     ),
                   ],
-
                   const Divider(
                       //horizontal line
                       height: 30,
@@ -442,9 +514,10 @@ class _SetupProfileState extends State<SetupProfile> {
                     textSeparators: const [','],
                     letterCase: LetterCase.normal,
                     validator: (String tag) {
+                      // This part sometimes toggle 2 times when running on time emulator
                       if (_skillsInputController.getTags != null &&
                           _skillsInputController.getTags!.contains(tag)) {
-                        return 'you already entered that';
+                        return 'Recent tag already added';
                       }
                       return null;
                     },
@@ -649,7 +722,6 @@ class _SetupProfileState extends State<SetupProfile> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () async {

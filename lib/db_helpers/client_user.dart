@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../model/earnings_history.dart';
 import '../model/profile.dart';
@@ -90,5 +93,35 @@ class ClientUser {
     await FirebaseFirestore.instance.collection('users').doc(userUid).update({
       'earningsHistory': FieldValue.arrayUnion([data1.toFirestoreMap()])
     });
+  }
+
+  static Future<String> uploadProfilePicture(File imageFile) async {
+    try {
+      final userUid = FirebaseAuth.instance.currentUser!.uid;
+      final imgReferences =
+          FirebaseStorage.instance.ref('avatars/$userUid.png');
+      await imgReferences.putFile(imageFile);
+      final urlImage = await imgReferences.getDownloadURL();
+
+      return urlImage;
+    } on FirebaseException catch (error) {
+      throw Exception(error.message.toString());
+    }
+  }
+
+  /// Uplaod and set profile picture
+  static Future<void> setProfilePicture(String imageUrl) async {
+    final userUid = FirebaseAuth.instance.currentUser!.uid;
+    try {
+      // save to firestore
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userUid)
+          .update({'profile.avatar': imageUrl});
+    } on FirebaseException catch (error) {
+      throw Exception(error.message.toString());
+    } catch (error) {
+      throw Exception('Unexpected error occured');
+    }
   }
 }
