@@ -25,6 +25,8 @@ class Identification {
         return IdentificationType.mykad;
       case 'matricno':
         return IdentificationType.matricno;
+      case 'staffno':
+        return IdentificationType.staffno;
       case 'passport':
         return IdentificationType.passport;
       default:
@@ -34,4 +36,4 @@ class Identification {
   }
 }
 
-enum IdentificationType { mykad, matricno, passport }
+enum IdentificationType { mykad, matricno, staffno, passport }

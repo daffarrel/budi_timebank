@@ -66,6 +66,20 @@ class _SetupProfileState extends State<SetupProfile> {
   // only to be used when editing profile
   List<String>? _initalSkills;
 
+  /// Convert enum value to proper full name
+  String getFullNameIndentificationType(IdentificationType type) {
+    switch (type) {
+      case IdentificationType.mykad:
+        return "MyKad";
+      case IdentificationType.matricno:
+        return "Matric No.";
+      case IdentificationType.staffno:
+        return "Staff No.";
+      case IdentificationType.passport:
+        return "Passport";
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -419,7 +433,7 @@ class _SetupProfileState extends State<SetupProfile> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10),
                                   child: Text(
-                                    e.name.titleCase(),
+                                    getFullNameIndentificationType(e),
                                     style: TextStyle(
                                         color: AppTheme.themeData2.primaryColor,
                                         fontWeight: FontWeight.bold,
