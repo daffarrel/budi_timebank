@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../components/app_theme.dart';
 import '../components/profile_avatar.dart';
 import '../custom widgets/custom_headline.dart';
-import '../components/app_theme.dart';
 import '../db_helpers/client_user.dart';
 import '../model/contact.dart';
 import '../model/profile.dart';
@@ -12,6 +12,7 @@ import '../my_extensions/extension_string.dart';
 import 'contact_widget.dart';
 import 'custom_list_view_contact.dart';
 import 'empty_card_contact.dart';
+import 'profile_photo_page.dart';
 
 class ViewProfile extends StatefulWidget {
   final String id;
@@ -95,9 +96,25 @@ class _ViewProfileState extends State<ViewProfile> {
                             horizontal: 20, vertical: 10.0),
                         child: Row(
                           children: [
-                            ProfileAvatar(
-                              imageUrl: profile.avatar,
-                              radius: 30,
+                            Hero(
+                              tag: 'profile-photo',
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (profile.avatar == null) return;
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => ProfilePhotoPage(
+                                        name: profile.name,
+                                        image: NetworkImage(profile.avatar!),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: ProfileAvatar(
+                                  imageUrl: profile.avatar,
+                                  radius: 30,
+                                ),
+                              ),
                             ),
                             const SizedBox(width: 20),
                             Column(

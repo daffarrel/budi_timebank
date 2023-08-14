@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../components/profile_avatar.dart';
 import '../custom widgets/heading2.dart';
 import '../components/app_theme.dart';
 import '../my_extensions/extension_string.dart';
@@ -63,17 +64,19 @@ class ApplicantsSelectionList extends StatelessWidget {
                         //   //         index]);
                         //   // print(widget.user);
 
-                        child: Text(
-                          '${index + 1}) ${applicants[index].name.titleCase()}',
-                        )),
+                        child: Text(applicants[index].name.titleCase())),
                   ),
                   const SizedBox(width: 8),
                   IconButton(
+                    tooltip: 'View Profile',
                     onPressed: (() => onClickProfile(index)),
-                    icon: FaIcon(
-                      FontAwesomeIcons.solidCircleQuestion,
-                      color: AppTheme.themeData2.secondaryHeaderColor,
+                    icon: ProfileAvatar(
+                      imageUrl: applicants[index].avatar,
                     ),
+                    // FaIcon(
+                    //   color: AppTheme.themeData2.secondaryHeaderColor,
+                    //   FontAwesomeIcons.solidCircleQuestion,
+                    // ),
                   )
                 ],
               );

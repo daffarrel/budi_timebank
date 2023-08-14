@@ -302,15 +302,21 @@ class _SetupProfileState extends State<SetupProfile> {
                               await ClientUser.uploadProfilePicture(
                                   selectedFile);
                           // if user first time setup, do not edit directly yet.
-                          if (!widget.editProfile) {
+                          if (widget.editProfile) {
                             await ClientUser.setProfilePicture(newImageUrl);
+                            if (mounted) {
+                              context.showSnackBar(
+                                  message: 'Successfully updated profile!');
+                            }
                           }
                           setState(() {
                             _isUplaodingImage = false;
                             imageUrl = newImageUrl;
                           });
                         },
-                        label: const Text('Change profile photo'),
+                        label: Text(widget.editProfile
+                            ? 'Change profile photo'
+                            : 'Set profile photo'),
                         icon: const Icon(Icons.camera_alt_outlined),
                       ),
                     ],

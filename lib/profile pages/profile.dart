@@ -14,6 +14,7 @@ import '../model/profile.dart';
 import 'contact_widget.dart';
 import 'empty_card_contact.dart';
 import 'custom_list_view_contact.dart';
+import 'profile_photo_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final bool isMyProfile;
@@ -136,13 +137,32 @@ class _ProfilePageState extends State<ProfilePage> {
                                   style: const TextStyle(fontSize: 12)),
                             ],
                           ),
-                          ProfileAvatar(imageUrl: snapshot.data!.avatar),
+                          Hero(
+                            tag: 'profile-photo',
+                            child: GestureDetector(
+                                onTap: () {
+                                  if (snapshot.data!.avatar == null) return;
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => ProfilePhotoPage(
+                                        name: snapshot.data!.name,
+                                        image: NetworkImage(
+                                            snapshot.data!.avatar!),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: ProfileAvatar(
+                                    imageUrl: snapshot.data!.avatar)),
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
                 const CustomHeadline(' Skill List'),
+                const SizedBox(height: 10),
                 skills.isEmpty
                     ? const Text('No skills entered')
                     : Wrap(
@@ -177,8 +197,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 //       );
                 //     },
                 //   ),
-
+                const SizedBox(height: 10),
                 const CustomHeadline(' Contact List'),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     ContactWidget(
@@ -193,6 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         : CustomListViewContact(contactList: email)
                   ],
                 ),
+                const SizedBox(height: 5),
                 Row(
                   children: [
                     ContactWidget(
@@ -207,6 +229,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         : CustomListViewContact(contactList: phone)
                   ],
                 ),
+                const SizedBox(height: 5),
                 Row(
                   children: [
                     ContactWidget(
@@ -221,6 +244,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         : CustomListViewContact(contactList: twitter)
                   ],
                 ),
+                const SizedBox(height: 5),
                 Row(
                   children: [
                     ContactWidget(
@@ -235,6 +259,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         : CustomListViewContact(contactList: whatsapp)
                   ],
                 ),
+                const SizedBox(height: 5),
+
                 // RatingCardWidget(
                 //   isProvider: true,
                 //   title: 'Provider Rating',
