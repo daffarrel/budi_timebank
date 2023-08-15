@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../custom widgets/custom_card_service_request.dart';
 import '../db_helpers/client_service_request.dart';
 import '../model/service_request.dart';
+import '../shared/job_categories.dart';
 import 'job_details.dart';
 
 class AvailableServices extends StatefulWidget {
@@ -25,19 +26,6 @@ class _AvailableServicesState extends State<AvailableServices> {
   List<String> listFilter = <String>[
     'Category',
     'State',
-  ];
-
-  List<String> listCategories = <String>[
-    'All Categories',
-    'Arts, Crafts & Music',
-    'Business Services',
-    'Community Activities',
-    'Companionship',
-    'Education',
-    'Help at Home',
-    'Recreation',
-    'Transportation',
-    'Wellness',
   ];
 
   List<String> listState = <String>[
@@ -62,7 +50,7 @@ class _AvailableServicesState extends State<AvailableServices> {
 
   @override
   void initState() {
-    _categoryController.text = listCategories[0];
+    _categoryController.text = kJobCategories.first;
     _stateController.text = listState[0];
     _filterController.text = listFilter[0];
     super.initState();

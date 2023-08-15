@@ -12,6 +12,7 @@ import '../custom widgets/custom_headline.dart';
 import '../components/app_theme.dart';
 import '../db_helpers/client_service_request.dart';
 import '../model/service_request.dart' as model;
+import '../shared/job_categories.dart';
 import '../shared/malaysia_state.dart';
 import 'map_editor.dart';
 
@@ -39,17 +40,6 @@ class _RequestFormState extends State<RequestForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   List<String> mediaList = [];
-  List<String> listCategories = <String>[
-    'Arts, Crafts & Music',
-    'Business Services',
-    'Community Activities',
-    'Companionship',
-    'Education',
-    'Help at Home',
-    'Recreation',
-    'Transportation',
-    'Wellness',
-  ];
 
   DateTime? selectedDate;
 
@@ -77,7 +67,7 @@ class _RequestFormState extends State<RequestForm> {
     super.initState();
     isLoad = false;
     isLocationFetched = false;
-    _categoryController.text = listCategories[2];
+    _categoryController.text = kJobCategories.first;
     // _mapController = MapController.withPosition(
     //   initPosition: GeoPoint(latitude: 47.4358055, longitude: 8.4737324),
     // );
@@ -310,7 +300,7 @@ class _RequestFormState extends State<RequestForm> {
                           iconEnabledColor: Theme.of(context).primaryColor,
                           value: _categoryController.text,
                           items:
-                              listCategories.map<DropdownMenuItem<String>>((e) {
+                              kJobCategories.map<DropdownMenuItem<String>>((e) {
                             return DropdownMenuItem<String>(
                                 value: e,
                                 child: Padding(
