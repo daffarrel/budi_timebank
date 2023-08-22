@@ -10,6 +10,7 @@ import '../components/constants.dart';
 import '../custom widgets/heading2.dart';
 import '../custom widgets/custom_headline.dart';
 import '../components/app_theme.dart';
+import '../db_helpers/client_notification.dart';
 import '../db_helpers/client_rating.dart';
 import '../db_helpers/client_service_request.dart';
 import '../db_helpers/client_user.dart';
@@ -115,10 +116,12 @@ class _JobDetailsState extends State<JobDetails> {
     setState(() => isLoad = false);
   }
 
+  /// Send job request to job creator and add me to list of applicants
   void applyJob(String reqid, String provider) async {
     try {
       await ClientServiceRequest.applyApplicant(reqid, provider);
-
+      ClientNotification.notifyAddApplicant(
+          jobDetail.requestorId, jobDetail.title);
       context.showSnackBar(message: 'Job have been successfully requested');
       Navigator.of(context).pop();
       _getAllinstance();
@@ -307,6 +310,7 @@ class _JobDetailsState extends State<JobDetails> {
                       child: Column(
                         children: [
                           CustomHeadline('Job has been completed'),
+                          SizedBox(height: 10),
                           Text('Pending verification from requestor')
                         ],
                       ),
@@ -323,8 +327,11 @@ class _JobDetailsState extends State<JobDetails> {
                         children: [
                           CustomHeadline(
                               'You have been accepted as the provider'),
+                          SizedBox(height: 10),
                           Text(
-                              'Contact your requestor to start the request when you are ready')
+                            'Contact your requestor to start the request when you are ready',
+                            textAlign: TextAlign.center,
+                          )
                         ],
                       ),
                     ),
@@ -371,6 +378,8 @@ class _JobDetailsState extends State<JobDetails> {
                                 if (res ?? false) {
                                   await ClientServiceRequest.markTaskComplete(
                                       widget.requestId);
+                                  await ClientNotification.claimCompleteJob(
+                                      jobDetail.requestorId, jobDetail.title);
                                   _getAllinstance();
                                 }
                               },

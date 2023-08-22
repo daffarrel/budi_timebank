@@ -124,4 +124,12 @@ class ClientUser {
       throw Exception('Unexpected error occured');
     }
   }
+
+  static Future<void> saveFcmToken(String token) {
+    final userUid = FirebaseAuth.instance.currentUser!.uid;
+    return FirebaseFirestore.instance
+        .collection('fcmUserTokens')
+        .doc(userUid)
+        .set({'fcmToken': token});
+  }
 }

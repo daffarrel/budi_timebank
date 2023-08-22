@@ -7,6 +7,7 @@ import 'package:latlong2/latlong.dart';
 import '../components/constants.dart';
 import '../custom widgets/heading2.dart';
 import '../components/app_theme.dart';
+import '../db_helpers/client_notification.dart';
 import '../db_helpers/client_rating.dart';
 import '../db_helpers/client_service_request.dart';
 import '../db_helpers/client_user.dart';
@@ -123,10 +124,6 @@ class _RequestDetailsState extends State<RequestDetails> {
     });
   }
 
-  Future<void> _verifyTaskComplete(String jobId) async {
-    await ClientServiceRequest.verifyServiceCompleted(jobId);
-  }
-
   //final rateServiceController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -210,9 +207,14 @@ class _RequestDetailsState extends State<RequestDetails> {
                           ApplicantsSelectionList(
                             applicants: _listApplicants,
                             onSelectProvider: (int index) async {
+                              // select applicants to be provider
                               await ClientServiceRequest.applyProvider(
                                   widget.requestId,
                                   requestDetails.applicants[index]);
+                              // send notification to the selected provider
+                              ClientNotification.notifyAcceptProvider(
+                                  requestDetails.applicants[index],
+                                  requestDetails.title);
                               if (mounted) Navigator.pop(context);
                               setState(() {
                                 _getAllinstance();
@@ -233,24 +235,19 @@ class _RequestDetailsState extends State<RequestDetails> {
                         const Heading2('Provider'),
                         _userProvidor == null
                             ? const Text('No provider selected')
-                            : Padding(
-                                padding: const EdgeInsets.fromLTRB(3, 3, 3, 6),
-                                child: TextButton(
-                                  style:
-                                      AppTheme.themeData2.textButtonTheme.style,
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                      builder: (context) => ViewProfile(
-                                        id: requestDetails.requestorId,
-                                      ),
-                                    ));
-                                  },
-                                  // TODO: Chnage to requestor name
-                                  child: Text(_userProvidor!.name
-                                      .toString()
-                                      .titleCase()),
-                                ),
+                            : TextButton(
+                                style:
+                                    AppTheme.themeData2.textButtonTheme.style,
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => ViewProfile(
+                                      id: requestDetails.requestorId,
+                                    ),
+                                  ));
+                                },
+                                // TODO: Chnage to requestor name
+                                child: Text(
+                                    _userProvidor!.name.toString().titleCase()),
                               ),
                         //CustomDivider(color: AppTheme.themeData2.primaryColor),
                         //SizedBox(height: 8),
@@ -335,14 +332,19 @@ class _RequestDetailsState extends State<RequestDetails> {
                                             child: const Text('Cancel'),
                                           ),
                                           TextButton(
-                                            onPressed: () {
-                                              ClientRating.rateProvider(
+                                            onPressed: () async {
+                                              await ClientRating.rateProvider(
                                                   rating: _starRatingValue,
                                                   message:
                                                       _commentController.text,
                                                   jobId: widget.requestId,
                                                   providerId:
                                                       _userProvidor!.userUid!);
+                                              await ClientNotification
+                                                  .notifyProviderRated(
+                                                      _userProvidor!.userUid!,
+                                                      requestDetails.title,
+                                                      _starRatingValue);
 
                                               Navigator.pop(context);
                                               setState(() {
@@ -376,32 +378,15 @@ class _RequestDetailsState extends State<RequestDetails> {
                               ElevatedButton(
                                   style: AppTheme
                                       .themeData2.elevatedButtonTheme.style,
-                                  onPressed: () => showDialog<String>(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                          title:
-                                              const Text('Complete Request?'),
-                                          content: const Text(
-                                              'Once the request completion is verified, transaction of Time/hour will be made.'),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () => Navigator.pop(
-                                                  context, 'Cancel'),
-                                              child: const Text('Cancel'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () async {
-                                                await _verifyTaskComplete(
-                                                    requestDetails.id!);
-                                                Navigator.pop(context);
-                                                _getAllinstance();
-                                              },
-                                              child: const Text('Complete'),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                  onPressed: () async {
+                                    await showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          ConfirmCompleteJobDialog(
+                                              requestDetails: requestDetails),
+                                    );
+                                    _getAllinstance();
+                                  },
                                   child: const Text('Verify Completion')),
                             ],
                           ),
@@ -416,30 +401,15 @@ class _RequestDetailsState extends State<RequestDetails> {
                               ElevatedButton(
                                   style: AppTheme
                                       .themeData2.elevatedButtonTheme.style,
-                                  onPressed: () => showDialog<String>(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                          title: const Text('Start Request'),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () => Navigator.pop(
-                                                  context, 'Cancel'),
-                                              child: const Text('Cancel'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () async {
-                                                await ClientServiceRequest
-                                                    .startService(
-                                                        requestDetails.id!);
-                                                Navigator.pop(context);
-                                                _getAllinstance();
-                                              },
-                                              child: const Text('Start'),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                  onPressed: () async {
+                                    await showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          StartJobDialog(
+                                              requestDetails: requestDetails),
+                                    );
+                                    _getAllinstance();
+                                  },
                                   child: const Text('Start Request')),
                             ],
                           ),
@@ -598,6 +568,66 @@ class _RequestDetailsState extends State<RequestDetails> {
       //         child: const Icon(Icons.edit),
       //       )
       //     : null,
+    );
+  }
+}
+
+class StartJobDialog extends StatelessWidget {
+  const StartJobDialog({super.key, required this.requestDetails});
+
+  final ServiceRequest requestDetails;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Start Request'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'Cancel'),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () async {
+            await ClientServiceRequest.startService(requestDetails.id!);
+            print('here');
+            await ClientNotification.notifyStartJob(
+                requestDetails.providerId!, requestDetails.title);
+            Navigator.pop(context);
+          },
+          child: const Text('Start'),
+        ),
+      ],
+    );
+  }
+}
+
+class ConfirmCompleteJobDialog extends StatelessWidget {
+  const ConfirmCompleteJobDialog({super.key, required this.requestDetails});
+
+  final ServiceRequest requestDetails;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Complete Request?'),
+      content: const Text(
+          'Once the request completion is verified, transaction of Time/hour will be made.'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'Cancel'),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () async {
+            await ClientServiceRequest.verifyServiceCompleted(
+                requestDetails.id!);
+            await ClientNotification.notifyVerifyCompleteJob(
+                requestDetails.providerId!, requestDetails.title);
+            Navigator.pop(context);
+          },
+          child: const Text('Complete'),
+        ),
+      ],
     );
   }
 }

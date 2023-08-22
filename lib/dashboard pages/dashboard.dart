@@ -1,8 +1,11 @@
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 import '../custom widgets/custom_headline.dart';
 import '../components/app_theme.dart';
+import '../db_helpers/client_user.dart';
 import '../rate pages/rate_given_page.dart';
 import '../rate pages/rate_received_page.dart';
 import '../transactions pages/transaction.dart';
@@ -12,8 +15,44 @@ import 'shortcut_action_card.dart';
 import 'time_balance_card.dart';
 import 'x_dashboard_card.dart';
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
+
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  @override
+  void initState() {
+    super.initState();
+    setupFcmNotification();
+  }
+
+  Future<void> setupFcmNotification() async {
+    final messaging = FirebaseMessaging.instance;
+
+    final settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (kDebugMode) {
+      print('Permission granted: ${settings.authorizationStatus}');
+    }
+
+    // Store the messaging token in the database
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      final token = await messaging.getToken();
+      debugPrint('FCM Token: $token');
+      await ClientUser.saveFcmToken(token!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +66,37 @@ class Dashboard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const TimeBalanceCard(),
+            if (kDebugMode)
+              ElevatedButton(
+                onPressed: () async {
+                  final fcmToken = await FirebaseMessaging.instance.getToken();
+
+                  debugPrint('fcmToken is $fcmToken');
+                },
+                child: const Text('Get firebase messaging token'),
+              ),
+            if (kDebugMode)
+              ElevatedButton(
+                onPressed: () async {
+                  final HttpsCallable sendNotification = FirebaseFunctions
+                      .instance
+                      .httpsCallable('sendNotification');
+                  try {
+                    final result =
+                        await sendNotification.call(<String, dynamic>{
+                      'receiverUid': 'HvTOQfSLvFOegnpXZjf5GFsomun2',
+                      'title': 'Notification Title',
+                      'content': 'Notification Content',
+                    });
+
+                    debugPrint(
+                        'Notification sent successfully: ${result.data}');
+                  } catch (error) {
+                    debugPrint('Error sending notification: $error');
+                  }
+                },
+                child: const Text('Send notification'),
+              ),
             Row(
               children: [
                 Expanded(
