@@ -27,13 +27,22 @@ class _RequestFormState extends State<RequestForm> {
   //store user input
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _categoryController = TextEditingController();
   final _locationController = TextEditingController();
   final _rateController = TextEditingController();
   final _mediaController = TextEditingController();
   final _dateControllerDisplay = TextEditingController();
   final _dateController = TextEditingController();
   final _timeLimitController = TextEditingController();
+
+  List<String> communityList = [
+    'IIUM',
+    'IIUM Staff',
+    'IIUM Students',
+    'Gombak'
+  ];
+
+  late String _selectedCategory;
+  late String _selectedCommunity;
 
   final DateTime _dateTime = DateTime.now();
 
@@ -67,7 +76,8 @@ class _RequestFormState extends State<RequestForm> {
     super.initState();
     isLoad = false;
     isLocationFetched = false;
-    _categoryController.text = kJobCategories.first;
+    _selectedCategory = kJobCategories.first;
+    _selectedCommunity = communityList.first;
     // _mapController = MapController.withPosition(
     //   initPosition: GeoPoint(latitude: 47.4358055, longitude: 8.4737324),
     // );
@@ -286,7 +296,6 @@ class _RequestFormState extends State<RequestForm> {
                       ),
                       Container(
                         alignment: Alignment.center,
-                        //padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
@@ -294,18 +303,16 @@ class _RequestFormState extends State<RequestForm> {
                               width: 2,
                             )),
                         child: DropdownButton<String>(
-                          underline: Container(
-                            height: 0,
-                          ),
+                          isExpanded: true,
+                          // to remove the dropdown's underline border
+                          underline: Container(height: 0),
                           iconEnabledColor: Theme.of(context).primaryColor,
-                          value: _categoryController.text,
+                          value: _selectedCategory,
                           items:
                               kJobCategories.map<DropdownMenuItem<String>>((e) {
                             return DropdownMenuItem<String>(
                                 value: e,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
+                                child: Center(
                                   child: Text(
                                     e,
                                     style: TextStyle(
@@ -317,12 +324,50 @@ class _RequestFormState extends State<RequestForm> {
                           }).toList(),
                           onChanged: (value) {
                             setState(() {
-                              _categoryController.text = value.toString();
+                              _selectedCategory = value.toString();
                               //print(_genderController.text);
                             });
                           },
                         ),
                       ),
+                      const SizedBox(height: 10),
+                      if (_selectedCategory ==
+                          'Community Activities') // from kJobActivities
+                        Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                                width: 2,
+                              )),
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            underline: Container(height: 0),
+                            iconEnabledColor: Theme.of(context).primaryColor,
+                            value: _selectedCommunity,
+                            items: communityList
+                                .map<DropdownMenuItem<String>>((e) {
+                              return DropdownMenuItem<String>(
+                                  value: e,
+                                  child: Center(
+                                    child: Text(
+                                      e,
+                                      style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15),
+                                    ),
+                                  ));
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedCommunity = value.toString();
+                                //print(_genderController.text);
+                              });
+                            },
+                          ),
+                        ),
                       const Padding(
                         padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
                         child: CustomHeadline('Location', isRequired: true),
@@ -659,7 +704,7 @@ class _RequestFormState extends State<RequestForm> {
                             media: mediaList,
                             requestorId: requestorId,
                             applicants: [],
-                            category: _categoryController.text,
+                            category: _selectedCategory,
                             timeLimit: time,
                             date: selectedDate!,
                             createdAt: DateTime.now(),
