@@ -12,6 +12,7 @@ class ServiceRequest {
   List<String> applicants;
   String? providerId;
   String category;
+  String? communityType;
   double timeLimit;
   DateTime date;
   DateTime createdAt;
@@ -31,6 +32,7 @@ class ServiceRequest {
     this.providerId,
     required this.applicants,
     required this.category,
+    this.communityType,
     required this.timeLimit,
     required this.date,
     required this.createdAt,
@@ -56,6 +58,7 @@ class ServiceRequest {
       'status': status.name,
       'applicants': applicants,
       'category': category,
+      'communityType': communityType,
       'timeLimit': timeLimit,
       'date': Timestamp.fromDate(date),
       'createdAt': Timestamp.fromDate(createdAt),
@@ -78,6 +81,7 @@ class ServiceRequest {
       'providerId': providerId,
       'applicants': applicants,
       'category': category,
+      'communityType': communityType,
       'timeLimit': timeLimit,
       'date': date,
       'createdAt': createdAt,
@@ -98,6 +102,7 @@ class ServiceRequest {
       status: ServiceRequestStatus.values
           .firstWhere((e) => e.name == json['status']),
       category: json['category'],
+      communityType: json['communityType'],
       timeLimit: json['timeLimit'],
       date: (json['date'] as Timestamp).toDate(),
       createdAt: (json['createdAt'] as Timestamp).toDate(),
@@ -127,6 +132,7 @@ class ServiceRequest {
       providerId: data['providerId'],
       applicants: List<String>.from(data['applicants']),
       category: data['category'],
+      communityType: data['communityType'],
       timeLimit: data['timeLimit'] as double,
       date: (data['date'] as Timestamp).toDate(),
       createdAt: (data['createdAt'] as Timestamp).toDate(),

@@ -705,6 +705,10 @@ class _RequestFormState extends State<RequestForm> {
                             requestorId: requestorId,
                             applicants: [],
                             category: _selectedCategory,
+                            communityType:
+                                _selectedCategory == 'Community Activities'
+                                    ? _selectedCommunity
+                                    : null,
                             timeLimit: time,
                             date: selectedDate!,
                             createdAt: DateTime.now(),
