@@ -8,9 +8,9 @@ import 'components/app_theme.dart';
 import 'dashboard%20pages/dashboard.dart';
 import 'firebase_options.dart';
 import 'navigation.dart';
-import 'profile%20pages/profile.dart';
+import 'profile pages/profile.dart';
 import 'request pages/request.dart';
-import 'service%20pages/service.dart';
+import 'service pages/service.dart';
 import 'splash_page.dart';
 
 Future<void> main() async {
