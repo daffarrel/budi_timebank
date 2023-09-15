@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide DatePickerTheme;
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -30,7 +31,6 @@ class _RequestFormState extends State<RequestForm> {
   final _locationController = TextEditingController();
   final _rateController = TextEditingController();
   final _mediaController = TextEditingController();
-  final _dateControllerDisplay = TextEditingController();
   final _dateController = TextEditingController();
   final _timeLimitController = TextEditingController();
 
@@ -238,47 +238,16 @@ class _RequestFormState extends State<RequestForm> {
                         padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
                         child: CustomHeadline('Date & Time', isRequired: true),
                       ),
-                      ElevatedButton(
-                          onPressed: () {
-                            DatePicker.showDateTimePicker(context,
-                                theme: DatePickerTheme(
-                                    doneStyle: TextStyle(
-                                        color:
-                                            AppTheme.themeData.primaryColor)),
-                                showTitleActions: true,
-                                minTime: DateTime(
-                                    _dateTime.year,
-                                    _dateTime.month,
-                                    _dateTime.day,
-                                    _dateTime.hour,
-                                    _dateTime.minute,
-                                    _dateTime.second),
-                                maxTime:
-                                    _dateTime.add(const Duration(days: 365)),
-                                onChanged: (date) {
-                              //print('change $date');
-                            }, onConfirm: (date) {
-                              selectedDate = date;
-                              _dateController.text = date.toString();
-                              _dateControllerDisplay.text =
-                                  'Date: ${date.day}-${date.month}-${date.year} Time: ${date.hour.toString().padLeft(2, '0')} : ${date.minute.toString().padLeft(2, '0')}';
-                            },
-                                currentTime: DateTime.now(),
-                                locale: LocaleType.en);
-                          },
-                          child: const Text(
-                            'Pick date & time',
-                            //style: TextStyle(color: Colors.blue),
-                          )),
-                      const SizedBox(height: 8),
                       TextFormField(
-                        enabled: false,
-                        controller: _dateControllerDisplay,
+                        enableInteractiveSelection: false,
+                        readOnly: true,
+                        controller: _dateController,
                         decoration: const InputDecoration(
                             errorStyle: TextStyle(
                               color: Colors.red, // or any other color
                             ),
                             border: OutlineInputBorder(),
+                            suffixIcon: Icon(Icons.calendar_today),
                             hintText: 'Date & Time'),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -288,6 +257,34 @@ class _RequestFormState extends State<RequestForm> {
                           //   return 'Pick a time';
                           // }
                           return null;
+                        },
+                        onTap: () {
+                          DatePicker.showDateTimePicker(context,
+                              theme: DatePickerTheme(
+                                  doneStyle: TextStyle(
+                                      color: AppTheme.themeData.primaryColor)),
+                              showTitleActions: true,
+                              minTime: DateTime(
+                                  _dateTime.year,
+                                  _dateTime.month,
+                                  _dateTime.day,
+                                  _dateTime.hour,
+                                  _dateTime.minute,
+                                  _dateTime.second),
+                              maxTime: _dateTime.add(const Duration(days: 365)),
+                              onChanged: (date) {
+                            //print('change $date');
+                          }, onConfirm: (date) {
+                            setState(() => selectedDate = date);
+                            final dateFormatted =
+                                DateFormat('dd-MM-yyyy').format(date);
+                            final timeFormatted =
+                                DateFormat('hh:mm a').format(date);
+                            _dateController.text =
+                                'Date: $dateFormatted Time: $timeFormatted';
+                          },
+                              currentTime: DateTime.now(),
+                              locale: LocaleType.en);
                         },
                       ),
                       const Padding(
