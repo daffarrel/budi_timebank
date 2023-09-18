@@ -38,7 +38,8 @@ class _RequestFormState extends State<RequestForm> {
     'IIUM',
     'IIUM Staff',
     'IIUM Students',
-    'Gombak'
+    'Gombak',
+    'Outside IIUM'
   ];
 
   late String _selectedCategory;
@@ -328,43 +329,45 @@ class _RequestFormState extends State<RequestForm> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      if (_selectedCategory ==
-                          'Community Activities') // from kJobActivities
-                        Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              border: Border.all(
-                                color: Theme.of(context).primaryColor,
-                                width: 2,
-                              )),
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            underline: Container(height: 0),
-                            iconEnabledColor: Theme.of(context).primaryColor,
-                            value: _selectedCommunity,
-                            items: communityList
-                                .map<DropdownMenuItem<String>>((e) {
-                              return DropdownMenuItem<String>(
-                                  value: e,
-                                  child: Center(
-                                    child: Text(
-                                      e,
-                                      style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15),
-                                    ),
-                                  ));
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedCommunity = value.toString();
-                                //print(_genderController.text);
-                              });
-                            },
-                          ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
+                        child: CustomHeadline('Community', isRequired: true),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(
+                              color: Theme.of(context).primaryColor,
+                              width: 2,
+                            )),
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                          underline: Container(height: 0),
+                          iconEnabledColor: Theme.of(context).primaryColor,
+                          value: _selectedCommunity,
+                          items:
+                              communityList.map<DropdownMenuItem<String>>((e) {
+                            return DropdownMenuItem<String>(
+                                value: e,
+                                child: Center(
+                                  child: Text(
+                                    e,
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
+                                ));
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedCommunity = value.toString();
+                              //print(_genderController.text);
+                            });
+                          },
                         ),
+                      ),
                       const Padding(
                         padding: EdgeInsets.fromLTRB(8.0, 8, 0, 8),
                         child: CustomHeadline('Location', isRequired: true),
@@ -702,10 +705,7 @@ class _RequestFormState extends State<RequestForm> {
                             requestorId: requestorId,
                             applicants: [],
                             category: _selectedCategory,
-                            communityType:
-                                _selectedCategory == 'Community Activities'
-                                    ? _selectedCommunity
-                                    : null,
+                            communityType: _selectedCommunity,
                             timeLimit: time,
                             date: selectedDate!,
                             createdAt: DateTime.now(),

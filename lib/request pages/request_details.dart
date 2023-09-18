@@ -462,11 +462,11 @@ class _RequestDetailsState extends State<RequestDetails> {
                 const Heading2('Category'),
                 Text(requestDetails.category),
                 const Divider(),
-                if (requestDetails.category == 'Community Activities') ...[
-                  const Heading2('Community'),
-                  Text(requestDetails.communityType!),
-                  const Divider(),
-                ],
+                const Heading2('Community'),
+                Text(requestDetails.communityType == null
+                    ? 'Not specified'
+                    : requestDetails.communityType!),
+                const Divider(),
                 const Heading2('Description'),
                 Text(requestDetails.description.toString().capitalize()),
                 const Divider(),

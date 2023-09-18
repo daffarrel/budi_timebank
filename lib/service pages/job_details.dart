@@ -455,11 +455,11 @@ class _JobDetailsState extends State<JobDetails> {
                 const Heading2('Category'),
                 Text(jobDetail.category),
                 const Divider(),
-                if (jobDetail.category == 'Community Activities') ...[
-                  const Heading2('Community'),
-                  Text(jobDetail.communityType!),
-                  const Divider(),
-                ],
+                const Heading2('Community'),
+                Text(jobDetail.communityType == null
+                    ? 'Not specified'
+                    : jobDetail.communityType!),
+                const Divider(),
                 const Heading2('Description'),
                 Text(jobDetail.description.toString().capitalize()),
                 const Divider(),
