@@ -64,6 +64,7 @@ class _CustomCardServiceRequestState extends State<CustomCardServiceRequest> {
 
   String changeStatus(ServiceRequestStatus status) {
     return switch (status) {
+      ServiceRequestStatus.pending => 'Available',
       ServiceRequestStatus.completedVerified => 'Completed',
       ServiceRequestStatus.completed => 'Completed (Pending Verification)',
       _ => status.name.titleCase()
