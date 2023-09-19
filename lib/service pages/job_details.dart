@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -145,6 +146,16 @@ class _JobDetailsState extends State<JobDetails> {
   //   }
   // }
 
+  String getServiceStatus(ServiceRequestStatus status) {
+    if (status == ServiceRequestStatus.pending &&
+        !jobDetail.applicants
+            .contains(FirebaseAuth.instance.currentUser!.uid)) {
+      return 'Available';
+    } else {
+      return status.name.capitalize();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -214,7 +225,7 @@ class _JobDetailsState extends State<JobDetails> {
                           children: [
                             const Heading2('Status'),
                             Text(
-                              jobDetail.status.name.capitalize(),
+                              getServiceStatus(jobDetail.status),
                               style: const TextStyle(fontSize: 12),
                             ),
                           ],

@@ -100,6 +100,8 @@ class _YourServicesState extends State<YourServices> {
                             requestorId: listFiltered[index].requestorId,
                             title: listFiltered[index].title,
                             rate: listFiltered[index].rate.toString(),
+                            // show pending instead of available
+                            isHaveApplicants: true,
                           ),
                         );
                       },

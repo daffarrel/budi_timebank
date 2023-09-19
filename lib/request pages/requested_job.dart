@@ -103,6 +103,8 @@ class _RequestedJobState extends State<RequestedJob> {
                             requestorId: listFiltered[index].requestorId,
                             title: listFiltered[index].title,
                             rate: listFiltered[index].rate.toString(),
+                            isHaveApplicants:
+                                listFiltered[index].applicants.isNotEmpty,
                           ),
                         );
                       },

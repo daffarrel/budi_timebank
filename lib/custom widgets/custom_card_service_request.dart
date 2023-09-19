@@ -15,16 +15,18 @@ class CustomCardServiceRequest extends StatefulWidget {
   final DateTime date;
   final Location location;
   final String category;
+  final bool isHaveApplicants;
 
   const CustomCardServiceRequest({
     super.key,
     required this.requestorId,
-    required this.title, //details /
+    required this.title,
     required this.rate,
     required this.status,
     required this.date,
     required this.location,
     required this.category,
+    this.isHaveApplicants = false,
   });
 
   @override
@@ -62,9 +64,9 @@ class _CustomCardServiceRequestState extends State<CustomCardServiceRequest> {
     }
   }
 
-  String changeStatus(ServiceRequestStatus status) {
+  String changeStatus(ServiceRequestStatus status, bool haveApplicant) {
     return switch (status) {
-      ServiceRequestStatus.pending => 'Available',
+      ServiceRequestStatus.pending => haveApplicant ? 'Pending' : 'Available',
       ServiceRequestStatus.completedVerified => 'Completed',
       ServiceRequestStatus.completed => 'Completed (Pending Verification)',
       _ => status.name.titleCase()
@@ -136,7 +138,8 @@ class _CustomCardServiceRequestState extends State<CustomCardServiceRequest> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      changeStatus(widget.status),
+                                      changeStatus(widget.status,
+                                          widget.isHaveApplicants),
                                       style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 10,

@@ -20,39 +20,39 @@ class _AvailableServicesState extends State<AvailableServices> {
   late String user;
 
   final _categoryController = TextEditingController();
-  final _stateController = TextEditingController();
-  final _filterController = TextEditingController();
+  // final _stateController = TextEditingController();
+  // final _filterController = TextEditingController();
 
-  List<String> listFilter = <String>[
-    'Category',
-    'State',
-  ];
+  // List<String> listFilter = <String>[
+  //   'Category',
+  //   'State',
+  // ];
 
-  List<String> listState = <String>[
-    'Malaysia',
-    'Kuala Lumpur',
-    'Kelantan',
-    'Kedah',
-    'Johor',
-    'labuan',
-    'Melaka',
-    'Negeri Sembilan',
-    'Pahang',
-    'Penang',
-    'Perak',
-    'Perlis',
-    'Putrajaya',
-    'Sabah',
-    'Sarawak',
-    'Selangor',
-    'Terengganu',
-  ];
+  // List<String> listState = <String>[
+  //   'Malaysia',
+  //   'Kuala Lumpur',
+  //   'Kelantan',
+  //   'Kedah',
+  //   'Johor',
+  //   'labuan',
+  //   'Melaka',
+  //   'Negeri Sembilan',
+  //   'Pahang',
+  //   'Penang',
+  //   'Perak',
+  //   'Perlis',
+  //   'Putrajaya',
+  //   'Sabah',
+  //   'Sarawak',
+  //   'Selangor',
+  //   'Terengganu',
+  // ];
 
   @override
   void initState() {
     _categoryController.text = kJobCategories.first;
-    _stateController.text = listState[0];
-    _filterController.text = listFilter[0];
+    // _stateController.text = listState[0];
+    // _filterController.text = listFilter[0];
     super.initState();
 
     getinstance();
@@ -69,80 +69,80 @@ class _AvailableServicesState extends State<AvailableServices> {
     //_filter..by = 'state'..value = '0';
     // print('from ' + from.toString());
     // print('to ' + to.toString());
-    if (_categoryController.text == 'All Categories' &&
-        _stateController.text == listState[0]) {
-      // listFiltered.addAll(await supabase
-      //     .from('service_requests')
-      //     .select()
-      //     .neq('requestor', user)
-      //     .eq('state', 0)
-      //     .range(from, to));
+    // if (_categoryController.text == 'All Categories' &&
+    //     _stateController.text == listState[0]) {
+    // listFiltered.addAll(await supabase
+    //     .from('service_requests')
+    //     .select()
+    //     .neq('requestor', user)
+    //     .eq('state', 0)
+    //     .range(from, to));
 
-      // data = await supabase
-      //     .from('service_requests')
-      //     .select()
-      //     .eq('state', 0)
-      //     .neq('requestor', user);
-      // TODO: implement this part requester name
-    } else if (_categoryController.text == 'All Categories' &&
-        _stateController.text != listState[0]) {
-      // listFiltered.addAll(await supabase
-      //     .from('service_requests')
-      //     .select()
-      //     .neq('requestor', user)
-      //     .eq('state', 0)
-      //     .eq('location->>state', _stateController.text)
-      //     .range(from, to));
-      // TODO: implement this part requester name
+    // data = await supabase
+    //     .from('service_requests')
+    //     .select()
+    //     .eq('state', 0)
+    //     .neq('requestor', user);
+    // TODO: implement this part requester name
+    // } else if (_categoryController.text == 'All Categories' &&
+    // _stateController.text != listState[0]) {
+    // listFiltered.addAll(await supabase
+    //     .from('service_requests')
+    //     .select()
+    //     .neq('requestor', user)
+    //     .eq('state', 0)
+    //     .eq('location->>state', _stateController.text)
+    //     .range(from, to));
+    // TODO: implement this part requester name
 
-      // data = await supabase
-      //     .from('service_requests')
-      //     .select()
-      //     .neq('requestor', user)
-      //     .eq('state', 0)
-      //     .eq('location->>state', _stateController.text);
-      // TODO: implement this part requester name
-    } else if (_categoryController.text != 'All Categories' &&
-        _stateController.text == listState[0]) {
-      // listFiltered.addAll(await supabase
-      //     .from('service_requests')
-      //     .select()
-      //     .neq('requestor', user)
-      //     .eq('state', 0)
-      //     .eq('category', _categoryController.text)
-      //     .range(from, to));
-      // TODO: implement this part requester name
+    // data = await supabase
+    //     .from('service_requests')
+    //     .select()
+    //     .neq('requestor', user)
+    //     .eq('state', 0)
+    //     .eq('location->>state', _stateController.text);
+    // TODO: implement this part requester name
+    // } else if (_categoryController.text != 'All Categories' &&
+    //     _stateController.text == listState[0]) {
+    // listFiltered.addAll(await supabase
+    //     .from('service_requests')
+    //     .select()
+    //     .neq('requestor', user)
+    //     .eq('state', 0)
+    //     .eq('category', _categoryController.text)
+    //     .range(from, to));
+    // TODO: implement this part requester name
 
-      // data = await supabase
-      //     .from('service_requests')
-      //     .select()
-      //     .neq('requestor', user)
-      //     .eq('state', 0)
-      //     .eq('category', _categoryController.text);
-      // TODO: implement this part requester name
+    // data = await supabase
+    //     .from('service_requests')
+    //     .select()
+    //     .neq('requestor', user)
+    //     .eq('state', 0)
+    //     .eq('category', _categoryController.text);
+    // TODO: implement this part requester name
 
-      // .like('location', '%${_stateController.text.toString()}%')
-    } else if (_categoryController.text != 'All Categories' &&
-        _stateController.text != listState[0]) {
-      // listFiltered.addAll(await supabase
-      //     .from('service_requests')
-      //     .select()
-      //     .neq('requestor', user)
-      //     .eq('state', 0)
-      //     .eq('category', _categoryController.text)
-      //     .eq('location->>state', _stateController.text)
-      //     .range(from, to));
-      // TODO: implement this part requester name
+    // .like('location', '%${_stateController.text.toString()}%')
+    // } else if (_categoryController.text != 'All Categories' &&
+    //     _stateController.text != listState[0]) {
+    // listFiltered.addAll(await supabase
+    //     .from('service_requests')
+    //     .select()
+    //     .neq('requestor', user)
+    //     .eq('state', 0)
+    //     .eq('category', _categoryController.text)
+    //     .eq('location->>state', _stateController.text)
+    //     .range(from, to));
+    // TODO: implement this part requester name
 
-      // data = await supabase
-      //     .from('service_requests')
-      //     .select()
-      //     .neq('requestor', user)
-      //     .eq('state', 0)
-      //     .eq('category', _categoryController.text)
-      //     .eq('location->>state', _stateController.text);
-      // TODO: implement this part requester name
-    }
+    // data = await supabase
+    //     .from('service_requests')
+    //     .select()
+    //     .neq('requestor', user)
+    //     .eq('state', 0)
+    //     .eq('category', _categoryController.text)
+    //     .eq('location->>state', _stateController.text);
+    // TODO: implement this part requester name
+    // }
 
     setState(() {
       listFiltered = documents;

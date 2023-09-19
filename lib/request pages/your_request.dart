@@ -29,14 +29,6 @@ class _YourRequestState extends State<YourRequest> {
     userUid = FirebaseAuth.instance.currentUser!.uid;
   }
 
-  isRequested(list) {
-    if (list.length == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,6 +94,8 @@ class _YourRequestState extends State<YourRequest> {
                         requestorId: snapshot.data![index].requestorId,
                         title: snapshot.data![index].title,
                         rate: snapshot.data![index].rate.toString(),
+                        isHaveApplicants:
+                            snapshot.data![index].applicants.isNotEmpty,
                       ),
                     );
                   },

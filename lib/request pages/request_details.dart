@@ -124,6 +124,15 @@ class _RequestDetailsState extends State<RequestDetails> {
     });
   }
 
+  String getStatus(ServiceRequestStatus status) {
+    if (status == ServiceRequestStatus.pending &&
+        requestDetails.applicants.isEmpty) {
+      return 'Available';
+    } else {
+      return status.name.titleCase();
+    }
+  }
+
   //final rateServiceController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -159,7 +168,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                           children: [
                             const Heading2('Status'),
                             Text(
-                              requestDetails.status.name.capitalize(),
+                              getStatus(requestDetails.status),
                               style: const TextStyle(fontSize: 12),
                             ),
                           ],

@@ -99,7 +99,7 @@ class ClientServiceRequest {
         .collection('serviceRequests')
         .where('status', isEqualTo: ServiceRequestStatus.pending.name)
         .where('requestorId', isEqualTo: userUid)
-        .get();
+        .where('applicants', isEqualTo: []).get();
 
     var snapshotData = snapshot.docs;
 
