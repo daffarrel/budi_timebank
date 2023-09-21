@@ -603,7 +603,6 @@ class StartJobDialog extends StatelessWidget {
         TextButton(
           onPressed: () async {
             await ClientServiceRequest.startService(requestDetails.id!);
-            print('here');
             await ClientNotification.notifyStartJob(
                 requestDetails.providerId!, requestDetails.title);
             Navigator.pop(context);

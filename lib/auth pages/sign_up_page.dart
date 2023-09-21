@@ -14,7 +14,6 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   bool _isLoading = false;
-  bool _redirecting = false;
   bool _passwordVisible = false;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;

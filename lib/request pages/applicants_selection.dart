@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../components/profile_avatar.dart';
 import '../custom widgets/heading2.dart';
