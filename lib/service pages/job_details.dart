@@ -110,7 +110,6 @@ class _JobDetailsState extends State<JobDetails> {
     // TODO: Implement this
 
     for (int i = 0; i < jobDetail.applicants.length; i++) {
-      // print(jobDetail.applicants[i]);
       var name = await ClientUser.getUserProfileById(jobDetail.applicants[i]);
       _listApplicants.add(name);
     }

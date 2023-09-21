@@ -442,10 +442,7 @@ class _SetupProfileState extends State<SetupProfile> {
                                 ));
                           }).toList(),
                           onChanged: (value) {
-                            setState(() {
-                              _selectedIdType = value!;
-                              //print(_genderController.text);
-                            });
+                            setState(() => _selectedIdType = value!);
                           },
                         ),
                       ),
@@ -493,10 +490,7 @@ class _SetupProfileState extends State<SetupProfile> {
                                 ));
                           }).toList(),
                           onChanged: (value) {
-                            setState(() {
-                              _selectedOwnerType = value!;
-                              //print(_genderController.text);
-                            });
+                            setState(() => _selectedOwnerType = value!);
                           },
                         ),
                       ),
@@ -736,12 +730,6 @@ class _SetupProfileState extends State<SetupProfile> {
                             ),
                           ),
                           maxLines: 1,
-                          // validator: (value) {
-                          //   if (value == null || value.isEmpty) {
-                          //     return 'Please enter contacts';
-                          //   }
-                          //   return null;
-                          // },
                         ),
                       ),
                     ],
@@ -780,29 +768,28 @@ class _SetupProfileState extends State<SetupProfile> {
                   ),
                   if (widget.editProfile)
                     TextButton(
-                        style:
-                            TextButton.styleFrom(foregroundColor: Colors.red),
-                        onPressed: () => showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: const Text('Confirm Sign Out?'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, 'Cancel'),
-                                    child: const Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      _signOut();
-                                    },
-                                    child: const Text('Sign Out'),
-                                  ),
-                                ],
-                              ),
+                      style: TextButton.styleFrom(foregroundColor: Colors.red),
+                      onPressed: () => showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Confirm Sign Out?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'Cancel'),
+                              child: const Text('Cancel'),
                             ),
-                        // onPressed: _signOut,
-                        child: const Text('Sign Out')),
+                            TextButton(
+                              onPressed: () {
+                                _signOut();
+                              },
+                              child: const Text('Sign Out'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // onPressed: _signOut,
+                      child: const Text('Sign Out'),
+                    ),
                 ],
               ),
             ),
