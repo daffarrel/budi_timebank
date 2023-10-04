@@ -13,6 +13,7 @@ import '../custom widgets/custom_headline.dart';
 import '../components/app_theme.dart';
 import '../db_helpers/client_service_request.dart';
 import '../model/service_request.dart' as model;
+import '../shared/community_list.dart';
 import '../shared/job_categories.dart';
 import '../shared/malaysia_state.dart';
 import 'map_editor.dart';
@@ -33,14 +34,6 @@ class _RequestFormState extends State<RequestForm> {
   final _mediaController = TextEditingController();
   final _dateController = TextEditingController();
   final _timeLimitController = TextEditingController();
-
-  List<String> communityList = [
-    'IIUM',
-    'IIUM Staff',
-    'IIUM Students',
-    'Gombak',
-    'Outside IIUM'
-  ];
 
   late String _selectedCategory;
   late String _selectedCommunity;
@@ -78,7 +71,7 @@ class _RequestFormState extends State<RequestForm> {
     isLoad = false;
     isLocationFetched = false;
     _selectedCategory = kJobCategories.first;
-    _selectedCommunity = communityList.first;
+    _selectedCommunity = kCommunityList.first;
     // _mapController = MapController.withPosition(
     //   initPosition: GeoPoint(latitude: 47.4358055, longitude: 8.4737324),
     // );
@@ -347,7 +340,7 @@ class _RequestFormState extends State<RequestForm> {
                           iconEnabledColor: Theme.of(context).primaryColor,
                           value: _selectedCommunity,
                           items:
-                              communityList.map<DropdownMenuItem<String>>((e) {
+                              kCommunityList.map<DropdownMenuItem<String>>((e) {
                             return DropdownMenuItem<String>(
                                 value: e,
                                 child: Center(
