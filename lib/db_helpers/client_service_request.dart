@@ -196,18 +196,15 @@ class ClientServiceRequest {
     var startTime = serviceRequest.startedAt!;
 
     // Calculate the duration of the service
-    var duration = finishTime.difference(startTime).inHours;
-
-    double totalPayment = 0;
+    // InHours will return the rounded down value of hours. Eg: 1h 30 min will be 1 hour
+    // round up the duration to the closest hour
+    var duration = finishTime.difference(startTime).inHours + 1;
 
     // Calculate total payment. If the duration is less than the time limit, then
     // the total payment is the duration * rate. Otherwise, the total payment is
     // the time limit * rate (max)
-    if (duration <= serviceRequest.timeLimit) {
-      totalPayment = (duration + 1) * serviceRequest.rate;
-    } else {
-      totalPayment = (serviceRequest.timeLimit + 1) * serviceRequest.rate;
-    }
+    double totalPayment =
+        (duration + 1).clamp(0, serviceRequest.timeLimit) * serviceRequest.rate;
 
     await ClientUser.transferPoints(
         serviceRequest.providerId!, totalPayment, serviceRequestId);
