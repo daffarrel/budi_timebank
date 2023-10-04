@@ -55,9 +55,12 @@ class _CompletedRequestState extends State<CompletedRequest> {
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Text(
-                      'All completed request will be listed here, remember to declare the job to "Completed". No completed requests...',
-                      textAlign: TextAlign.center,
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        'All completed request will be listed here, remember to declare the job to "Completed". No completed requests for now...',
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     Container(
                         margin: const EdgeInsets.only(bottom: 0),
