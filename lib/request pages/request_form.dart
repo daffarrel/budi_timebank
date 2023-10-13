@@ -131,10 +131,39 @@ class _RequestFormState extends State<RequestForm> {
 
       _locationController.text = locationAddress.join(', ');
 
+      var state = place.administrativeArea;
+
       setState(() {
         // countryValue = place.country.toString();
-        stateValue = place.administrativeArea.toString();
+        if (state!.contains('Wilayah Persekutuan') ||
+            state.contains('Federal Territory')) {
+          stateValue =
+              'Wilayah Persekutuan'; // must match the value in MalaysiaState
+
+          if (state.contains('Kuala Lumpur')) {
+            districtValue = 'Kuala Lumpur';
+          } else if (state.contains('Labuan')) {
+            districtValue = 'Labuan';
+          } else if (state.contains('Putrajaya')) {
+            districtValue = 'Putrajaya';
+          }
+        } else {
+          stateValue = place.administrativeArea.toString();
+          districtValue = null;
+        }
+
         districtsInSelectedState = MalaysiaState.districtsForState(stateValue!);
+
+        print(place);
+
+        // only assign the value if known, otherwise, it is up to the user to select
+        if (districtsInSelectedState!.contains(place.subAdministrativeArea)) {
+          districtValue = place.subAdministrativeArea;
+        } else if (districtsInSelectedState!.contains(place.locality)) {
+          districtValue = place.locality;
+        } else if (districtsInSelectedState!.contains(place.subLocality)) {
+          districtValue = place.subLocality;
+        }
       });
       if (mounted) context.showSnackBar(message: 'Location details added');
     } catch (e) {

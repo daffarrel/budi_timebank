@@ -92,6 +92,11 @@ class MalaysiaState {
       'Muallim',
       'Perak Tengah',
     ]),
+    StateMalaysia(state: 'Wilayah Persekutuan', districts: [
+      'Kuala Lumpur',
+      'Labuan',
+      'Putrajaya',
+    ]),
     StateMalaysia(state: 'Sabah', districts: [
       'Beaufort',
       'Beluran',
@@ -178,7 +183,14 @@ class MalaysiaState {
       'Kuala Terengganu',
       'Marang',
       'Setiu',
-    ])
+    ]),
+    StateMalaysia(state: 'Perlis', districts: [
+      'Kangar',
+      'Padang Besar',
+      'Arau',
+      'Pauh',
+      'Simpang Ampat',
+    ]),
   ];
 
   static List<StateMalaysia> allStates() => _allStates;
