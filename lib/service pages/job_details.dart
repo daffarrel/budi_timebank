@@ -150,6 +150,8 @@ class _JobDetailsState extends State<JobDetails> {
         !jobDetail.applicants
             .contains(FirebaseAuth.instance.currentUser!.uid)) {
       return 'Available';
+    } else if (status == ServiceRequestStatus.completedVerified) {
+      return 'Completed'; // Verified status will be denoted by a checkmark
     } else {
       return status.name.capitalize();
     }
@@ -223,9 +225,18 @@ class _JobDetailsState extends State<JobDetails> {
                         child: Column(
                           children: [
                             const Heading2('Status'),
-                            Text(
-                              getServiceStatus(jobDetail.status),
-                              style: const TextStyle(fontSize: 12),
+                            Row(
+                              children: [
+                                Text(
+                                  getServiceStatus(jobDetail.status),
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                const SizedBox(width: 5),
+                                if (jobDetail.status ==
+                                    ServiceRequestStatus.completedVerified)
+                                  const Icon(Icons.check_circle_rounded,
+                                      color: Colors.blue, size: 16),
+                              ],
                             ),
                           ],
                         ),

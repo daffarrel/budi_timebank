@@ -128,6 +128,8 @@ class _RequestDetailsState extends State<RequestDetails> {
     if (status == ServiceRequestStatus.pending &&
         requestDetails.applicants.isEmpty) {
       return 'Available';
+    } else if (status == ServiceRequestStatus.completedVerified) {
+      return 'Completed'; // Verified status will be denoted by a checkmark
     } else {
       return status.name.titleCase();
     }
@@ -167,9 +169,18 @@ class _RequestDetailsState extends State<RequestDetails> {
                         child: Column(
                           children: [
                             const Heading2('Status'),
-                            Text(
-                              getStatus(requestDetails.status),
-                              style: const TextStyle(fontSize: 12),
+                            Row(
+                              children: [
+                                Text(
+                                  getStatus(requestDetails.status),
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                const SizedBox(width: 5),
+                                if (requestDetails.status ==
+                                    ServiceRequestStatus.completedVerified)
+                                  const Icon(Icons.check_circle_rounded,
+                                      color: Colors.blue, size: 16),
+                              ],
                             ),
                           ],
                         ),
