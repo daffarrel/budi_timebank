@@ -22,10 +22,12 @@ class ApplicantsSelectionList extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Heading2('Applicants'),
-          const Text('Select your applicants: '),
+          const Heading2(
+            'Applicants',
+          ),
+          const Text('Select your applicants'),
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
