@@ -252,23 +252,31 @@ class _RequestDetailsState extends State<RequestDetails> {
                               );
                             },
                           ),
-                        const Heading2('Provider'),
-                        _userProvidor == null
-                            ? const Text('No provider selected')
-                            : TextButton(
-                                style:
-                                    AppTheme.themeData2.textButtonTheme.style,
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ViewProfile(
-                                      id: requestDetails.requestorId,
+                        if (getStatus(requestDetails.status) != 'Available')
+                          Column(
+                            children: [
+                              const Heading2('Provider'),
+                              _userProvidor == null
+                                  ? const Text('No provider selected')
+                                  : TextButton(
+                                      style: AppTheme
+                                          .themeData2.textButtonTheme.style,
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) => ViewProfile(
+                                            id: requestDetails.requestorId,
+                                          ),
+                                        ));
+                                      },
+                                      // TODO: Chnage to requestor name
+                                      child: Text(_userProvidor!.name
+                                          .toString()
+                                          .titleCase()),
                                     ),
-                                  ));
-                                },
-                                // TODO: Chnage to requestor name
-                                child: Text(
-                                    _userProvidor!.name.toString().titleCase()),
-                              ),
+                            ],
+                          ),
+
                         //CustomDivider(color: AppTheme.themeData2.primaryColor),
                         //SizedBox(height: 8),
                         if (isCompletedVerified())
@@ -597,11 +605,17 @@ class _RequestDetailsState extends State<RequestDetails> {
   }
 }
 
-class StartJobDialog extends StatelessWidget {
+class StartJobDialog extends StatefulWidget {
   const StartJobDialog({super.key, required this.requestDetails});
 
   final ServiceRequest requestDetails;
 
+  @override
+  State<StartJobDialog> createState() => _StartJobDialogState();
+}
+
+class _StartJobDialogState extends State<StartJobDialog> {
+  bool processing = false;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -611,25 +625,43 @@ class StartJobDialog extends StatelessWidget {
           onPressed: () => Navigator.pop(context, 'Cancel'),
           child: const Text('Cancel'),
         ),
-        TextButton(
-          onPressed: () async {
-            await ClientServiceRequest.startService(requestDetails.id!);
-            await ClientNotification.notifyStartJob(
-                requestDetails.providerId!, requestDetails.title);
-            Navigator.pop(context);
-          },
-          child: const Text('Start'),
-        ),
+        if (processing)
+          const SizedBox(
+            height: 25,
+            width: 25,
+            child: CircularProgressIndicator(),
+          )
+        else
+          TextButton(
+            onPressed: () async {
+              setState(() => processing = true);
+              await ClientServiceRequest.startService(
+                  widget.requestDetails.id!);
+              await ClientNotification.notifyStartJob(
+                  widget.requestDetails.providerId!,
+                  widget.requestDetails.title);
+              setState(() => processing = false);
+              Navigator.pop(context);
+            },
+            child: const Text('Start'),
+          ),
       ],
     );
   }
 }
 
-class ConfirmCompleteJobDialog extends StatelessWidget {
+class ConfirmCompleteJobDialog extends StatefulWidget {
   const ConfirmCompleteJobDialog({super.key, required this.requestDetails});
 
   final ServiceRequest requestDetails;
 
+  @override
+  State<ConfirmCompleteJobDialog> createState() =>
+      _ConfirmCompleteJobDialogState();
+}
+
+class _ConfirmCompleteJobDialogState extends State<ConfirmCompleteJobDialog> {
+  bool processing = false;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -641,16 +673,26 @@ class ConfirmCompleteJobDialog extends StatelessWidget {
           onPressed: () => Navigator.pop(context, 'Cancel'),
           child: const Text('Cancel'),
         ),
-        TextButton(
-          onPressed: () async {
-            await ClientServiceRequest.verifyServiceCompleted(
-                requestDetails.id!);
-            await ClientNotification.notifyVerifyCompleteJob(
-                requestDetails.providerId!, requestDetails.title);
-            Navigator.pop(context);
-          },
-          child: const Text('Complete'),
-        ),
+        if (processing)
+          const SizedBox(
+            height: 25,
+            width: 25,
+            child: CircularProgressIndicator(),
+          )
+        else
+          TextButton(
+            onPressed: () async {
+              setState(() => processing = true);
+              await ClientServiceRequest.verifyServiceCompleted(
+                  widget.requestDetails.id!);
+              await ClientNotification.notifyVerifyCompleteJob(
+                  widget.requestDetails.providerId!,
+                  widget.requestDetails.title);
+              setState(() => processing = false);
+              Navigator.pop(context);
+            },
+            child: const Text('Complete'),
+          ),
       ],
     );
   }
