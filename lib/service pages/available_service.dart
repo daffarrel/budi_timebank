@@ -28,6 +28,9 @@ class _AvailableServicesState extends State<AvailableServices> {
 
     var documents = await ClientServiceRequest.getMyAvailableServices();
 
+    // order documents by date. The latest date will be at the top
+    documents.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
     // apply filter by state
     if (filterState != null) {
       documents = documents

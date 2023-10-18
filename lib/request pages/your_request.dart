@@ -66,18 +66,22 @@ class _YourRequestState extends State<YourRequest> {
                 );
               }
 
+              var requests = snapshot.data!;
+              // sort request by created date (latest on top)
+              requests.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
               return SizedBox(
                 height: MediaQuery.of(context).size.height / 1.2,
                 child: ListView.builder(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: snapshot.data!.length,
+                  itemCount: requests.length,
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
                         Navigator.of(context)
                             .push(MaterialPageRoute(
                                 builder: (context) => RequestDetails(
-                                    requestId: snapshot.data![index].id!,
+                                    requestId: requests[index].id!,
                                     user: userUid)))
                             .then((value) => setState(
                                   () {
@@ -87,15 +91,14 @@ class _YourRequestState extends State<YourRequest> {
                                 ));
                       },
                       child: CustomCardServiceRequest(
-                        category: snapshot.data![index].category,
-                        location: snapshot.data![index].location,
-                        date: snapshot.data![index].date,
-                        status: snapshot.data![index].status,
-                        requestorId: snapshot.data![index].requestorId,
-                        title: snapshot.data![index].title,
-                        rate: snapshot.data![index].rate.toString(),
-                        isHaveApplicants:
-                            snapshot.data![index].applicants.isNotEmpty,
+                        category: requests[index].category,
+                        location: requests[index].location,
+                        date: requests[index].date,
+                        status: requests[index].status,
+                        requestorId: requests[index].requestorId,
+                        title: requests[index].title,
+                        rate: requests[index].rate.toString(),
+                        isHaveApplicants: requests[index].applicants.isNotEmpty,
                       ),
                     );
                   },
