@@ -217,24 +217,6 @@ class _SetupProfileState extends State<SetupProfile> {
     }
   }
 
-  Future<void> _signOut() async {
-    try {
-      await FirebaseAuth.instance.signOut();
-    } on FirebaseAuthException {
-      context.showErrorSnackBar(message: 'error signing out');
-    } catch (error) {
-      context.showErrorSnackBar(message: 'Unable to signout');
-    }
-    if (mounted) {
-      //Navigator.of(context).pushReplacementNamed('/');
-      Navigator.of(context).popUntil((route) => route.isFirst);
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => const SplashPage()));
-    }
-  }
-
   Future<File?> _selectImage() async {
     // show dialog to select destination where to pick image
     ImageSource? imgSource = await showDialog(
@@ -766,30 +748,7 @@ class _SetupProfileState extends State<SetupProfile> {
                               : 'Save',
                     ),
                   ),
-                  if (widget.editProfile)
-                    TextButton(
-                      style: TextButton.styleFrom(foregroundColor: Colors.red),
-                      onPressed: () => showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Confirm Sign Out?'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                _signOut();
-                              },
-                              child: const Text('Sign Out'),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // onPressed: _signOut,
-                      child: const Text('Sign Out'),
-                    ),
+                  const SizedBox(height: 60),
                 ],
               ),
             ),

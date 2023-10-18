@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../auth pages/setup_profile.dart';
+import '../components/constants.dart';
 import '../components/profile_avatar.dart';
 import '../custom widgets/custom_headline.dart';
 import '../components/app_theme.dart';
@@ -11,6 +12,7 @@ import '../my_extensions/extension_string.dart';
 
 import '../model/contact.dart';
 import '../model/profile.dart';
+import '../splash_page.dart';
 import 'contact_widget.dart';
 import 'empty_card_contact.dart';
 import 'custom_list_view_contact.dart';
@@ -39,6 +41,25 @@ class _ProfilePageState extends State<ProfilePage> {
     futureProfile = ClientUser.getUserProfileById(userUid);
   }
 
+  Future<void> _signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } on FirebaseAuthException {
+      context.showErrorSnackBar(message: 'error signing out');
+    } catch (error) {
+      context.showErrorSnackBar(message: 'Unable to signout');
+    }
+    if (mounted) {
+      //Navigator.of(context).pushReplacementNamed('/');
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => const SplashPage()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
             onPressed: () {
               Navigator.push(
                   context,
@@ -60,6 +82,27 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                   ));
             },
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Log out',
+            onPressed: () => showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Confirm Log Out?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Cancel'),
+                    child: const Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () => _signOut(),
+                    child: const Text('Log Out',
+                        style: TextStyle(color: Colors.red)),
+                  ),
+                ],
+              ),
+            ),
           )
         ],
         title: const Text('Profile Page'),
@@ -179,24 +222,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                         ],
                       ),
-
-                // ListView.builder(
-                //     physics: const BouncingScrollPhysics(),
-                //     scrollDirection: Axis.horizontal,
-                //     shrinkWrap: true,
-                //     itemCount: skills.length,
-                //     itemBuilder: (context, index) {
-                //       return Card(
-                //         elevation: 5,
-                //         child: Padding(
-                //           padding: const EdgeInsets.all(8.0),
-                //           child: Center(
-                //               child: Text(
-                //                   skills[index].toString().capitalize())),
-                //         ),
-                //       );
-                //     },
-                //   ),
                 const SizedBox(height: 10),
                 const CustomHeadline(' Contact List'),
                 const SizedBox(height: 10),
@@ -273,6 +298,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 //   iconRating: Icons.handshake,
                 //   userRating: profile.user.rating.asRequestor,
                 // ),
+                const SizedBox(height: 10),
               ],
             );
           }),
