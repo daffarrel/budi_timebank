@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'auth pages/login_page.dart';
 import 'auth pages/setup_profile.dart';
-import 'auth pages/sign_up_page.dart';
 import 'components/app_theme.dart';
 import 'dashboard%20pages/dashboard.dart';
 import 'firebase_options.dart';
@@ -39,7 +38,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (_) => const SplashPage(),
-        '/signup': (_) => const SignUpPage(),
         '/login': (_) => const LoginPage(),
         '/setupProfile': (_) => const SetupProfile(),
         '/navigation': (_) => const BottomBarNavigation(valueListenable: 0),
