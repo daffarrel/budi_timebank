@@ -71,31 +71,12 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.all(15),
           children: [
             Text(
-              'Budi',
+              'BUDI',
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: AppTheme.themeData.primaryColor,
                   fontSize: 65,
                   fontWeight: FontWeight.bold),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Blockchain-Based ',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: AppTheme.themeData.secondaryHeaderColor,
-                      fontWeight: FontWeight.w600),
-                ),
-                Text(
-                  'Time Bank',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: AppTheme.themeData.secondaryHeaderColor,
-                      fontWeight: FontWeight.w600),
-                ),
-              ],
             ),
             const SizedBox(
               height: 5,
