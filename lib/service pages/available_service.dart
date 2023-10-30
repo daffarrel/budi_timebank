@@ -11,7 +11,7 @@ import 'filter_modal_sheet.dart';
 import 'job_details.dart';
 
 class AvailableServices extends StatefulWidget {
-  const AvailableServices({Key? key}) : super(key: key);
+  const AvailableServices({super.key});
 
   @override
   State<AvailableServices> createState() => _AvailableServicesState();

@@ -9,7 +9,7 @@ import 'request_details.dart';
 import 'request_form.dart';
 
 class YourRequest extends StatefulWidget {
-  const YourRequest({Key? key}) : super(key: key);
+  const YourRequest({super.key});
 
   @override
   State<YourRequest> createState() => _YourRequestState();

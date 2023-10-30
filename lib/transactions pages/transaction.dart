@@ -33,7 +33,7 @@ class _MyEarningHistory {
 }
 
 class TransactionPage extends StatefulWidget {
-  const TransactionPage({Key? key}) : super(key: key);
+  const TransactionPage({super.key});
 
   @override
   State<TransactionPage> createState() => _TransactionPageState();

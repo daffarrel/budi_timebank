@@ -19,7 +19,7 @@ import '../shared/malaysia_state.dart';
 import 'map_editor.dart';
 
 class RequestForm extends StatefulWidget {
-  const RequestForm({Key? key}) : super(key: key);
+  const RequestForm({super.key});
 
   @override
   State<RequestForm> createState() => _RequestFormState();
@@ -63,7 +63,7 @@ class _RequestFormState extends State<RequestForm> {
   late bool isLoad;
   bool isDetectingLocation = false;
   LatLng? _currentPosition;
-  MapController _mapController = MapController();
+  final MapController _mapController = MapController();
 
   @override
   void initState() {

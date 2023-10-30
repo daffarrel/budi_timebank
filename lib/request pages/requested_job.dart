@@ -7,7 +7,7 @@ import '../model/service_request.dart';
 import 'request_details.dart';
 
 class RequestedJob extends StatefulWidget {
-  const RequestedJob({Key? key}) : super(key: key);
+  const RequestedJob({super.key});
 
   @override
   State<RequestedJob> createState() => _RequestedJobState();

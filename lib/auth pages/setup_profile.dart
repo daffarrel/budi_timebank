@@ -16,7 +16,6 @@ import '../my_extensions/extension_string.dart';
 import '../model/contact.dart';
 import '../model/identification.dart';
 import '../model/profile.dart';
-import '../splash_page.dart';
 
 class SetupProfile extends StatefulWidget {
   const SetupProfile({super.key, this.editProfile = false});
@@ -758,12 +757,10 @@ class _SetupProfileState extends State<SetupProfile> {
 
 class _AddedContactWidget extends StatelessWidget {
   const _AddedContactWidget(
-      {Key? key,
-      required this.onContactDelete,
+      {required this.onContactDelete,
       required this.contactType,
       required this.iconData,
-      required this.value})
-      : super(key: key);
+      required this.value});
 
   final VoidCallback onContactDelete;
   final ContactType contactType;

@@ -7,7 +7,7 @@ import '../model/service_request.dart';
 import 'job_details.dart';
 
 class CompletedServices extends StatefulWidget {
-  const CompletedServices({Key? key}) : super(key: key);
+  const CompletedServices({super.key});
 
   @override
   State<CompletedServices> createState() => _CompletedServicesState();

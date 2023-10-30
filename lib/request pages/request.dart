@@ -5,7 +5,7 @@ import 'requested_job.dart';
 import 'your_request.dart';
 
 class RequestPage extends StatefulWidget {
-  const RequestPage({Key? key}) : super(key: key);
+  const RequestPage({super.key});
 
   @override
   State<RequestPage> createState() => _RequestPageState();

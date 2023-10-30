@@ -6,11 +6,11 @@ class ContactWidget extends StatelessWidget {
   final Widget theIcon;
   final Color iconColor;
   const ContactWidget({
-    Key? key,
+    super.key,
     required this.containerColor,
     required this.theIcon,
     required this.iconColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

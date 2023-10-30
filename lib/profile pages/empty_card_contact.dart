@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import '../components/app_theme.dart';
 
 class EmptyCardContact extends StatelessWidget {
-  const EmptyCardContact({
-    Key? key,
-  }) : super(key: key);
+  const EmptyCardContact({super.key});
 
   @override
   Widget build(BuildContext context) {

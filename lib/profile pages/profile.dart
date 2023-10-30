@@ -135,7 +135,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 .toList();
 
             return ListView(
-              padding: EdgeInsets.all(14),
+              padding: const EdgeInsets.all(14),
               children: [
                 if (kDebugMode)
                   Text(

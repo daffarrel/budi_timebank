@@ -10,8 +10,7 @@ class BottomBarNavigation extends StatefulWidget {
   final int valueListenable;
   // final toRequest;
   // final toService;
-  const BottomBarNavigation({Key? key, required this.valueListenable})
-      : super(key: key);
+  const BottomBarNavigation({super.key, required this.valueListenable});
 
   @override
   State<BottomBarNavigation> createState() => _BottomBarNavigationState();

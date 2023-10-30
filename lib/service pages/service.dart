@@ -6,7 +6,7 @@ import 'completed_service.dart';
 import 'your_services.dart';
 
 class ServicePage extends StatefulWidget {
-  const ServicePage({Key? key}) : super(key: key);
+  const ServicePage({super.key});
 
   @override
   State<ServicePage> createState() => _ServicePageState();

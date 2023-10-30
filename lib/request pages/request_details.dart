@@ -18,7 +18,6 @@ import '../model/service_request.dart';
 import '../profile pages/others_profile.dart';
 import '../rate pages/rate_given_page.dart';
 import 'applicants_selection.dart';
-import 'update_page.dart';
 
 class RequestDetails extends StatefulWidget {
   final String requestId;
