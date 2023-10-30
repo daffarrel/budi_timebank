@@ -33,9 +33,9 @@ class _MapEditorState extends State<MapEditor> {
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
-              center:
+              initialCenter:
                   widget.initialLocation ?? const LatLng(3.049364, 102.12928),
-              zoom: 12.5,
+              initialZoom: 12.5,
               onPositionChanged: (position, hasGesture) {
                 if (hasGesture) {
                   setState(() {
@@ -44,33 +44,18 @@ class _MapEditorState extends State<MapEditor> {
                 }
               },
             ),
-            nonRotatedChildren: const [
-              RichAttributionWidget(
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'iium-buditimebank',
+              ),
+              const RichAttributionWidget(
                 attributions: [
                   TextSourceAttribution(
                     'OpenStreetMap contributors',
                   ),
                 ],
               ),
-            ],
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'iium-buditimebank',
-              ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    builder: (_) => IconButton(
-                      icon: const Icon(Icons.location_on),
-                      color: Colors.blueAccent,
-                      iconSize: 45,
-                      onPressed: () {},
-                    ),
-                    point: _selectedPoint ?? const LatLng(3.049364, 102.12928),
-                  ),
-                ],
-              )
             ],
           ),
           Positioned(
@@ -93,7 +78,19 @@ class _MapEditorState extends State<MapEditor> {
                 ],
               ),
             ),
-          )
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                icon: const Icon(Icons.location_on),
+                color: Colors.blueAccent,
+                iconSize: 45,
+                onPressed: () {},
+              ),
+            ),
+          ),
         ],
       ),
     );

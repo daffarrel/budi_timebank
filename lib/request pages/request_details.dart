@@ -508,10 +508,10 @@ class _RequestDetailsState extends State<RequestDetails> {
                   width: double.infinity,
                   child: FlutterMap(
                     options: MapOptions(
-                      center: LatLng(
+                      initialCenter: LatLng(
                           requestDetails.location.coordinate.latitude,
                           requestDetails.location.coordinate.longitude),
-                      zoom: 13.0,
+                      initialZoom: 13.0,
                     ),
                     children: [
                       TileLayer(
@@ -527,7 +527,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                             point: LatLng(
                                 requestDetails.location.coordinate.latitude,
                                 requestDetails.location.coordinate.longitude),
-                            builder: (ctx) => IconButton(
+                            child: IconButton(
                               icon: const Icon(Icons.location_on),
                               color: Colors.red,
                               iconSize: 45,

@@ -497,10 +497,13 @@ class _RequestFormState extends State<RequestForm> {
                             FlutterMap(
                               mapController: _mapController,
                               options: MapOptions(
-                                center: LatLng(
+                                interactionOptions: const InteractionOptions(
+                                  flags: InteractiveFlag.none,
+                                ),
+                                initialCenter: LatLng(
                                     _currentPosition?.latitude ?? 3.035,
                                     _currentPosition?.longitude ?? 102.5),
-                                zoom: 13.6,
+                                initialZoom: 13.6,
                               ),
                               children: [
                                 TileLayer(
@@ -517,7 +520,7 @@ class _RequestFormState extends State<RequestForm> {
                                         point: LatLng(
                                             _currentPosition!.latitude,
                                             _currentPosition!.longitude),
-                                        builder: (ctx) => IconButton(
+                                        child: IconButton(
                                           icon: const Icon(Icons.location_on),
                                           color: Colors.red,
                                           iconSize: 45,

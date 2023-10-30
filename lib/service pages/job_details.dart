@@ -493,15 +493,13 @@ class _JobDetailsState extends State<JobDetails> {
                   height: 120,
                   width: double.infinity,
                   child: FlutterMap(
-                    options: MapOptions(
-                      interactiveFlags: InteractiveFlag.pinchZoom,
-                      center: LatLng(
-                        jobDetail.location.coordinate.latitude,
-                        jobDetail.location.coordinate.longitude,
+                    options: const MapOptions(
+                      interactionOptions: InteractionOptions(
+                        flags: InteractiveFlag.pinchZoom,
                       ),
-                      zoom: 16.0,
+                      initialZoom: 16.0,
                     ),
-                    nonRotatedChildren: [
+                    children: [
                       TileLayer(
                         urlTemplate:
                             'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -516,7 +514,7 @@ class _JobDetailsState extends State<JobDetails> {
                               jobDetail.location.coordinate.latitude,
                               jobDetail.location.coordinate.longitude,
                             ),
-                            builder: (ctx) => IconButton(
+                            child: IconButton(
                               icon: const Icon(Icons.location_on),
                               color: Colors.red,
                               iconSize: 45,
