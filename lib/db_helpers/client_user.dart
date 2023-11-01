@@ -132,4 +132,21 @@ class ClientUser {
         .doc(userUid)
         .set({'fcmToken': token});
   }
+
+  /// Upload verification letter to firebase storage. Return the file link
+  static Future<String> uploadVerificationLetter(File file) {
+    final userUid = FirebaseAuth.instance.currentUser!.uid;
+    // extract the filename from file
+    final filename = file.path.split('/').last;
+
+    final fileReference = FirebaseStorage.instance
+        .ref('verificationLetters/$userUid/$filename')
+        .putFile(file);
+    return fileReference.then((value) => value.ref.getDownloadURL());
+  }
+
+  /// Delete verification letter from firebase storage
+  static Future<void> deleteVerificationLetter(String url) {
+    return FirebaseStorage.instance.refFromURL(url).delete();
+  }
 }

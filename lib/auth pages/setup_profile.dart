@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textfield_tags/textfield_tags.dart';
@@ -16,6 +18,8 @@ import '../my_extensions/extension_string.dart';
 import '../model/contact.dart';
 import '../model/identification.dart';
 import '../model/profile.dart';
+
+enum FileUploadStatus { notSelected, uploading, uploaded, error }
 
 class SetupProfile extends StatefulWidget {
   const SetupProfile({super.key, this.editProfile = false});
@@ -60,6 +64,11 @@ class _SetupProfileState extends State<SetupProfile> {
   bool _isUplaodingImage = false;
 
   double _distanceToField = 1;
+
+  FileUploadStatus? _fileUploadStatus = FileUploadStatus.notSelected;
+  File? _organizationLetter;
+  String? _organizationLetterUrl;
+
   final TextfieldTagsController _skillsInputController =
       TextfieldTagsController();
   // only to be used when editing profile
@@ -192,6 +201,7 @@ class _SetupProfileState extends State<SetupProfile> {
       ownerType: _selectedOwnerType,
       gender: Gender.values[userGenderIndex],
       organizationName: orgName,
+      organizationLetterUrl: _organizationLetterUrl,
     );
 
     try {
@@ -254,6 +264,50 @@ class _SetupProfileState extends State<SetupProfile> {
     if (imageFile == null) return null;
 
     return File(imageFile.path);
+  }
+
+  void _pickAndUploadVerificationLetter() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'doc', 'docx'],
+    );
+
+    if (result == null) return;
+
+    File file = File(result.files.single.path!);
+    setState(() {
+      _organizationLetter = file;
+      _fileUploadStatus = FileUploadStatus.uploading;
+    });
+
+    // upload to firebase storage
+    try {
+      _organizationLetterUrl = await ClientUser.uploadVerificationLetter(file);
+      Fluttertoast.showToast(msg: 'File uploaded');
+      setState(() {
+        _fileUploadStatus = FileUploadStatus.uploaded;
+      });
+    } on FirebaseException catch (error) {
+      context.showErrorSnackBar(message: error.message.toString());
+      return;
+    } catch (error) {
+      context.showErrorSnackBar(
+          message: 'Unable to upload verification letter');
+      return;
+    }
+  }
+
+  String _getFilenameFromFile(File file) => file.path.split('/').last;
+
+  String _getFileSizeFromFile(File file) {
+    var fileSizeInBytes = file.lengthSync();
+    var fileSizeInKB = fileSizeInBytes / 1024;
+    if (fileSizeInKB < 1024) {
+      return '${fileSizeInKB.toStringAsFixed(2)} KB';
+    } else {
+      var fileSizeInMB = fileSizeInKB / 1024;
+      return '${fileSizeInMB.toStringAsFixed(2)} MB';
+    }
   }
 
   @override
@@ -492,6 +546,74 @@ class _SetupProfileState extends State<SetupProfile> {
                         return null;
                       },
                     ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Organization letter',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        if (_fileUploadStatus == FileUploadStatus.notSelected)
+                          ElevatedButton(
+                            onPressed: _pickAndUploadVerificationLetter,
+                            child: const Text('Select file'),
+                          ),
+                      ],
+                    ),
+                    if (_organizationLetter != null)
+                      Card(
+                        child: ListTile(
+                          tileColor: Colors.blueGrey.shade50,
+                          title:
+                              Text(_getFilenameFromFile(_organizationLetter!)),
+                          subtitle:
+                              Text(_getFileSizeFromFile(_organizationLetter!)),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (_fileUploadStatus ==
+                                  FileUploadStatus.uploading)
+                                const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(),
+                                ),
+                              if (_fileUploadStatus ==
+                                  FileUploadStatus.uploaded) ...[
+                                const Icon(Icons.check_circle,
+                                    color: Colors.green),
+                                IconButton(
+                                  onPressed: () async {
+                                    await showDialog(
+                                        context: context,
+                                        builder: (_) =>
+                                            _DeleteOrganizationLetterDialog(
+                                                fileurl:
+                                                    _organizationLetterUrl!));
+                                    setState(() {
+                                      _organizationLetter = null;
+                                      _fileUploadStatus =
+                                          FileUploadStatus.notSelected;
+                                    });
+                                  },
+                                  icon: const Icon(Icons.delete_outline,
+                                      color: Colors.red),
+                                ),
+                              ]
+                            ],
+                          ),
+                        ),
+                      ),
+                    // Text(verificationLetterFilename ??
+                    //     'Please upload orgaization letter'),
+                    const SizedBox(height: 8),
                   ],
                   const Divider(
                       //horizontal line
@@ -785,6 +907,50 @@ class _AddedContactWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DeleteOrganizationLetterDialog extends StatefulWidget {
+  // ignore: unused_element
+  const _DeleteOrganizationLetterDialog({super.key, required this.fileurl});
+
+  final String fileurl;
+
+  @override
+  State<_DeleteOrganizationLetterDialog> createState() =>
+      __DeleteOrganizationLetterDialogState();
+}
+
+class __DeleteOrganizationLetterDialogState
+    extends State<_DeleteOrganizationLetterDialog> {
+  bool _loading = false;
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Delete organization letter?'),
+      content: const Text('Are you sure you want to delete this letter?'),
+      actions: [
+        if (_loading)
+          const SizedBox(
+            height: 25,
+            width: 25,
+            child: CircularProgressIndicator(),
+          ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () async {
+            setState(() => _loading = true);
+            await ClientUser.deleteVerificationLetter(widget.fileurl);
+            setState(() => _loading = false);
+            Navigator.of(context).pop();
+          },
+          child: const Text('Delete'),
+        ),
+      ],
     );
   }
 }

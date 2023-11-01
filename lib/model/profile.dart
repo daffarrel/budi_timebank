@@ -13,6 +13,7 @@ class Profile {
   final OwnerType ownerType;
   final String? organizationName;
   final String? avatar;
+  final String? organizationLetterUrl;
 
   Profile({
     this.userUid,
@@ -24,6 +25,7 @@ class Profile {
     required this.ownerType,
     this.organizationName,
     this.avatar,
+    this.organizationLetterUrl,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
@@ -38,6 +40,7 @@ class Profile {
       ownerType: _parseOwnerType(json['ownerType']),
       organizationName: json['organizationName'] as String?,
       avatar: json['avatar'] as String?,
+      organizationLetterUrl: json['organizationLetterUrl'] as String?,
     );
   }
 
@@ -56,6 +59,7 @@ class Profile {
       'ownerType': ownerType.name,
       'organizationName': organizationName,
       'avatar': avatar,
+      'organizationLetterUrl': organizationLetterUrl,
     };
   }
 
