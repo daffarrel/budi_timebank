@@ -52,7 +52,12 @@ class _LoginPageState extends State<LoginPage> {
                     }),
                     child: Text(
                       pageIndex == 0 ? 'Get an account' : 'Login',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: pageIndex == 0
+                            ? AppTheme.themeData.secondaryHeaderColor
+                            : AppTheme.themeData.primaryColor,
+                      ),
                     ),
                   ),
                 ),
@@ -74,9 +79,14 @@ class _LoginPageState extends State<LoginPage> {
                             builder: (context) => const PasswordRecoveryPage(),
                           ));
                     }),
-                    child: const Text(
+                    child: Text(
                       'Forgot Password',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: pageIndex == 0
+                            ? AppTheme.themeData.secondaryHeaderColor
+                            : AppTheme.themeData.primaryColor,
+                      ),
                     ),
                   ),
                 ),

@@ -174,6 +174,11 @@ class _SetupProfileState extends State<SetupProfile> {
 
   /// Called when user taps `Save` button
   Future<void> _saveProfile() async {
+    if (_selectedOwnerType == OwnerType.organization) {
+      if (_organizationLetter == null) {
+        throw Exception('Organization letter not uploaded');
+      }
+    }
     setState(() => _loading = true);
     var userIdentification = Identification(
         identificationType: _selectedIdType, value: _idController.text);
@@ -842,7 +847,12 @@ class _SetupProfileState extends State<SetupProfile> {
                     onPressed: () async {
                       if (!_formKey.currentState!.validate()) return;
 
-                      await _saveProfile();
+                      try {
+                        await _saveProfile();
+                      } on Exception catch (e) {
+                        context.showErrorSnackBar(message: e.toString());
+                        return;
+                      }
 
                       // add points during registration
                       if (!widget.editProfile) {

@@ -158,6 +158,16 @@ class _ProfilePageState extends State<ProfilePage> {
                               CustomHeadline(
                                   snapshot.data!.name.toString().titleCase()),
                               const SizedBox(height: 10),
+                              if (snapshot.data!.ownerType ==
+                                  OwnerType.organization) ...[
+                                const Text('Organization',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold)),
+                                Text(snapshot.data!.organizationName!,
+                                    style: const TextStyle(fontSize: 12)),
+                                const SizedBox(height: 10),
+                              ],
                               Text(
                                   snapshot.data!.identification
                                       .identificationType.name
