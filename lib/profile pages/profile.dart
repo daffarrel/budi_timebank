@@ -7,7 +7,9 @@ import '../components/constants.dart';
 import '../components/profile_avatar.dart';
 import '../custom widgets/custom_headline.dart';
 import '../components/app_theme.dart';
+import '../db_helpers/client_rating.dart';
 import '../db_helpers/client_user.dart';
+import '../model/rating.dart';
 import '../my_extensions/extension_string.dart';
 
 import '../model/contact.dart';
@@ -17,6 +19,7 @@ import 'contact_widget.dart';
 import 'empty_card_contact.dart';
 import 'custom_list_view_contact.dart';
 import 'profile_photo_page.dart';
+import 'rating_card_widget.dart';
 
 class ProfilePage extends StatefulWidget {
   final bool isMyProfile;
@@ -58,6 +61,27 @@ class _ProfilePageState extends State<ProfilePage> {
             builder: (BuildContext context) => const SplashPage()),
       );
     }
+  }
+
+  Future<(int? totalRating, double? averageRating)>
+      getRequestorRatings() async {
+    List<Rating> myReceivedRatings = await ClientRating.getAllReceivedRating();
+
+    int totalRating = 0;
+    int totalNumberOfRatings = myReceivedRatings.length;
+
+    for (var rating in myReceivedRatings) {
+      totalRating += rating.rating;
+    }
+
+    // calculate average rating
+    final averageRating = totalRating / totalNumberOfRatings;
+
+    if (averageRating.isNaN) {
+      return (null, null);
+    }
+
+    return (totalNumberOfRatings, averageRating);
   }
 
   @override
@@ -214,6 +238,28 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 const SizedBox(height: 10),
+
+                FutureBuilder(
+                    future: getRequestorRatings(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      }
+
+                      final (numberOfRating, averageRating) = snapshot.data!;
+
+                      return RatingCardWidget(
+                        isProvider: false,
+                        title: 'Requestor Rating',
+                        leadingIcon: Icons.handshake,
+                        totalRating: numberOfRating,
+                        rating: averageRating,
+                      );
+                    }),
+                const SizedBox(height: 10),
                 const CustomHeadline(' Skill List'),
                 const SizedBox(height: 10),
                 skills.isEmpty
@@ -294,20 +340,15 @@ class _ProfilePageState extends State<ProfilePage> {
                         : CustomListViewContact(contactList: whatsapp)
                   ],
                 ),
-                const SizedBox(height: 5),
 
                 // RatingCardWidget(
                 //   isProvider: true,
                 //   title: 'Provider Rating',
                 //   iconRating: Icons.emoji_people,
-                //   userRating: profile.user.rating.asProvider,
+                //   // userRating: profile.user.rating.asProvider,
+                //   userRating: "3",
                 // ),
-                // RatingCardWidget(
-                //   isProvider: false,
-                //   title: 'Requestor Rating',
-                //   iconRating: Icons.handshake,
-                //   userRating: profile.user.rating.asRequestor,
-                // ),
+
                 const SizedBox(height: 10),
               ],
             );

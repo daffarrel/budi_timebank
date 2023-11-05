@@ -4,8 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../model/rating.dart';
 
 class ClientRating {
-  static final String _userUid = FirebaseAuth.instance.currentUser!.uid;
-
   /// Rate provider after completing a job
   static Future<void> rateProvider(
       {required int rating,
@@ -17,7 +15,7 @@ class ClientRating {
       message: message,
       jobId: jobId,
       rateeId: providerId,
-      authorId: _userUid,
+      authorId: FirebaseAuth.instance.currentUser!.uid,
       createdAt: DateTime.now(),
     );
     await FirebaseFirestore.instance
@@ -41,16 +39,16 @@ class ClientRating {
   static Future<List<Rating>> getAllGivenRating() async {
     var docsSnapshot = FirebaseFirestore.instance
         .collection('ratings')
-        .where('authorId', isEqualTo: _userUid);
+        .where('authorId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
     var docs = await docsSnapshot.get();
     return docs.docs.map((e) => Rating.fromJson(e.data())).toList();
   }
 
-  /// Retrieve all received rating
+  /// Retrieve all received rating for the current user
   static Future<List<Rating>> getAllReceivedRating() async {
     var docsSnapshot = FirebaseFirestore.instance
         .collection('ratings')
-        .where('rateeId', isEqualTo: _userUid);
+        .where('rateeId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
     var docs = await docsSnapshot.get();
     return docs.docs.map((e) => Rating.fromJson(e.data())).toList();
   }
