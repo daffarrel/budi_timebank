@@ -5,14 +5,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../components/app_theme.dart';
 import '../components/profile_avatar.dart';
 import '../custom widgets/custom_headline.dart';
+import '../db_helpers/client_rating.dart';
 import '../db_helpers/client_user.dart';
 import '../model/contact.dart';
 import '../model/profile.dart';
+import '../model/rating.dart';
 import '../my_extensions/extension_string.dart';
 import 'contact_widget.dart';
 import 'custom_list_view_contact.dart';
 import 'empty_card_contact.dart';
 import 'profile_photo_page.dart';
+import 'rating_card_widget.dart';
 
 class ViewProfile extends StatefulWidget {
   final String id;
@@ -66,6 +69,27 @@ class _ViewProfileState extends State<ViewProfile> {
       profile = myProfile;
       isLoad = false;
     });
+  }
+
+  Future<(int? totalRating, double? averageRating)> getRating() async {
+    List<Rating> myReceivedRatings =
+        await ClientRating.getAllReceivedRatingForUserId(widget.id);
+
+    int totalRating = 0;
+    int totalNumberOfRatings = myReceivedRatings.length;
+
+    for (var rating in myReceivedRatings) {
+      totalRating += rating.rating;
+    }
+
+    // calculate average rating
+    final averageRating = totalRating / totalNumberOfRatings;
+
+    if (averageRating.isNaN) {
+      return (null, null);
+    }
+
+    return (totalNumberOfRatings, averageRating);
   }
 
   @override
@@ -135,9 +159,34 @@ class _ViewProfileState extends State<ViewProfile> {
                   ),
                   // const CustomHeadline(' Ratings'),
                   const SizedBox(height: 10),
+                  FutureBuilder(
+                      future: getRating(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        }
+
+                        final (numberOfRating, averageRating) = snapshot.data!;
+
+                        return RatingCardWidget(
+                          isProvider: false,
+                          title: 'Requestor Rating',
+                          leadingIcon: Icons.handshake,
+                          totalRating: numberOfRating,
+                          rating: averageRating,
+                        );
+                      }),
+                  const SizedBox(height: 15),
                   const CustomHeadline(' Skill List'),
+                  const SizedBox(height: 5),
                   skills.isEmpty
-                      ? const Text('No skills entered')
+                      ? const Text(' No skills entered')
                       : Wrap(
                           children: [
                             for (var skill in skills)
@@ -157,8 +206,9 @@ class _ViewProfileState extends State<ViewProfile> {
                               ),
                           ],
                         ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
                   const CustomHeadline(' Contact List'),
+                  const SizedBox(height: 5),
                   Row(
                     children: [
                       ContactWidget(

@@ -238,7 +238,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 const SizedBox(height: 10),
-
                 FutureBuilder(
                     future: getRequestorRatings(),
                     builder: (context, snapshot) {

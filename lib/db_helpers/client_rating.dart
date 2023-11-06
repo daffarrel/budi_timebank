@@ -52,4 +52,13 @@ class ClientRating {
     var docs = await docsSnapshot.get();
     return docs.docs.map((e) => Rating.fromJson(e.data())).toList();
   }
+
+  /// Retrieve all received rating for user id provided
+  static Future<List<Rating>> getAllReceivedRatingForUserId(String uid) async {
+    var docsSnapshot = FirebaseFirestore.instance
+        .collection('ratings')
+        .where('rateeId', isEqualTo: uid);
+    var docs = await docsSnapshot.get();
+    return docs.docs.map((e) => Rating.fromJson(e.data())).toList();
+  }
 }

@@ -92,9 +92,9 @@ class _RatingCardWidgetState extends State<RatingCardWidget> {
             ),
             const Spacer(),
             if (widget.rating == null)
-              const Text('No Rating',
+              const Text('No Rating yet',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white))
+                      fontWeight: FontWeight.normal, color: Colors.white))
             else ...[
               RatingBar.builder(
                 ignoreGestures: true,
@@ -115,8 +115,8 @@ class _RatingCardWidgetState extends State<RatingCardWidget> {
                 style: const TextStyle(
                     fontWeight: FontWeight.bold, color: Colors.white),
               ),
-              const SizedBox(width: 10),
-            ]
+            ],
+            const SizedBox(width: 10),
           ],
         ),
       ),
