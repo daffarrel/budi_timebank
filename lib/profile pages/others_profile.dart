@@ -11,6 +11,7 @@ import '../model/contact.dart';
 import '../model/profile.dart';
 import '../model/rating.dart';
 import '../my_extensions/extension_string.dart';
+import '../rate pages/rating_review_page.dart';
 import 'contact_widget.dart';
 import 'custom_list_view_contact.dart';
 import 'empty_card_contact.dart';
@@ -180,6 +181,18 @@ class _ViewProfileState extends State<ViewProfile> {
                           leadingIcon: Icons.handshake,
                           totalRating: numberOfRating,
                           rating: averageRating,
+                          onTap: averageRating != null
+                              ? () async {
+                                  final ratings = await ClientRating
+                                      .getAllReceivedRatingForUserId(widget.id);
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          RatingReviewPage(ratings: ratings),
+                                    ),
+                                  );
+                                }
+                              : null,
                         );
                       }),
                   const SizedBox(height: 15),

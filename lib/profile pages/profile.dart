@@ -14,6 +14,7 @@ import '../my_extensions/extension_string.dart';
 
 import '../model/contact.dart';
 import '../model/profile.dart';
+import '../rate pages/rating_review_page.dart';
 import '../splash_page.dart';
 import 'contact_widget.dart';
 import 'empty_card_contact.dart';
@@ -256,6 +257,17 @@ class _ProfilePageState extends State<ProfilePage> {
                         leadingIcon: Icons.handshake,
                         totalRating: numberOfRating,
                         rating: averageRating,
+                        onTap: averageRating != null
+                            ? () async {
+                                final ratings =
+                                    await ClientRating.getAllReceivedRating();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          RatingReviewPage(ratings: ratings)),
+                                );
+                              }
+                            : null,
                       );
                     }),
                 const SizedBox(height: 10),
