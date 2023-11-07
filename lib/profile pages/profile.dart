@@ -9,6 +9,7 @@ import '../custom widgets/custom_headline.dart';
 import '../components/app_theme.dart';
 import '../db_helpers/client_rating.dart';
 import '../db_helpers/client_user.dart';
+import '../model/identification.dart';
 import '../model/rating.dart';
 import '../my_extensions/extension_string.dart';
 
@@ -83,6 +84,19 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     return (totalNumberOfRatings, averageRating);
+  }
+
+  String identificationLabel(IdentificationType type) {
+    switch (type) {
+      case IdentificationType.mykad:
+        return 'MyKad';
+      case IdentificationType.staffno:
+        return 'Staff ID';
+      case IdentificationType.matricno:
+        return 'Matric No';
+      default:
+        return type.name.capitalize();
+    }
   }
 
   @override
@@ -170,70 +184,63 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(
                   width: double.infinity,
                   child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              CustomHeadline(
-                                  snapshot.data!.name.toString().titleCase()),
-                              const SizedBox(height: 10),
-                              if (snapshot.data!.ownerType ==
-                                  OwnerType.organization) ...[
-                                const Text('Organization',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold)),
-                                Text(snapshot.data!.organizationName!,
-                                    style: const TextStyle(fontSize: 12)),
-                                const SizedBox(height: 10),
-                              ],
-                              Text(
-                                  snapshot.data!.identification
-                                      .identificationType.name
-                                      .toString()
-                                      .capitalize(),
+                    child: SelectionArea(
+                      child: Padding(
+                        padding: const EdgeInsets.all(18),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  snapshot.data!.name.toString().titleCase(),
                                   style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold)),
-                              Text(snapshot.data!.identification.value,
-                                  style: const TextStyle(fontSize: 12)),
-                              const SizedBox(height: 10),
-                              const Text('Gender',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold)),
-                              Text(
-                                  snapshot.data!.gender.name
-                                      .toString()
-                                      .capitalize(),
-                                  style: const TextStyle(fontSize: 12)),
-                            ],
-                          ),
-                          Hero(
-                            tag: 'profile-photo',
-                            child: GestureDetector(
-                                onTap: () {
-                                  if (snapshot.data!.avatar == null) return;
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => ProfilePhotoPage(
-                                        name: snapshot.data!.name,
-                                        image: NetworkImage(
-                                            snapshot.data!.avatar!),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                if (snapshot.data!.ownerType ==
+                                    OwnerType.organization) ...[
+                                  const Text('Organization',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(snapshot.data!.organizationName!,
+                                      style: const TextStyle(fontSize: 12)),
+                                  const SizedBox(height: 10),
+                                ],
+                                Text(
+                                  '${identificationLabel(snapshot.data!.identification.identificationType)}: ${snapshot.data!.identification.value}',
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  'Gender: ${snapshot.data!.gender.name.capitalize()}',
+                                ),
+                              ],
+                            ),
+                            Hero(
+                              tag: 'profile-photo',
+                              child: GestureDetector(
+                                  onTap: () {
+                                    if (snapshot.data!.avatar == null) return;
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => ProfilePhotoPage(
+                                          name: snapshot.data!.name,
+                                          image: NetworkImage(
+                                              snapshot.data!.avatar!),
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                                child: ProfileAvatar(
-                                    imageUrl: snapshot.data!.avatar)),
-                          ),
-                        ],
+                                    );
+                                  },
+                                  child: ProfileAvatar(
+                                      imageUrl: snapshot.data!.avatar)),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
