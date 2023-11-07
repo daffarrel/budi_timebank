@@ -57,8 +57,6 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-
-        setProperty("archivesBaseName", "Budi-v$versionName")
     }
 
     signingConfigs {
