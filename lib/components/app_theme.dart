@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static ThemeData themeData = ThemeData(
+    useMaterial3: false,
     textSelectionTheme: const TextSelectionThemeData(
         cursorColor: Color.fromARGB(255, 0, 146, 143)),
     inputDecorationTheme: const InputDecorationTheme(
@@ -38,6 +39,7 @@ class AppTheme {
   );
 
   static ThemeData themeData2 = ThemeData(
+    useMaterial3: false,
     inputDecorationTheme: const InputDecorationTheme(
       border: OutlineInputBorder(),
 

@@ -260,7 +260,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                       return RatingCardWidget(
                         isProvider: false,
-                        title: 'Requestor Rating',
+                        title: 'Rating:',
                         leadingIcon: Icons.handshake,
                         totalRating: numberOfRating,
                         rating: averageRating,
@@ -270,8 +270,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     await ClientRating.getAllReceivedRating();
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                      builder: (_) =>
-                                          RatingReviewPage(ratings: ratings)),
+                                    builder: (_) =>
+                                        RatingReviewPage(ratings: ratings),
+                                  ),
                                 );
                               }
                             : null,

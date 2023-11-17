@@ -177,7 +177,7 @@ class _ViewProfileState extends State<ViewProfile> {
 
                         return RatingCardWidget(
                           isProvider: false,
-                          title: 'Requestor Rating',
+                          title: 'Rating',
                           leadingIcon: Icons.handshake,
                           totalRating: numberOfRating,
                           rating: averageRating,
