@@ -208,6 +208,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       style: TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold)),
+                                  SizedBox(height: 4),
                                   Text(snapshot.data!.organizationName!,
                                       style: const TextStyle(fontSize: 12)),
                                   const SizedBox(height: 10),

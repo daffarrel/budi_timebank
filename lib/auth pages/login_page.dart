@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                       });
                     }),
                     child: Text(
-                      pageIndex == 0 ? 'Get an account' : 'Login',
+                      pageIndex == 0 ? 'Sign Up' : 'Login',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: pageIndex == 0

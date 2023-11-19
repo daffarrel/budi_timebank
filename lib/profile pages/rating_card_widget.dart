@@ -107,16 +107,25 @@ class _RatingCardWidgetState extends State<RatingCardWidget> {
             // const SizedBox(width: s),
             const Spacer(),
             if (widget.rating != null)
-              Directionality(
-                textDirection: TextDirection.rtl,
-                child: TextButton.icon(
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.zero,
+              InkWell(
+                onTap: widget.onTap,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'View',
+                        style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.normal,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right_rounded,
+                          color: Colors.white),
+                    ],
                   ),
-                  label: const Text('View'),
-                  icon: const Icon(Icons.chevron_left_rounded),
-                  onPressed: widget.onTap,
                 ),
               ),
             const SizedBox(width: 10),
